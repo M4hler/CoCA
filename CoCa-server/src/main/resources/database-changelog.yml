@@ -15,7 +15,11 @@ databaseChangeLog:
                     primaryKeyName: accountPrimaryKey
               - column:
                   name: password
-                  type: varchar(256)
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
               - column:
                   name: salt
                   type: varchar(16)
+                  constraints:
+                    nullable: false

@@ -15,6 +15,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) {
@@ -54,6 +58,15 @@ public class Application extends javafx.application.Application {
         loginButton.setOnAction(e -> {
             actionTarget.setFill(Color.FIREBRICK);
             actionTarget.setText("Sign in button pressed");
+
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+                byte[] hashBytes = digest.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
+                String hash = new String(hashBytes, StandardCharsets.UTF_8);
+            }
+            catch (NoSuchAlgorithmException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         Scene scene = new Scene(grid, 300, 275);
