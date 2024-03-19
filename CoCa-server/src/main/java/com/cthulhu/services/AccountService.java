@@ -16,6 +16,14 @@ public class AccountService {
         return repository.findByName(name) != null;
     }
 
+    public String getSalt(String name) {
+        return repository.findSaltByName(name);
+    }
+
+    public String getPassword(String name) {
+        return repository.findPasswordByName(name);
+    }
+
     public void save(Account account) {
         repository.save(account);
     }
