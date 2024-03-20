@@ -23,3 +23,82 @@ databaseChangeLog:
                   type: varchar(16)
                   constraints:
                     nullable: false
+  - changeSet:
+      id: Create BladeRunner table
+      author: M4hler
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: blade_runner
+            columns:
+              - column:
+                  name: name
+                  type: varchar(40)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: bladeRunnerPrimaryKey
+              - column:
+                  name: is_human
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: secret_replicant
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: archetype
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: years_on_the_force
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: strength
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: agility
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: intelligence
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: empathy
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: health
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resolve
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: promotion_points
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: humanity_points
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: chinyen_points
+                  type: integer
+                  constraints:
+                    nullable: false
