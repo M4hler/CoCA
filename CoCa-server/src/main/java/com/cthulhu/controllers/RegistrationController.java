@@ -2,7 +2,6 @@ package com.cthulhu.controllers;
 
 import com.cthulhu.models.Account;
 import com.cthulhu.models.LoginData;
-import com.cthulhu.models.RegistrationData;
 import com.cthulhu.services.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,15 +41,15 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public HttpStatus register(@RequestBody RegistrationData registrationData) {
-        if(accountService.userExists(registrationData.getName())) {
+    public HttpStatus register(@RequestBody LoginData loginData) {
+        if(accountService.userExists(loginData.getName())) {
             return HttpStatus.CONFLICT;
         }
 
         String salt = UUID.randomUUID().toString().substring(0, 16);
-        String password = getPassword(registrationData.getPassword(), salt);
+        String password = getPassword(loginData.getPassword(), salt);
 
-        Account account = new Account(registrationData.getName(), password, salt);
+        Account account = new Account(loginData.getName(), password, salt);
         accountService.save(account);
 
         return HttpStatus.OK;
