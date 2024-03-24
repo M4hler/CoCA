@@ -1,8 +1,10 @@
 package com.cthulhu.controllers;
 
+import com.cthulhu.listeners.MainListener;
 import com.cthulhu.models.Account;
 import com.cthulhu.models.LoginData;
 import com.cthulhu.services.AccountService;
+import jakarta.jms.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,15 +18,17 @@ import java.util.UUID;
 @RestController
 public class RegistrationController {
     private final AccountService accountService;
+    private final ConnectionFactory connectionFactory;
     private final MessageDigest messageDigest;
 
-    public RegistrationController(AccountService accountService) throws NoSuchAlgorithmException {
+    public RegistrationController(AccountService accountService, ConnectionFactory connectionFactory) throws NoSuchAlgorithmException {
         this.accountService = accountService;
+        this.connectionFactory = connectionFactory;
         messageDigest = MessageDigest.getInstance("SHA-512");
     }
 
     @PostMapping("/login")
-    public HttpStatus login(@RequestBody LoginData loginData) {
+    public HttpStatus login(@RequestBody LoginData loginData) throws JMSException {
         if(!accountService.userExists(loginData.getName())) {
             return HttpStatus.NOT_FOUND;
         }
@@ -36,6 +40,13 @@ public class RegistrationController {
         if(!dbPassword.equals(password)) {
             return HttpStatus.FORBIDDEN;
         }
+
+        Connection connection = connectionFactory.createConnection();
+        connection.start();
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Queue queue = session.createQueue(loginData.getName());
+        MessageConsumer consumer = session.createConsumer(queue);
+        consumer.setMessageListener(new MainListener());
 
         return HttpStatus.OK;
     }
