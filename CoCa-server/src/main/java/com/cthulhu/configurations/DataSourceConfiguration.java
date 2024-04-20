@@ -12,13 +12,13 @@ import software.amazon.awssdk.services.ssm.model.Parameter;
 import javax.sql.DataSource;
 
 @Configuration
+@Profile("cloud")
 public class DataSourceConfiguration {
     private static final String POSTGRESQL_URL = "PostgreSqlUrl";
     private static final String POSTGRESQL_USERNAME = "PostgreSqlUsername";
     private static final String POSTGRESQL_PASSWORD = "PostgreSqlPassword";
 
     @Bean
-    @Profile("cloud")
     public DataSource dataSourceCloud(SsmClient ssmClient) {
         GetParametersRequest request = GetParametersRequest.builder()
                 .names(POSTGRESQL_URL, POSTGRESQL_USERNAME, POSTGRESQL_PASSWORD)

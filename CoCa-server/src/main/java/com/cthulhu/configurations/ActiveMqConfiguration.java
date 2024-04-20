@@ -3,12 +3,14 @@ package com.cthulhu.configurations;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.services.ssm.SsmClient;
 import software.amazon.awssdk.services.ssm.model.GetParametersRequest;
 import software.amazon.awssdk.services.ssm.model.GetParametersResponse;
 import software.amazon.awssdk.services.ssm.model.Parameter;
 
 @Configuration
+@Profile("cloud")
 public class ActiveMqConfiguration {
     private static final String ACTIVEMQ_OPENWIRE_URL = "ActiveMqOpenWireUrl";
     private static final String ACTIVEMQ_USERNAME = "ActiveMqUsername";
