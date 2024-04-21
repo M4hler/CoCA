@@ -3,6 +3,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+h2-database.mv.db
+h2-database.trace.db
+
 ### IntelliJ IDEA ###
 .idea/
 *.iws
