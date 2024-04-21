@@ -30,6 +30,13 @@ spring:
       path: /h2
     settings:
       web-allow-others: true
+  activemq:
+    broker-url: tcp://localhost:61616
+    packages:
+      trust-all: true
+    in-memory: true
+    user: admin
+    password: admin
 
 ---
 spring:

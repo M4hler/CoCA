@@ -54,6 +54,19 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-activemq -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-broker -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-broker</artifactId>
+            <version>6.1.2</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/software.amazon.awssdk/ssm -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>

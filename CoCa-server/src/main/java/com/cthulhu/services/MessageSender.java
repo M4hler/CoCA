@@ -1,16 +1,15 @@
 package com.cthulhu.services;
 
 import jakarta.jms.*;
-import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MessageSender {
-    private final ActiveMQConnectionFactory connectionFactory;
+    private final ConnectionFactory connectionFactory;
 
-    public MessageSender(ActiveMQConnectionFactory connectionFactory) throws JMSException {
+    public MessageSender(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
-        sendMessage();
     }
 
     public void sendMessage() throws JMSException {

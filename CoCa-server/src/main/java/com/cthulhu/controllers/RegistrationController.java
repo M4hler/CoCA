@@ -6,6 +6,8 @@ import com.cthulhu.models.LoginData;
 import com.cthulhu.services.AccountService;
 import jakarta.jms.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +22,13 @@ public class RegistrationController {
     private final AccountService accountService;
     private final ConnectionFactory connectionFactory;
     private final MessageDigest messageDigest;
+    private final JmsTemplate jmsTemplate;
 
-    public RegistrationController(AccountService accountService, ConnectionFactory connectionFactory) throws NoSuchAlgorithmException {
+    public RegistrationController(AccountService accountService, ConnectionFactory connectionFactory,
+                                  JmsTemplate jmsTemplate) throws NoSuchAlgorithmException {
         this.accountService = accountService;
         this.connectionFactory = connectionFactory;
+        this.jmsTemplate = jmsTemplate;
         messageDigest = MessageDigest.getInstance("SHA-512");
     }
 
@@ -63,6 +68,12 @@ public class RegistrationController {
         Account account = new Account(loginData.getName(), password, salt);
         accountService.save(account);
 
+        return HttpStatus.OK;
+    }
+
+    @GetMapping("/send")
+    public HttpStatus send() {
+        jmsTemplate.convertAndSend("testQueue", "Hello World!");
         return HttpStatus.OK;
     }
 
