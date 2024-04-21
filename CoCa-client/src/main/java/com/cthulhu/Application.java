@@ -1,5 +1,7 @@
 package com.cthulhu;
 
+import com.cthulhu.models.LoginData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,6 +17,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -60,16 +67,24 @@ public class Application extends javafx.application.Application {
             actionTarget.setText("Sign in button pressed");
 
             try {
-                MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+                MessageDigest digest = MessageDigest.getInstance("SHA-512");
                 byte[] hashBytes = digest.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
                 String hash = new String(hashBytes, StandardCharsets.UTF_8);
+
+                LoginData data = new LoginData(userNameTextField.getText(), hash);
+                URI uri = URI.create("http://127.0.0.1:8080/register");
+                HttpClient client = HttpClient.newHttpClient();
+                String payload = new ObjectMapper().writeValueAsString(data);
+                HttpRequest request = HttpRequest.newBuilder().uri(uri).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(payload)).build();
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println("Status: " + response.statusCode());
             }
-            catch (NoSuchAlgorithmException ex) {
+            catch (NoSuchAlgorithmException | InterruptedException | IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
 
-        Scene scene = new Scene(grid, 300, 275);
+        Scene scene = new Scene(grid, 800, 600);
         stage.setScene(scene);
         stage.show();
     }
