@@ -78,6 +78,66 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: force
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hand_to_hand_combat
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stamina
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: firearms
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mobility
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stealth
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: medical_aid
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: observation
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tech
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: connections
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: manipulation
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: insight
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
                   name: health
                   type: integer
                   constraints:
