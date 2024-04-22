@@ -1,9 +1,12 @@
 package com.cthulhu.controllers;
 
 import com.cthulhu.services.HttpService;
+import com.cthulhu.views.LoginView;
 import com.cthulhu.views.RegistrationView;
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
@@ -11,17 +14,18 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 @Getter
-public class RegistrationController {
-    private final RegistrationView registrationView;
+@Setter
+public class RegistrationController extends AbstractController<RegistrationView> {
+    private LoginView loginView;
 
     public RegistrationController() {
-        registrationView = new RegistrationView(this::registerAction);
+        view = new RegistrationView(this::registerAction, this::backAction);
     }
 
     private void registerAction() {
-        String name = registrationView.getNameTextField().getText();
-        String password = registrationView.getPasswordField().getText();
-        String passwordRepeat = registrationView.getPasswordRepeatField().getText();
+        String name = view.getNameTextField().getText();
+        String password = view.getPasswordField().getText();
+        String passwordRepeat = view.getPasswordRepeatField().getText();
 
         if(name.length() < 4) {
             setErrorMessage("Name must be at least 4 characters long");
@@ -64,8 +68,12 @@ public class RegistrationController {
         }
     }
 
+    private void backAction() {
+        MainController.setCurrentScene(loginView);
+    }
+
     private void setErrorMessage(String message) {
-        registrationView.getErrorText().setFill(Color.FIREBRICK);
-        registrationView.getErrorText().setText(message);
+        view.getErrorText().setFill(Color.FIREBRICK);
+        view.getErrorText().setText(message);
     }
 }

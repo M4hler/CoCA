@@ -2,7 +2,7 @@ package com.cthulhu.views;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -15,14 +15,14 @@ import javafx.scene.text.Text;
 import lombok.Getter;
 
 @Getter
-public class LoginView extends Parent {
+public class LoginView implements IView {
     private final TextField nameTextField;
     private final PasswordField passwordField;
     private final Text errorText;
-    private final GridPane grid;
+    private final Scene scene;
 
     public LoginView(Runnable loginAction, Runnable registerAction) {
-        grid = new GridPane();
+        GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
@@ -61,5 +61,14 @@ public class LoginView extends Parent {
 
         loginButton.setOnAction(e -> loginAction.run());
         registerButton.setOnAction(e -> registerAction.run());
+
+        scene = new Scene(grid, 800, 600);
+    }
+
+    @Override
+    public void refresh() {
+        nameTextField.clear();
+        passwordField.clear();
+        errorText.setText("");
     }
 }

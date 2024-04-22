@@ -2,7 +2,7 @@ package com.cthulhu.views;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -17,15 +17,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegistrationView extends Parent {
+public class RegistrationView implements IView {
     private final TextField nameTextField;
     private final PasswordField passwordField;
     private final PasswordField passwordRepeatField;
     private final Text errorText;
-    private final GridPane grid;
+    private final Scene scene;
 
-    public RegistrationView(Runnable registerAction) {
-        grid = new GridPane();
+    public RegistrationView(Runnable registerAction, Runnable backAction) {
+        GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
@@ -53,6 +53,12 @@ public class RegistrationView extends Parent {
         passwordRepeatField = new PasswordField();
         grid.add(passwordRepeatField, 1, 3);
 
+        Button backButton = new Button("Back");
+        HBox backBox = new HBox(10);
+        backBox.setAlignment(Pos.BOTTOM_RIGHT);
+        backBox.getChildren().add(backButton);
+        grid.add(backBox, 0, 4);
+
         Button registerButton = new Button("Register");
         HBox registerBox = new HBox(10);
         registerBox.setAlignment(Pos.BOTTOM_RIGHT);
@@ -62,6 +68,17 @@ public class RegistrationView extends Parent {
         errorText = new Text();
         grid.add(errorText, 1, 5);
 
+        backButton.setOnAction(e -> backAction.run());
         registerButton.setOnAction(e -> registerAction.run());
+
+        scene = new Scene(grid, 800, 600);
+    }
+
+    @Override
+    public void refresh() {
+        nameTextField.clear();
+        passwordField.clear();
+        passwordRepeatField.clear();
+        errorText.setText("");
     }
 }
