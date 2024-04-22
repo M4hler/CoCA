@@ -1,7 +1,7 @@
 package com.cthulhu.controllers;
 
 import com.cthulhu.services.HttpService;
-import com.cthulhu.views.LoginView;
+import com.cthulhu.views.RegistrationView;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -11,16 +11,17 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 @Getter
-public class LoginController {
-    private final LoginView loginView;
+public class RegistrationController {
+    private final RegistrationView registrationView;
 
-    public LoginController() {
-        loginView = new LoginView(this::loginAction);
+    public RegistrationController() {
+        registrationView = new RegistrationView(this::registerAction);
     }
 
-    private void loginAction() {
-        String name = loginView.getNameTextField().getText();
-        String password = loginView.getPasswordField().getText();
+    private void registerAction() {
+        String name = registrationView.getNameTextField().getText();
+        String password = registrationView.getPasswordField().getText();
+        String passwordRepeat = registrationView.getPasswordRepeatField().getText();
 
         if(name.length() < 4) {
             setErrorMessage("Name must be at least 4 characters long");
@@ -29,6 +30,11 @@ public class LoginController {
 
         if(password.length() < 8) {
             setErrorMessage("Password must be at least 8 characters long");
+            return;
+        }
+
+        if(!password.equals(passwordRepeat)) {
+            setErrorMessage("Repeated password doesn't match the original one");
             return;
         }
 
@@ -59,7 +65,7 @@ public class LoginController {
     }
 
     private void setErrorMessage(String message) {
-        loginView.getActionTarget().setFill(Color.FIREBRICK);
-        loginView.getActionTarget().setText(message);
+        registrationView.getActionTarget().setFill(Color.FIREBRICK);
+        registrationView.getActionTarget().setText(message);
     }
 }

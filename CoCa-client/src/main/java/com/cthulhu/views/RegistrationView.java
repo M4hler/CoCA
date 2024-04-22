@@ -18,13 +18,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginView extends Parent {
+public class RegistrationView extends Parent {
     private final TextField nameTextField;
     private final PasswordField passwordField;
+    private final PasswordField passwordRepeatField;
     private final Text actionTarget;
     private final GridPane grid;
 
-    public LoginView(Runnable loginAction) {
+    public RegistrationView(Runnable registerAction) {
         grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -47,16 +48,22 @@ public class LoginView extends Parent {
         passwordField = new PasswordField();
         grid.add(passwordField, 1, 2);
 
-        Button loginButton = new Button("Sign in");
-        HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().add(loginButton);
-        grid.add(hbBtn, 1, 4);
+        Label passwordRepeat = new Label("Repeat password:");
+        grid.add(passwordRepeat, 0, 3);
+
+        passwordRepeatField = new PasswordField();
+        grid.add(passwordRepeatField, 1, 3);
+
+        Button registerButton = new Button("Register");
+        HBox registerBox = new HBox(10);
+        registerBox.setAlignment(Pos.BOTTOM_RIGHT);
+        registerBox.getChildren().add(registerButton);
+        grid.add(registerBox, 1, 4);
 
         actionTarget = new Text();
-        grid.add(actionTarget, 1, 6);
+        grid.add(actionTarget, 1, 5);
 
-        loginButton.setOnAction(e -> loginAction.run());
+        registerButton.setOnAction(e -> registerAction.run());
     }
 
     @Override
