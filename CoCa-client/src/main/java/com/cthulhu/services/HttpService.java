@@ -14,11 +14,31 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HttpService {
-    public static HttpStatus loginRequest(String name, String password) throws NoSuchAlgorithmException, InterruptedException, IOException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-512");
-        byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        String hash = new String(hashBytes, StandardCharsets.UTF_8);
+    public static HttpStatus loginRequest(String name, String password) throws NoSuchAlgorithmException, InterruptedException,IOException {
+        String hash = getHash(password);
+        LoginData loginData = new LoginData(name, hash);
+        URI uri = URI.create("http://127.0.0.1:8080/login");
+        HttpClient client = HttpClient.newHttpClient();
+        String payload = new ObjectMapper().writeValueAsString(loginData);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(payload)).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        String status = response.body().replaceAll("\"", "");
 
+        if(status.equals(HttpStatus.NOT_FOUND.name())) {
+            return HttpStatus.NOT_FOUND;
+        }
+
+        if(status.equals(HttpStatus.FORBIDDEN.name())) {
+            return HttpStatus.FORBIDDEN;
+        }
+
+        return HttpStatus.OK;
+    }
+
+    public static HttpStatus registerRequest(String name, String password) throws NoSuchAlgorithmException, InterruptedException, IOException {
+        String hash = getHash(password);
         LoginData loginData = new LoginData(name, hash);
         URI uri = URI.create("http://127.0.0.1:8080/register");
         HttpClient client = HttpClient.newHttpClient();
@@ -38,5 +58,11 @@ public class HttpService {
         }
 
         return HttpStatus.OK;
+    }
+
+    private static String getHash(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-512");
+        byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        return new String(hashBytes, StandardCharsets.UTF_8);
     }
 }

@@ -39,7 +39,7 @@ public class RegistrationController {
         }
 
         try {
-            HttpStatus status = HttpService.loginRequest(name, password);
+            HttpStatus status = HttpService.registerRequest(name, password);
 
             if(Objects.equals(status, HttpStatus.CONFLICT)) {
                 setErrorMessage("User with this name already exists");
@@ -65,7 +65,7 @@ public class RegistrationController {
     }
 
     private void setErrorMessage(String message) {
-        registrationView.getActionTarget().setFill(Color.FIREBRICK);
-        registrationView.getActionTarget().setText(message);
+        registrationView.getErrorText().setFill(Color.FIREBRICK);
+        registrationView.getErrorText().setText(message);
     }
 }
