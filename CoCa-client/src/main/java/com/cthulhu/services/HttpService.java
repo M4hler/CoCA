@@ -15,15 +15,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class HttpService {
     public static HttpStatus loginRequest(String name, String password) throws NoSuchAlgorithmException, InterruptedException,IOException {
-        String hash = getHash(password);
-        LoginData loginData = new LoginData(name, hash);
-        URI uri = URI.create("http://127.0.0.1:8080/login");
-        HttpClient client = HttpClient.newHttpClient();
-        String payload = new ObjectMapper().writeValueAsString(loginData);
-        HttpRequest request = HttpRequest.newBuilder().uri(uri)
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(payload)).build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = makeRequest(name, password, "login");
         String status = response.body().replaceAll("\"", "");
 
         if(status.equals(HttpStatus.NOT_FOUND.name())) {
@@ -34,19 +26,15 @@ public class HttpService {
             return HttpStatus.FORBIDDEN;
         }
 
+        if(!status.equals(HttpStatus.OK.name())) {
+            return HttpStatus.valueOf(response.statusCode());
+        }
+
         return HttpStatus.OK;
     }
 
     public static HttpStatus registerRequest(String name, String password) throws NoSuchAlgorithmException, InterruptedException, IOException {
-        String hash = getHash(password);
-        LoginData loginData = new LoginData(name, hash);
-        URI uri = URI.create("http://127.0.0.1:8080/register");
-        HttpClient client = HttpClient.newHttpClient();
-        String payload = new ObjectMapper().writeValueAsString(loginData);
-        HttpRequest request = HttpRequest.newBuilder().uri(uri)
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(payload)).build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = makeRequest(name, password, "register");
         String status = response.body().replaceAll("\"", "");
 
         if (status.equals(HttpStatus.CONFLICT.name())) {
@@ -58,6 +46,18 @@ public class HttpService {
         }
 
         return HttpStatus.OK;
+    }
+
+    private static HttpResponse<String> makeRequest(String name, String password, String endpoint) throws NoSuchAlgorithmException, IOException, InterruptedException {
+        String hash = getHash(password);
+        LoginData loginData = new LoginData(name, hash);
+        URI uri = URI.create("http://127.0.0.1:8080/" + endpoint);
+        HttpClient client = HttpClient.newHttpClient();
+        String payload = new ObjectMapper().writeValueAsString(loginData);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(payload)).build();
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     private static String getHash(String password) throws NoSuchAlgorithmException {
