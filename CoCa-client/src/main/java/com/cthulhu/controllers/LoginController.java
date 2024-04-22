@@ -1,19 +1,12 @@
 package com.cthulhu.controllers;
 
-import com.cthulhu.models.LoginData;
+import com.cthulhu.services.HttpService;
 import com.cthulhu.views.LoginView;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
@@ -40,27 +33,15 @@ public class LoginController {
         }
 
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-512");
-            byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-            String hash = new String(hashBytes, StandardCharsets.UTF_8);
+            HttpStatus status = HttpService.loginRequest(name, password);
 
-            LoginData data = new LoginData(name, hash);
-            URI uri = URI.create("http://127.0.0.1:8080/register");
-            HttpClient client = HttpClient.newHttpClient();
-            String payload = new ObjectMapper().writeValueAsString(data);
-            HttpRequest request = HttpRequest.newBuilder().uri(uri)
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(payload)).build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            String status = response.body().replaceAll("\"", "");
-
-            if(Objects.equals(status, HttpStatus.CONFLICT.name())) {
+            if(Objects.equals(status, HttpStatus.CONFLICT)) {
                 setErrorMessage("User with this name already exists");
                 return;
             }
 
-            if(!Objects.equals(status, HttpStatus.OK.name())) {
-                setErrorMessage("Server responded with error, code: " + response.statusCode());
+            if(!Objects.equals(status, HttpStatus.OK)) {
+                setErrorMessage("Server responded with error, code: " + status.value());
                 return;
             }
 
