@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
@@ -62,12 +61,6 @@ public class LoginController extends AbstractController<LoginView> {
         }
         catch(NoSuchAlgorithmException e) {
             setErrorMessage("Wrong algorithm used to hash the password");
-        }
-        catch(InterruptedException e) {
-            setErrorMessage("Communication with server was interrupted");
-        }
-        catch(IOException e) {
-            setErrorMessage("Server isn't responding");
         }
     }
 

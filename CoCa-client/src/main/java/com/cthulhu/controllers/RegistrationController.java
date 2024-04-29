@@ -3,13 +3,12 @@ package com.cthulhu.controllers;
 import com.cthulhu.services.HttpService;
 import com.cthulhu.views.LoginView;
 import com.cthulhu.views.RegistrationView;
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
@@ -43,7 +42,7 @@ public class RegistrationController extends AbstractController<RegistrationView>
         }
 
         try {
-            HttpStatus status = HttpService.registerRequest(name, password);
+            HttpStatusCode status = HttpService.registerRequest(name, password);
 
             if(Objects.equals(status, HttpStatus.CONFLICT)) {
                 setErrorMessage("User with this name already exists");
@@ -59,12 +58,6 @@ public class RegistrationController extends AbstractController<RegistrationView>
         }
         catch(NoSuchAlgorithmException e) {
             setErrorMessage("Wrong algorithm used to hash the password");
-        }
-        catch(InterruptedException e) {
-            setErrorMessage("Communication with server was interrupted");
-        }
-        catch(IOException ex) {
-            setErrorMessage("Server isn't responding");
         }
     }
 

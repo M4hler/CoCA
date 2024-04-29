@@ -1,6 +1,5 @@
 package com.cthulhu.controllers;
 
-import com.cthulhu.listeners.MainListener;
 import com.cthulhu.models.Account;
 import com.cthulhu.models.LoginData;
 import com.cthulhu.models.LoginResponse;
@@ -13,22 +12,21 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
-@RestController
-public class RegistrationController {
+@org.springframework.web.bind.annotation.RestController
+public class RestController {
     private final AccountService accountService;
     private final MessageSender messageSender;
     private final MessageDigest messageDigest;
     private final JmsTemplate jmsTemplate;
 
-    public RegistrationController(AccountService accountService, MessageSender messageSender,
-                                  JmsTemplate jmsTemplate) throws NoSuchAlgorithmException {
+    public RestController(AccountService accountService, MessageSender messageSender,
+                          JmsTemplate jmsTemplate) throws NoSuchAlgorithmException {
         this.accountService = accountService;
         this.messageSender = messageSender;
         this.jmsTemplate = jmsTemplate;
@@ -61,9 +59,9 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public HttpStatus register(@RequestBody LoginData loginData) {
+    public ResponseEntity<String> register(@RequestBody LoginData loginData) {
         if(accountService.userExists(loginData.getName())) {
-            return HttpStatus.CONFLICT;
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
 
         String salt = UUID.randomUUID().toString().substring(0, 16);
@@ -72,7 +70,7 @@ public class RegistrationController {
         Account account = new Account(loginData.getName(), password, salt, false);
         accountService.save(account);
 
-        return HttpStatus.OK;
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @GetMapping("/send")
