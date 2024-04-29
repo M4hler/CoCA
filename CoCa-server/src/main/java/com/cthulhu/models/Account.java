@@ -15,4 +15,5 @@ public class Account {
     private String name;
     private String password;
     private String salt;
+    private boolean isAdmin;
 }

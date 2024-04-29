@@ -65,7 +65,7 @@ public class RegistrationController {
         String salt = UUID.randomUUID().toString().substring(0, 16);
         String password = getPassword(loginData.getPassword(), salt);
 
-        Account account = new Account(loginData.getName(), password, salt);
+        Account account = new Account(loginData.getName(), password, salt, false);
         accountService.save(account);
 
         return HttpStatus.OK;

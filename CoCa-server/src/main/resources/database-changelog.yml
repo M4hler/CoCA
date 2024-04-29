@@ -23,6 +23,10 @@ databaseChangeLog:
                   type: varchar(16)
                   constraints:
                     nullable: false
+              - column:
+                  name: is_admin
+                  type: boolean
+                  defaultValueBoolean: false
   - changeSet:
       id: Create BladeRunner table
       author: M4hler
