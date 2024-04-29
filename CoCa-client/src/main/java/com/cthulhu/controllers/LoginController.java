@@ -36,24 +36,29 @@ public class LoginController extends AbstractController<LoginView> {
         }
 
         try {
-            HttpStatus status = HttpService.loginRequest(name, password);
+            var response = HttpService.loginRequest(name, password);
 
-            if(Objects.equals(status, HttpStatus.NOT_FOUND)) {
+            if(Objects.equals(response.getStatusCode(), HttpStatus.NOT_FOUND)) {
                 setErrorMessage("User with name " + name + " not found");
                 return;
             }
 
-            if(Objects.equals(status, HttpStatus.FORBIDDEN)) {
+            if(Objects.equals(response.getStatusCode(), HttpStatus.FORBIDDEN)) {
                 setErrorMessage("Wrong password");
                 return;
             }
 
-            if(!Objects.equals(status, HttpStatus.OK)) {
-                setErrorMessage("Server responded with error, code: " + status.value());
+            if(!Objects.equals(response.getStatusCode(), HttpStatus.OK)) {
+                setErrorMessage("Server responded with error, code: " + response.getStatusCode().value());
                 return;
             }
 
-            setErrorMessage("Everything good");
+            if(response.getBody() != null) {
+                setErrorMessage("Everything good: " + response.getBody().getQueue());
+            }
+            else {
+               setErrorMessage("Body was null");
+            }
         }
         catch(NoSuchAlgorithmException e) {
             setErrorMessage("Wrong algorithm used to hash the password");

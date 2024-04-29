@@ -24,6 +24,10 @@ public class AccountService {
         return repository.findPasswordByName(name);
     }
 
+    public boolean isAdmin(String name) {
+        return repository.checkIsAdminByName(name);
+    }
+
     public void save(Account account) {
         repository.save(account);
     }

@@ -3,9 +3,12 @@ package com.cthulhu.controllers;
 import com.cthulhu.listeners.MainListener;
 import com.cthulhu.models.Account;
 import com.cthulhu.models.LoginData;
+import com.cthulhu.models.LoginResponse;
 import com.cthulhu.services.AccountService;
+import com.cthulhu.services.MessageSender;
 import jakarta.jms.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,22 +23,22 @@ import java.util.UUID;
 @RestController
 public class RegistrationController {
     private final AccountService accountService;
-    private final ConnectionFactory connectionFactory;
+    private final MessageSender messageSender;
     private final MessageDigest messageDigest;
     private final JmsTemplate jmsTemplate;
 
-    public RegistrationController(AccountService accountService, ConnectionFactory connectionFactory,
+    public RegistrationController(AccountService accountService, MessageSender messageSender,
                                   JmsTemplate jmsTemplate) throws NoSuchAlgorithmException {
         this.accountService = accountService;
-        this.connectionFactory = connectionFactory;
+        this.messageSender = messageSender;
         this.jmsTemplate = jmsTemplate;
         messageDigest = MessageDigest.getInstance("SHA-512");
     }
 
     @PostMapping("/login")
-    public HttpStatus login(@RequestBody LoginData loginData) throws JMSException {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginData loginData) {
         if(!accountService.userExists(loginData.getName())) {
-            return HttpStatus.NOT_FOUND;
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
         String salt = accountService.getSalt(loginData.getName());
@@ -43,17 +46,18 @@ public class RegistrationController {
         String dbPassword = accountService.getPassword(loginData.getName());
 
         if(!dbPassword.equals(password)) {
-            return HttpStatus.FORBIDDEN;
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         }
 
-        Connection connection = connectionFactory.createConnection();
-        connection.start();
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Queue queue = session.createQueue(loginData.getName());
-        MessageConsumer consumer = session.createConsumer(queue);
-        consumer.setMessageListener(new MainListener());
-
-        return HttpStatus.OK;
+        try {
+            String queue = messageSender.createQueue(loginData.getName());
+            var isAdmin = accountService.isAdmin(loginData.getName());
+            var body = new LoginResponse(queue, isAdmin);
+            return new ResponseEntity<>(body, HttpStatus.OK);
+        }
+        catch(JMSException e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/register")

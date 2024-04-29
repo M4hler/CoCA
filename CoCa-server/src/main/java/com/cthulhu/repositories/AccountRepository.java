@@ -12,4 +12,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     String findSaltByName(String name);
     @Query("SELECT password FROM Account WHERE name = ?1")
     String findPasswordByName(String name);
+    @Query("SELECT isAdmin FROM Account WHERE name = ?1")
+    boolean checkIsAdminByName(String name);
 }
