@@ -67,7 +67,7 @@ public class RestController {
         String salt = UUID.randomUUID().toString().substring(0, 16);
         String password = getPassword(loginData.getPassword(), salt);
 
-        Account account = new Account(loginData.getName(), password, salt, false);
+        Account account = new Account(loginData.getName(), password, salt, false, null);
         accountService.save(account);
 
         return new ResponseEntity<>(null, HttpStatus.OK);

@@ -42,6 +42,11 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: bladeRunnerPrimaryKey
               - column:
+                  name: account_name
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+              - column:
                   name: is_human
                   type: boolean
                   constraints:
