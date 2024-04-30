@@ -1,5 +1,6 @@
 package com.cthulhu.controllers;
 
+import com.cthulhu.models.Account;
 import com.cthulhu.services.HttpService;
 import com.cthulhu.views.LoginView;
 import com.cthulhu.views.RegistrationView;
@@ -15,8 +16,10 @@ import java.util.Objects;
 @Setter
 public class LoginController extends AbstractController<LoginView> {
     private RegistrationView registrationView;
+    private Account account;
 
-    public LoginController() {
+    public LoginController(Account account) {
+        this.account = account;
         view = new LoginView(this::login, this::register);
     }
 
@@ -36,6 +39,7 @@ public class LoginController extends AbstractController<LoginView> {
 
         try {
             var response = HttpService.loginRequest(name, password);
+            System.out.println("BODY: " + response.getBody().toString());
 
             if(Objects.equals(response.getStatusCode(), HttpStatus.NOT_FOUND)) {
                 setErrorMessage("User with name " + name + " not found");
@@ -53,7 +57,11 @@ public class LoginController extends AbstractController<LoginView> {
             }
 
             if(response.getBody() != null) {
+                account.setAdmin(response.getBody().getIsAdmin());
                 setErrorMessage("Everything good: " + response.getBody().getQueue());
+
+                var sessionController = new SessionController(account.isAdmin());
+                MainController.setCurrentScene(sessionController.getView());
             }
             else {
                setErrorMessage("Body was null");
