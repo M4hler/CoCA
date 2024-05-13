@@ -4,9 +4,11 @@ import com.cthulhu.models.Account;
 import com.cthulhu.services.HttpService;
 import com.cthulhu.views.LoginView;
 import com.cthulhu.views.RegistrationView;
+import jakarta.jms.*;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.http.HttpStatus;
 
 import java.security.NoSuchAlgorithmException;
@@ -21,6 +23,13 @@ public class LoginController extends AbstractController<LoginView> {
     public LoginController(Account account) {
         this.account = account;
         view = new LoginView(this::login, this::register);
+        try {
+            createQueue("testQueue");
+            System.out.println("Created queue");
+        }
+        catch(Exception e) {
+
+        }
     }
 
     private void login() {
@@ -79,5 +88,17 @@ public class LoginController extends AbstractController<LoginView> {
     private void setErrorMessage(String message) {
         view.getErrorText().setFill(Color.FIREBRICK);
         view.getErrorText().setText(message);
+    }
+
+    public String createQueue(String name) throws JMSException {
+        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
+        Connection connection = connectionFactory.createConnection();
+        connection.start();
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Queue queue = session.createQueue(name);
+        MessageConsumer consumer = session.createConsumer(queue);
+        consumer.setMessageListener(new TestListener());
+
+        return queue.getQueueName();
     }
 }
