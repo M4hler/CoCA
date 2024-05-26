@@ -12,4 +12,5 @@ import lombok.ToString;
 public class LoginResponse {
     private String queue;
     private Boolean isAdmin;
+    private BladeRunner bladeRunner;
 }

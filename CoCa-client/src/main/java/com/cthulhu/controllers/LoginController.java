@@ -48,7 +48,6 @@ public class LoginController extends AbstractController<LoginView> {
 
         try {
             var response = HttpService.loginRequest(name, password);
-            System.out.println("BODY: " + response.getBody().toString());
 
             if(Objects.equals(response.getStatusCode(), HttpStatus.NOT_FOUND)) {
                 setErrorMessage("User with name " + name + " not found");
@@ -69,7 +68,7 @@ public class LoginController extends AbstractController<LoginView> {
                 account.setAdmin(response.getBody().getIsAdmin());
                 setErrorMessage("Everything good: " + response.getBody().getQueue());
 
-                var sessionController = new SessionController(account.isAdmin());
+                var sessionController = new SessionController(account.isAdmin(), response.getBody().getBladeRunner());
                 MainController.setCurrentScene(sessionController.getView());
             }
             else {

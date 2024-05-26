@@ -6,6 +6,7 @@ import com.cthulhu.models.LoginResponse;
 import com.cthulhu.services.AccountService;
 import com.cthulhu.services.MessageSender;
 import jakarta.jms.*;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
@@ -34,11 +35,13 @@ public class RestController {
     }
 
     @PostMapping("/login")
+    @Transactional
     public ResponseEntity<LoginResponse> login(@RequestBody LoginData loginData) {
         if(!accountService.userExists(loginData.getName())) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
+        Account account = accountService.getAccount(loginData.getName());
         String salt = accountService.getSalt(loginData.getName());
         String password = getPassword(loginData.getPassword(), salt);
         String dbPassword = accountService.getPassword(loginData.getName());
@@ -50,7 +53,8 @@ public class RestController {
         try {
             String queue = messageSender.createQueue(loginData.getName());
             var isAdmin = accountService.isAdmin(loginData.getName());
-            var body = new LoginResponse(queue, isAdmin);
+            var bladeRunner = account.getBladeRunners().get(0);
+            var body = new LoginResponse(queue, isAdmin, bladeRunner);
             return new ResponseEntity<>(body, HttpStatus.OK);
         }
         catch(JMSException e) {

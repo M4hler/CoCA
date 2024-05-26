@@ -54,7 +54,7 @@ public class RegistrationController extends AbstractController<RegistrationView>
                 return;
             }
 
-            setErrorMessage("Everything good");
+            backAction();
         }
         catch(NoSuchAlgorithmException e) {
             setErrorMessage("Wrong algorithm used to hash the password");
