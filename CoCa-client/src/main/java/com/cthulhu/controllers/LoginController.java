@@ -23,13 +23,6 @@ public class LoginController extends AbstractController<LoginView> {
     public LoginController(Account account) {
         this.account = account;
         view = new LoginView(this::login, this::register);
-        try {
-            createQueue("testQueue");
-            System.out.println("Created queue");
-        }
-        catch(Exception e) {
-
-        }
     }
 
     private void login() {
@@ -66,7 +59,7 @@ public class LoginController extends AbstractController<LoginView> {
 
             if(response.getBody() != null) {
                 account.setAdmin(response.getBody().getIsAdmin());
-                setErrorMessage("Everything good: " + response.getBody().getQueue());
+                createQueue(response.getBody().getQueue());
 
                 var sessionController = new SessionController(account.isAdmin(), response.getBody().getBladeRunner());
                 MainController.setCurrentScene(sessionController.getView());
@@ -77,6 +70,9 @@ public class LoginController extends AbstractController<LoginView> {
         }
         catch(NoSuchAlgorithmException e) {
             setErrorMessage("Wrong algorithm used to hash the password");
+        }
+        catch(JMSException e) {
+            setErrorMessage("Couldn't create queue");
         }
     }
 
@@ -89,7 +85,7 @@ public class LoginController extends AbstractController<LoginView> {
         view.getErrorText().setText(message);
     }
 
-    public String createQueue(String name) throws JMSException {
+    public void createQueue(String name) throws JMSException {
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
         Connection connection = connectionFactory.createConnection();
         connection.start();
@@ -97,7 +93,5 @@ public class LoginController extends AbstractController<LoginView> {
         Queue queue = session.createQueue(name);
         MessageConsumer consumer = session.createConsumer(queue);
         consumer.setMessageListener(new TestListener());
-
-        return queue.getQueueName();
     }
 }

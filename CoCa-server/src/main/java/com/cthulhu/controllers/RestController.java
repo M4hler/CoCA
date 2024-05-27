@@ -1,16 +1,15 @@
 package com.cthulhu.controllers;
 
 import com.cthulhu.models.Account;
+import com.cthulhu.models.BladeRunner;
 import com.cthulhu.models.LoginData;
 import com.cthulhu.models.LoginResponse;
 import com.cthulhu.services.AccountService;
-import com.cthulhu.services.MessageSender;
+import com.cthulhu.services.MessageSenderService;
 import jakarta.jms.*;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,15 +21,13 @@ import java.util.UUID;
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
     private final AccountService accountService;
-    private final MessageSender messageSender;
+    private final MessageSenderService messageSenderService;
     private final MessageDigest messageDigest;
-    private final JmsTemplate jmsTemplate;
 
-    public RestController(AccountService accountService, MessageSender messageSender,
-                          JmsTemplate jmsTemplate) throws NoSuchAlgorithmException {
+    public RestController(AccountService accountService,
+                          MessageSenderService messageSenderService) throws NoSuchAlgorithmException {
         this.accountService = accountService;
-        this.messageSender = messageSender;
-        this.jmsTemplate = jmsTemplate;
+        this.messageSenderService = messageSenderService;
         messageDigest = MessageDigest.getInstance("SHA-512");
     }
 
@@ -51,10 +48,15 @@ public class RestController {
         }
 
         try {
-            String queue = messageSender.createQueue(loginData.getName());
+            String queue = messageSenderService.createQueue(loginData.getName());
             var isAdmin = accountService.isAdmin(loginData.getName());
-            var bladeRunner = account.getBladeRunners().get(0);
+            BladeRunner bladeRunner = null;
+            if(!isAdmin) {
+                bladeRunner = account.getBladeRunners().get(0);
+            }
+
             var body = new LoginResponse(queue, isAdmin, bladeRunner);
+            messageSenderService.sendJoinEvent(loginData.getName());
             return new ResponseEntity<>(body, HttpStatus.OK);
         }
         catch(JMSException e) {
@@ -75,12 +77,6 @@ public class RestController {
         accountService.save(account);
 
         return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
-    @GetMapping("/send")
-    public HttpStatus send() {
-        jmsTemplate.convertAndSend("testQueue", "Hello World!");
-        return HttpStatus.OK;
     }
 
     private String getPassword(String password, String salt) {
