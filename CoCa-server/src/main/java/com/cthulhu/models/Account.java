@@ -1,6 +1,6 @@
 package com.cthulhu.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -21,6 +21,6 @@ public class Account {
     private String salt;
     private boolean isAdmin;
     @OneToMany(mappedBy = "account")
-    @JsonManagedReference
+    @JsonIgnore
     private List<BladeRunner> bladeRunners;
 }

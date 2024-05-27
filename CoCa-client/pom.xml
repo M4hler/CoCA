@@ -18,11 +18,18 @@
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-client -->
         <dependency>
-            <groupId>com.cthulhu</groupId>
-            <artifactId>CoCa-server</artifactId>
-            <version>0.0.1</version>
-            <scope>compile</scope>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>6.0.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.3.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->

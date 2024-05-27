@@ -1,23 +1,12 @@
 package com.cthulhu.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 public class BladeRunner {
-    @Id
     private String name;
-    @ManyToOne
-    @JoinColumn(name = "account_name")
-    @JsonIgnore
-    private Account account;
 
     private boolean isHuman;
     private boolean secretReplicant;
