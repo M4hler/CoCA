@@ -89,9 +89,11 @@ public class LoginController extends AbstractController<LoginView> {
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
         Connection connection = connectionFactory.createConnection();
         connection.start();
+
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Queue queue = session.createQueue(name);
-        MessageConsumer consumer = session.createConsumer(queue);
+        Destination destination = session.createQueue(name);
+
+        MessageConsumer consumer = session.createConsumer(destination);
         consumer.setMessageListener(new TestListener());
     }
 }

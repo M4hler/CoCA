@@ -13,67 +13,34 @@ import java.util.List;
 public class MessageSenderService {
     private final ConnectionFactory connectionFactory;
     private final JmsTemplate jmsTemplate;
-    private final List<Queue> queues;
+    private final List<Topic> topics;
     private static final String QUEUE_PREFIX = "queue_";
 
     public MessageSenderService(ConnectionFactory connectionFactory, JmsTemplate jmsTemplate) {
         this.connectionFactory = connectionFactory;
         this.jmsTemplate = jmsTemplate;
-        queues = new ArrayList<>();
+        topics = new ArrayList<>();
     }
 
     public String createQueue(String name) throws JMSException {
         Connection connection = connectionFactory.createConnection();
         connection.start();
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Queue queue = session.createQueue(QUEUE_PREFIX + name);
+        Topic topic = session.createTopic(QUEUE_PREFIX + name);
 
-        MessageConsumer consumer = session.createConsumer(queue);
+        MessageConsumer consumer = session.createConsumer(topic);
         consumer.setMessageListener(new MainListener());
 
-        MessageProducer producer = session.createProducer(queue);
+        MessageProducer producer = session.createProducer(topic);
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
-        queues.add(queue);
-        return queue.getQueueName();
+        topics.add(topic);
+        return topic.getTopicName();
     }
-
-//    public void test() {
-//        jmsTemplate.convertAndSend("testQueue", "Hello World!");
-//    }
 
     public void sendJoinEvent(String name) throws JMSException {
-//        for(var entry : sessionsToProducers.entrySet()) {
-//            var session = entry.getKey();
-//            var producer = entry.getValue();
-//            var message = session.createObjectMessage(new JoinEvent(name));
-//            producer.send(message);
-//            System.out.println("Send message by " + name);
-//        }
-
-        for(var queue : queues) {
-            jmsTemplate.convertAndSend(queue.getQueueName(), new JoinEvent(name));
+        for(var topic : topics) {
+            jmsTemplate.convertAndSend(topic.getTopicName(), new JoinEvent(name));
         }
-    }
-
-    public void sendMessage() throws JMSException {
-        Connection connection = connectionFactory.createConnection();
-        connection.start();
-
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination destination = session.createQueue("testQueue");
-
-        MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-
-        String message = "Hello, World!";
-        TextMessage textMessage = session.createTextMessage(message);
-
-        producer.send(textMessage);
-        System.out.println("Sending message");
-
-        producer.close();
-        session.close();
-        connection.close();
     }
 }
