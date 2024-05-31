@@ -1,7 +1,7 @@
 package com.cthulhu.views;
 
 import com.cthulhu.models.BladeRunner;
-import jakarta.jms.MessageListener;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -38,6 +38,7 @@ public class SessionView implements IView {
 
     private Text title;
     private final GridPane grid;
+    private final VBox vBox;
     private final Scene scene;
 
     public SessionView(boolean isAdmin, BladeRunner bladeRunner) {
@@ -47,13 +48,7 @@ public class SessionView implements IView {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        VBox vBox = new VBox();
-        for(int i = 0; i < 5; i++) {
-            Text text = new Text("Message: " + i);
-            text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
-            text.setTextAlignment(TextAlignment.LEFT);
-            vBox.getChildren().add(text);
-        }
+        vBox = new VBox();
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefSize(400, 600);
@@ -71,6 +66,16 @@ public class SessionView implements IView {
         else {
             setupUser(bladeRunner);
         }
+    }
+
+    public void addToVBox(String message) {
+        System.out.println("Adding to vbox");
+        Platform.runLater(() -> {
+            Text text = new Text("Player " + message + " joined game");
+            text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
+            text.setTextAlignment(TextAlignment.LEFT);
+            vBox.getChildren().add(text);
+        });
     }
 
     private void setupUser(BladeRunner bladeRunner) {

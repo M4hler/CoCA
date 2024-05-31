@@ -59,9 +59,11 @@ public class LoginController extends AbstractController<LoginView> {
 
             if(response.getBody() != null) {
                 account.setAdmin(response.getBody().getIsAdmin());
-                createQueue(response.getBody().getQueue());
+                var listener = createQueue(response.getBody().getQueue());
+                var testListener = (TestListener)listener;
 
                 var sessionController = new SessionController(account.isAdmin(), response.getBody().getBladeRunner());
+                testListener.setController(sessionController);
                 MainController.setCurrentScene(sessionController.getView());
             }
             else {
@@ -85,7 +87,7 @@ public class LoginController extends AbstractController<LoginView> {
         view.getErrorText().setText(message);
     }
 
-    public void createQueue(String name) throws JMSException {
+    public MessageListener createQueue(String name) throws JMSException {
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
         Connection connection = connectionFactory.createConnection();
         connection.start();
@@ -94,6 +96,9 @@ public class LoginController extends AbstractController<LoginView> {
         Destination destination = session.createQueue(name);
 
         MessageConsumer consumer = session.createConsumer(destination);
-        consumer.setMessageListener(new TestListener());
+        var listener = new TestListener();
+        consumer.setMessageListener(listener);
+
+        return listener;
     }
 }

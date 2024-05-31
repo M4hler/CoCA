@@ -7,4 +7,8 @@ public class SessionController extends AbstractController<SessionView> {
     public SessionController(boolean isAdmin, BladeRunner bladeRunner) {
         view = new SessionView(isAdmin, bladeRunner);
     }
+
+    public void test(String message) {
+        view.addToVBox(message);
+    }
 }
