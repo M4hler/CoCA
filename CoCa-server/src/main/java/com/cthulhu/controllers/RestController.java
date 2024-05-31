@@ -47,15 +47,18 @@ public class RestController {
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         }
 
+        if(!account.isAdmin() && !messageSenderService.isAdminOnline()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
         try {
-            String queue = messageSenderService.createQueue(loginData.getName());
-            var isAdmin = accountService.isAdmin(loginData.getName());
+            String queue = messageSenderService.createQueue(account);
             BladeRunner bladeRunner = null;
-            if(!isAdmin) {
+            if(!account.isAdmin()) {
                 bladeRunner = account.getBladeRunners().get(0);
             }
 
-            var body = new LoginResponse(queue, isAdmin, bladeRunner);
+            var body = new LoginResponse(queue, account.isAdmin(), bladeRunner);
             messageSenderService.sendJoinEvent(loginData.getName());
             return new ResponseEntity<>(body, HttpStatus.OK);
         }

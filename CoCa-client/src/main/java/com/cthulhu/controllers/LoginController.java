@@ -52,6 +52,11 @@ public class LoginController extends AbstractController<LoginView> {
                 return;
             }
 
+            if(Objects.equals(response.getStatusCode(), HttpStatus.NOT_ACCEPTABLE)) {
+                setErrorMessage("Admin hasn't started the session yet");
+                return;
+            }
+
             if(!Objects.equals(response.getStatusCode(), HttpStatus.OK)) {
                 setErrorMessage("Server responded with error, code: " + response.getStatusCode().value());
                 return;
