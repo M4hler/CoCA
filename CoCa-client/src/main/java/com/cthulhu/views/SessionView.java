@@ -1,6 +1,7 @@
 package com.cthulhu.views;
 
 import com.cthulhu.models.BladeRunner;
+import jakarta.jms.MessageListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -45,6 +46,37 @@ public class SessionView implements IView {
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
+
+        VBox vBox = new VBox();
+        for(int i = 0; i < 5; i++) {
+            Text text = new Text("Message: " + i);
+            text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
+            text.setTextAlignment(TextAlignment.LEFT);
+            vBox.getChildren().add(text);
+        }
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setPrefSize(400, 600);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setContent(vBox);
+
+        grid.add(scrollPane, 3, 1, 20, 20);
+
+        scene = new Scene(grid, 800, 600);
+
+        if(isAdmin) {
+            setupAdmin();
+        }
+        else {
+            setupUser(bladeRunner);
+        }
+    }
+
+    private void setupUser(BladeRunner bladeRunner) {
+        title = new Text("User view");
+        title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(title, 3, 0, 2, 1);
 
         Label stats = createLabel("Stats", 16);
         grid.add(stats, 0, 1, 2, 1);
@@ -116,37 +148,6 @@ public class SessionView implements IView {
         grid.add(manipulationLabel, 0, 17, 2, 1);
         manipulation = createLabel(map(bladeRunner.getManipulation()), 12);
         grid.add(manipulation, 2, 17, 1, 1);
-
-        VBox vBox = new VBox();
-        for(int i = 0; i < 5; i++) {
-            Text text = new Text("Message: " + i);
-            text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
-            text.setTextAlignment(TextAlignment.LEFT);
-            vBox.getChildren().add(text);
-        }
-
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setPrefSize(400, 600);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setContent(vBox);
-
-        grid.add(scrollPane, 3, 1, 20, 20);
-
-        scene = new Scene(grid, 800, 600);
-
-        if(isAdmin) {
-            setupAdmin();
-        }
-        else {
-            setupUser();
-        }
-    }
-
-    private void setupUser() {
-        title = new Text("User view");
-        title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(title, 3, 0, 2, 1);
     }
 
     private void setupAdmin() {
