@@ -52,7 +52,7 @@ public class LoginController extends AbstractController<LoginView> {
                 return;
             }
 
-            if(Objects.equals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED)) {
+            if(Objects.equals(response.getStatusCode(), HttpStatus.NOT_FOUND)) {
                 setErrorMessage("No Blade Runner is linked to this account");
                 return;
             }
