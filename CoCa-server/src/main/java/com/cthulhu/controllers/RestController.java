@@ -47,6 +47,10 @@ public class RestController {
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         }
 
+        if(account.getBladeRunners().isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+        }
+
         if(!account.isAdmin() && !messageSenderService.isAdminOnline()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }

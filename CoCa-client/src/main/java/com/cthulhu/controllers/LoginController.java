@@ -52,6 +52,11 @@ public class LoginController extends AbstractController<LoginView> {
                 return;
             }
 
+            if(Objects.equals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED)) {
+                setErrorMessage("No Blade Runner is linked to this account");
+                return;
+            }
+
             if(Objects.equals(response.getStatusCode(), HttpStatus.NOT_ACCEPTABLE)) {
                 setErrorMessage("Admin hasn't started the session yet");
                 return;

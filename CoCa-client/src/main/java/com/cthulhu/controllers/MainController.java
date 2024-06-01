@@ -27,7 +27,7 @@ public class MainController extends Application {
     @Override
     public void start(Stage stage) {
         MainController.stage = stage;
-        stage.setTitle("Login");
+        stage.setTitle("CoCa");
         stage.setScene(currentScene);
         stage.show();
     }
