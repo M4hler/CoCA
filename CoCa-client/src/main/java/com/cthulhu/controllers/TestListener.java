@@ -24,7 +24,9 @@ public class TestListener implements MessageListener {
             String body = message.getBody(String.class);
             var event = mapper.readValue(body, JoinEvent.class);
             System.out.println("event: " + event.getName());
-            controller.test(event.getName());
+            if(controller != null) {
+                controller.test(event.getName());
+            }
         }
         catch (JMSException e) {
             e.printStackTrace();

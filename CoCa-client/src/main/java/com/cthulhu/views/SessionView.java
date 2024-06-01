@@ -2,10 +2,13 @@ package com.cthulhu.views;
 
 import com.cthulhu.models.BladeRunner;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -15,6 +18,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -159,6 +164,14 @@ public class SessionView implements IView {
         title = new Text("Admin view");
         title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(title, 3, 0, 2, 1);
+
+        ListView<String> listView = new ListView<>();
+        ObservableList<String> items = FXCollections.observableList(List.of("test1", "test2"));
+        listView.setItems(items);
+        listView.setPrefHeight(70);
+        listView.setPrefWidth(100);
+
+        grid.add(listView, 0, 1);
     }
 
     @Override
