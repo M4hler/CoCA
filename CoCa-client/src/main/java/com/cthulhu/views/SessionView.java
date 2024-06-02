@@ -2,14 +2,11 @@ package com.cthulhu.views;
 
 import com.cthulhu.models.BladeRunner;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -18,8 +15,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -165,13 +160,16 @@ public class SessionView implements IView {
         title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(title, 3, 0, 2, 1);
 
-        ListView<String> listView = new ListView<>();
-        ObservableList<String> items = FXCollections.observableList(List.of("test1", "test2"));
-        listView.setItems(items);
-        listView.setPrefHeight(70);
-        listView.setPrefWidth(100);
+        CheckBoxTreeItem<String> root = new CheckBoxTreeItem<>("Blade Runners");
+        root.setExpanded(false);
+        root.getChildren().add(new CheckBoxTreeItem<>("test1"));
+        root.getChildren().add(new CheckBoxTreeItem<>("test2"));
+        TreeView<String> treeView = new TreeView<>(root);
+        treeView.setPrefHeight(100);
+        treeView.setPrefWidth(200);
+        treeView.setCellFactory(CheckBoxTreeCell.forTreeView());
 
-        grid.add(listView, 0, 1);
+        grid.add(treeView, 0, 1);
     }
 
     @Override
