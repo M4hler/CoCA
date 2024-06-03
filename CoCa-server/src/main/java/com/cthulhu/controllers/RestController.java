@@ -63,7 +63,7 @@ public class RestController {
             }
 
             var body = new LoginResponse(queue, account.isAdmin(), bladeRunner);
-            messageSenderService.sendJoinEvent(loginData.getName());
+            messageSenderService.sendJoinEvent(loginData.getName(), bladeRunner);
             return new ResponseEntity<>(body, HttpStatus.OK);
         }
         catch(JMSException e) {

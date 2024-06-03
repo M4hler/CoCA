@@ -1,28 +1,30 @@
 package com.cthulhu.services;
 
+import com.cthulhu.events.BladeRunnerDataEvent;
 import com.cthulhu.events.JoinEvent;
 import com.cthulhu.listeners.MainListener;
 import com.cthulhu.models.Account;
+import com.cthulhu.models.BladeRunner;
 import jakarta.jms.*;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MessageSenderService {
     private final ConnectionFactory connectionFactory;
     private final JmsTemplate jmsTemplate;
-    private final List<Topic> topics;
-    private final List<Account> onlineAccounts;
+    private final Map<Account, Topic> queues;
     private static final String QUEUE_PREFIX = "queue_";
 
     public MessageSenderService(ConnectionFactory connectionFactory, JmsTemplate jmsTemplate) {
         this.connectionFactory = connectionFactory;
         this.jmsTemplate = jmsTemplate;
-        topics = new ArrayList<>();
-        onlineAccounts = new ArrayList<>();
+        queues = new HashMap<>();
     }
 
     public String createQueue(Account account) throws JMSException {
@@ -37,18 +39,20 @@ public class MessageSenderService {
         MessageProducer producer = session.createProducer(topic);
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
-        topics.add(topic);
-        onlineAccounts.add(account);
+        queues.put(account, topic);
         return topic.getTopicName();
     }
 
-    public void sendJoinEvent(String name) throws JMSException {
-        for(var topic : topics) {
-            jmsTemplate.convertAndSend(topic.getTopicName(), new JoinEvent(name));
+    public void sendJoinEvent(String name, BladeRunner bladeRunner) throws JMSException {
+        for(var queue : queues.entrySet()) {
+            jmsTemplate.convertAndSend(queue.getValue().getTopicName(), new JoinEvent(name));
+            if(queue.getKey().isAdmin()) {
+                jmsTemplate.convertAndSend(queue.getValue().getTopicName(), new BladeRunnerDataEvent(bladeRunner));
+            }
         }
     }
 
     public boolean isAdminOnline() {
-        return onlineAccounts.stream().anyMatch(Account::isAdmin);
+        return queues.entrySet().stream().anyMatch(x -> x.getKey().isAdmin());
     }
 }

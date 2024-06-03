@@ -1,5 +1,6 @@
 package com.cthulhu.controllers;
 
+import com.cthulhu.events.BladeRunnerDataEvent;
 import com.cthulhu.events.JoinEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,10 +23,16 @@ public class TestListener implements MessageListener {
         try {
             System.out.println("onMessage in javafx application");
             String body = message.getBody(String.class);
-            var event = mapper.readValue(body, JoinEvent.class);
-            System.out.println("event: " + event.getName());
-            if(controller != null) {
-                controller.test(event.getName());
+            if(tryParse(body, JoinEvent.class)) {
+                var event = mapper.readValue(body, JoinEvent.class);
+                System.out.println("JoinEvent: " + event.getName());
+                if(controller != null) {
+                    controller.test(event.getName());
+                }
+            }
+            else if(tryParse(body, BladeRunnerDataEvent.class)) {
+                var event = mapper.readValue(body, BladeRunnerDataEvent.class);
+                System.out.println("BladeRunner data: " + event.getBladeRunner().getName());
             }
         }
         catch (JMSException e) {
@@ -33,6 +40,16 @@ public class TestListener implements MessageListener {
         }
         catch (JsonProcessingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private boolean tryParse(String body, Class<?> clazz) {
+        try {
+            mapper.readValue(body, clazz);
+            return true;
+        }
+        catch(JsonProcessingException e) {
+            return false;
         }
     }
 }
