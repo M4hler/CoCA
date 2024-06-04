@@ -37,6 +37,7 @@ public class SessionView implements IView {
     private Label manipulation;
 
     private Text title;
+    private CheckBoxTreeItem<String> root;
     private final GridPane grid;
     private final VBox vBox;
     private final Scene scene;
@@ -75,6 +76,13 @@ public class SessionView implements IView {
             text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
             text.setTextAlignment(TextAlignment.LEFT);
             vBox.getChildren().add(text);
+        });
+    }
+
+    public void addToTreeView(String name) {
+        System.out.println("Adding to treeView");
+        Platform.runLater(() -> {
+            root.getChildren().add(new TreeItem<>(name));
         });
     }
 
@@ -160,10 +168,8 @@ public class SessionView implements IView {
         title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(title, 3, 0, 2, 1);
 
-        CheckBoxTreeItem<String> root = new CheckBoxTreeItem<>("Blade Runners");
+        root = new CheckBoxTreeItem<>("Blade Runners");
         root.setExpanded(false);
-        root.getChildren().add(new CheckBoxTreeItem<>("test1"));
-        root.getChildren().add(new CheckBoxTreeItem<>("test2"));
         TreeView<String> treeView = new TreeView<>(root);
         treeView.setPrefHeight(100);
         treeView.setPrefWidth(200);

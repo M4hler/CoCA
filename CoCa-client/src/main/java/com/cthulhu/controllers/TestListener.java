@@ -33,6 +33,7 @@ public class TestListener implements MessageListener {
             else if(tryParse(body, BladeRunnerDataEvent.class)) {
                 var event = mapper.readValue(body, BladeRunnerDataEvent.class);
                 System.out.println("BladeRunner data: " + event.getBladeRunner().getName());
+                controller.test2(event.getBladeRunner().getName());
             }
         }
         catch (JMSException e) {

@@ -11,4 +11,8 @@ public class SessionController extends AbstractController<SessionView> {
     public void test(String message) {
         view.addToVBox(message);
     }
+
+    public void test2(String name) {
+        view.addToTreeView(name);
+    }
 }
