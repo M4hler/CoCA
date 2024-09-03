@@ -1,6 +1,9 @@
 package com.cthulhu.views;
 
+import com.cthulhu.controllers.MainController;
+import com.cthulhu.events.RollEvent;
 import com.cthulhu.models.BladeRunner;
+import jakarta.jms.ConnectionFactory;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -15,9 +19,17 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
+import org.springframework.jms.support.converter.MessageType;
 
 @Getter
 @Setter
+@Configuration
+@EnableJms
 public class SessionView implements IView {
     private Label strength;
     private Label force;
@@ -42,7 +54,16 @@ public class SessionView implements IView {
     private final VBox vBox;
     private final Scene scene;
 
+    private final JmsTemplate jmsTemplate;
+
     public SessionView(boolean isAdmin, BladeRunner bladeRunner) {
+        jmsTemplate = new JmsTemplate();
+        jmsTemplate.setConnectionFactory(new ActiveMQConnectionFactory());
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("_type");
+        jmsTemplate.setMessageConverter(converter);
+
         grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -175,7 +196,14 @@ public class SessionView implements IView {
         treeView.setPrefWidth(200);
         treeView.setCellFactory(CheckBoxTreeCell.forTreeView());
 
+        Button rollbutton = new Button("Roll");
+        HBox rollBox = new HBox(10);
+        rollBox.setAlignment(Pos.BOTTOM_RIGHT);
+        rollBox.getChildren().add(rollbutton);
+        rollbutton.setOnAction(e -> rollAction());
+
         grid.add(treeView, 0, 1);
+        grid.add(rollBox, 0, 5);
     }
 
     @Override
@@ -185,6 +213,13 @@ public class SessionView implements IView {
 
     @Override
     public void refresh() {
+    }
+
+    private void rollAction() {
+        System.out.println("Roll action");
+//        System.out.println("Sending event to: " + MainController.getQueueName());
+//        var rollEvent = new RollEvent(8, null, "", 0);
+//        jmsTemplate.convertAndSend(MainController.getQueueName(), rollEvent);
     }
 
     private Label createLabel(String s, int size) {
