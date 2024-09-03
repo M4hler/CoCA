@@ -98,7 +98,7 @@ public class LoginController extends AbstractController<LoginView> {
     }
 
     public MessageListener createQueue(String name) throws JMSException {
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
+        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
         Connection connection = connectionFactory.createConnection();
         connection.start();
 

@@ -56,13 +56,14 @@ public class RestController {
         }
 
         try {
-            String queue = messageSenderService.createQueue(account);
+            String serverQueue = messageSenderService.createServerQueue(account);
+            String playerQueue = messageSenderService.createPlayerQueue(account);
             BladeRunner bladeRunner = null;
             if(!account.isAdmin()) {
                 bladeRunner = account.getBladeRunners().get(0);
             }
 
-            var body = new LoginResponse(queue, account.isAdmin(), bladeRunner);
+            var body = new LoginResponse(serverQueue, account.isAdmin(), bladeRunner);
             messageSenderService.sendJoinEvent(loginData.getName(), bladeRunner);
             return new ResponseEntity<>(body, HttpStatus.OK);
         }
