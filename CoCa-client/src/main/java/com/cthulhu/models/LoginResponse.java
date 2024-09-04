@@ -10,7 +10,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class LoginResponse {
-    private String queue;
+    private String serverQueue;
+    private String clientQueue;
     private Boolean isAdmin;
     private BladeRunner bladeRunner;
 }

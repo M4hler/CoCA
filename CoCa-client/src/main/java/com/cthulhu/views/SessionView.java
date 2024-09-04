@@ -58,7 +58,7 @@ public class SessionView implements IView {
 
     public SessionView(boolean isAdmin, BladeRunner bladeRunner) {
         jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory(new ActiveMQConnectionFactory());
+        jmsTemplate.setConnectionFactory(new ActiveMQConnectionFactory("tcp://localhost:61616"));
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
@@ -217,9 +217,9 @@ public class SessionView implements IView {
 
     private void rollAction() {
         System.out.println("Roll action");
-//        System.out.println("Sending event to: " + MainController.getQueueName());
-//        var rollEvent = new RollEvent(8, null, "", 0);
-//        jmsTemplate.convertAndSend(MainController.getQueueName(), rollEvent);
+        System.out.println("Sending event to: " + MainController.getQueue());
+        var rollEvent = new RollEvent(8, null, "", 0);
+        jmsTemplate.convertAndSend(MainController.getQueue(), rollEvent);
     }
 
     private Label createLabel(String s, int size) {

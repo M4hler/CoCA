@@ -5,6 +5,7 @@ import com.cthulhu.views.IView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Getter;
 
 public class MainController extends Application {
     private static Scene currentScene;
@@ -12,6 +13,8 @@ public class MainController extends Application {
     private final LoginController loginController;
     private final RegistrationController registrationController;
     private Account account;
+    @Getter
+    private static String queue;
 
     public MainController() {
         account = new Account();
@@ -36,5 +39,9 @@ public class MainController extends Application {
         currentScene = view.getScene();
         view.refresh();
         stage.setScene(currentScene);
+    }
+
+    public static void setQueue(String name) {
+        queue = name;
     }
 }

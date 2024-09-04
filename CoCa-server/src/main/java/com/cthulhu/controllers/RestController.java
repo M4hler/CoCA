@@ -63,7 +63,7 @@ public class RestController {
                 bladeRunner = account.getBladeRunners().get(0);
             }
 
-            var body = new LoginResponse(serverQueue, account.isAdmin(), bladeRunner);
+            var body = new LoginResponse(serverQueue, playerQueue, account.isAdmin(), bladeRunner);
             messageSenderService.sendJoinEvent(loginData.getName(), bladeRunner);
             return new ResponseEntity<>(body, HttpStatus.OK);
         }

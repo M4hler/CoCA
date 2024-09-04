@@ -34,8 +34,8 @@ public class MessageSenderService {
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Queue queue = session.createQueue(QUEUE_SERVER_PREFIX + account.getName());
 
-        MessageProducer producer = session.createProducer(queue);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+        //MessageProducer producer = session.createProducer(queue);
+        //producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
         queues.put(account, queue);
         return queue.getQueueName();

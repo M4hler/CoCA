@@ -69,8 +69,9 @@ public class LoginController extends AbstractController<LoginView> {
 
             if(response.getBody() != null) {
                 account.setAdmin(response.getBody().getIsAdmin());
-                var listener = createQueue(response.getBody().getQueue());
+                var listener = createQueue(response.getBody().getServerQueue());
                 var testListener = (TestListener)listener;
+                MainController.setQueue(response.getBody().getClientQueue());
 
                 var sessionController = new SessionController(account.isAdmin(), response.getBody().getBladeRunner());
                 testListener.setController(sessionController);
