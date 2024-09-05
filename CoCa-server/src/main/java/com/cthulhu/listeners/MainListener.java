@@ -1,5 +1,6 @@
 package com.cthulhu.listeners;
 
+import com.cthulhu.events.Event;
 import com.cthulhu.events.RollEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,8 @@ import jakarta.jms.MessageListener;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
@@ -26,8 +29,9 @@ public class MainListener implements MessageListener {
             String body = message.getBody(String.class);
             System.out.println("Received message! " + body);
 
-            if(tryParse(body, RollEvent.class)) {
-                var event = mapper.readValue(body, RollEvent.class);
+            var parsed = tryParse(body, RollEvent.class);
+            if(parsed.isPresent()) {
+                var event = parsed.get();
                 System.out.println("Event: " + event.getDie());
             }
             else {
@@ -37,18 +41,14 @@ public class MainListener implements MessageListener {
         catch (JMSException e) {
             e.printStackTrace();
         }
-        catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 
-    private boolean tryParse(String body, Class<?> clazz) {
+    private <T extends Event> Optional<T> tryParse(String body, Class<T> toCast) {
         try {
-            mapper.readValue(body, clazz);
-            return true;
+            return Optional.of(mapper.readValue(body, toCast));
         }
-        catch(JsonProcessingException e) {
-            return false;
+        catch(Exception e) {
+            return Optional.empty();
         }
     }
 }
