@@ -29,9 +29,8 @@ public class MainListener implements MessageListener {
             String body = message.getBody(String.class);
             System.out.println("Received message! " + body);
 
-            var parsed = tryParse(body, RollEvent.class);
-            if(parsed.isPresent()) {
-                var event = parsed.get();
+            var event = tryParse(body, RollEvent.class);
+            if(event != null) {
                 System.out.println("Event: " + event.getDie());
             }
             else {
@@ -43,12 +42,12 @@ public class MainListener implements MessageListener {
         }
     }
 
-    private <T extends Event> Optional<T> tryParse(String body, Class<T> toCast) {
+    private <T extends Event> T tryParse(String body, Class<T> toCast) {
         try {
-            return Optional.of(mapper.readValue(body, toCast));
+            return mapper.readValue(body, toCast);
         }
         catch(Exception e) {
-            return Optional.empty();
+            return null;
         }
     }
 }
