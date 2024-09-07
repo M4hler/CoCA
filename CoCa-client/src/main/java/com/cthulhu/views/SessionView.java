@@ -3,15 +3,12 @@ package com.cthulhu.views;
 import com.cthulhu.controllers.MainController;
 import com.cthulhu.events.RollEvent;
 import com.cthulhu.models.BladeRunner;
-import jakarta.jms.ConnectionFactory;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -43,7 +40,7 @@ public class SessionView implements IView {
     public SessionView(boolean isAdmin, BladeRunner bladeRunner) {
         jmsTemplate = new JmsTemplate();
         jmsTemplate.setConnectionFactory(new ActiveMQConnectionFactory("tcp://localhost:61616"));
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        var converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
         jmsTemplate.setMessageConverter(converter);
@@ -56,7 +53,7 @@ public class SessionView implements IView {
 
         vBox = new VBox();
 
-        ScrollPane scrollPane = new ScrollPane();
+        var scrollPane = new ScrollPane();
         scrollPane.setPrefSize(400, 600);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -77,7 +74,7 @@ public class SessionView implements IView {
     public void addToVBox(String message) {
         System.out.println("Adding to vbox");
         Platform.runLater(() -> {
-            Text text = new Text("Player " + message + " joined game");
+            var text = new Text("Player " + message + " joined game");
             text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
             text.setTextAlignment(TextAlignment.LEFT);
             vBox.getChildren().add(text);
@@ -86,9 +83,7 @@ public class SessionView implements IView {
 
     public void addToTreeView(String name) {
         System.out.println("Adding to treeView");
-        Platform.runLater(() -> {
-            root.getChildren().add(new TreeItem<>(name));
-        });
+        Platform.runLater(() -> root.getChildren().add(new TreeItem<>(name)));
     }
 
     private void setupUser(BladeRunner bladeRunner) {
@@ -96,7 +91,7 @@ public class SessionView implements IView {
         title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(title, 3, 0, 2, 1);
 
-        Label stats = createLabel("Stats", 16);
+        var stats = createLabel("Stats", 16);
         grid.add(stats, 0, 1, 2, 1);
 
         createRow("Strength", bladeRunner.getStrength(), 2, 14);
@@ -127,13 +122,13 @@ public class SessionView implements IView {
 
         root = new CheckBoxTreeItem<>("Blade Runners");
         root.setExpanded(false);
-        TreeView<String> treeView = new TreeView<>(root);
+        var treeView = new TreeView<>(root);
         treeView.setPrefHeight(100);
         treeView.setPrefWidth(200);
         treeView.setCellFactory(CheckBoxTreeCell.forTreeView());
 
-        Button rollbutton = new Button("Roll");
-        HBox rollBox = new HBox(10);
+        var rollbutton = new Button("Roll");
+        var rollBox = new HBox(10);
         rollBox.setAlignment(Pos.BOTTOM_RIGHT);
         rollBox.getChildren().add(rollbutton);
         rollbutton.setOnAction(e -> rollAction());
@@ -166,14 +161,14 @@ public class SessionView implements IView {
     }
 
     private Label createLabel(String s, int size) {
-        Label label =  new Label(s);
+        var label =  new Label(s);
         label.setFont(Font.font("Tahoma", FontWeight.NORMAL, size));
         label.setAlignment(Pos.CENTER_LEFT);
         return label;
     }
 
     private Label createClickableLabel(String s, int size) {
-        Label label =  new Label(s);
+        var label =  new Label(s);
         label.setFont(Font.font("Tahoma", FontWeight.NORMAL, size));
         label.setAlignment(Pos.CENTER_LEFT);
         label.setOnMouseEntered(mouseEvent
