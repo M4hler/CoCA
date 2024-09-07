@@ -94,22 +94,22 @@ public class SessionView implements IView {
         var stats = createLabel("Stats", 16);
         grid.add(stats, 0, 1, 2, 1);
 
-        createRow("Strength", bladeRunner.getStrength(), 2, 14);
+        createAttributeRow("Strength", bladeRunner.getStrength(), 2, 14);
         createRow("Force", bladeRunner.getForce(), 3, 12);
         createRow("Hand-to-hand combat", bladeRunner.getHandToHandCombat(), 4, 12);
         createRow("Stamina", bladeRunner.getStamina(), 5, 12);
 
-        createRow("Agility", bladeRunner.getAgility(), 6, 14);
+        createAttributeRow("Agility", bladeRunner.getAgility(), 6, 14);
         createRow("Firearms", bladeRunner.getFirearms(), 7, 12);
         createRow("Mobility", bladeRunner.getMobility(), 8, 12);
         createRow("Stealth", bladeRunner.getStealth(), 9, 12);
 
-        createRow("Intelligence", bladeRunner.getIntelligence(), 10, 14);
+        createAttributeRow("Intelligence", bladeRunner.getIntelligence(), 10, 14);
         createRow("Medical aid", bladeRunner.getMedicalAid(), 11, 12);
         createRow("Observation", bladeRunner.getObservation(), 12, 12);
         createRow("Tech", bladeRunner.getTech(), 13, 12);
 
-        createRow("Empathy", bladeRunner.getEmpathy(), 14, 14);
+        createAttributeRow("Empathy", bladeRunner.getEmpathy(), 14, 14);
         createRow("Connections", bladeRunner.getConnections(), 15, 12);
         createRow("Insight", bladeRunner.getInsight(), 16, 12);
         createRow("Manipulation", bladeRunner.getManipulation(), 17, 12);
@@ -155,6 +155,13 @@ public class SessionView implements IView {
 
     private void createRow(String text, int value, int row, int size) {
         var label = createClickableLabel(text, size);
+        var valueLabel = createLabel(map(value), size);
+        grid.add(label, 0, row, 2, 1);
+        grid.add(valueLabel, 2, row, 1, 1);
+    }
+
+    private void createAttributeRow(String text, int value, int row, int size) {
+        var label = createLabel(text, size);
         var valueLabel = createLabel(map(value), size);
         grid.add(label, 0, row, 2, 1);
         grid.add(valueLabel, 2, row, 1, 1);
