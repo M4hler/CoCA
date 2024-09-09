@@ -15,6 +15,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -181,8 +183,21 @@ public class SessionView implements IView {
         label.setOnMouseEntered(mouseEvent
                 -> label.setBackground(new Background(new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY))));
         label.setOnMouseExited(mouseEvent -> label.setBackground(Background.EMPTY));
-        //label.setOnMouseClicked();
+        label.setOnMouseClicked(mouseEvent -> createRollDialog(s));
         return label;
+    }
+
+    private void createRollDialog(String s) {
+        var rollDialog = new Stage();
+        rollDialog.setTitle("Roll dialog");
+        rollDialog.initModality(Modality.APPLICATION_MODAL);
+        var title = new Label("Rolling for " + s);
+        var container = new VBox(title);
+        container.setSpacing(15);
+        container.setPadding(new Insets(25));
+        container.setAlignment(Pos.CENTER);
+        rollDialog.setScene(new Scene(container));
+        rollDialog.show();
     }
 
     private String map(int value) {
