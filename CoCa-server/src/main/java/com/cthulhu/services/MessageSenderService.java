@@ -9,9 +9,7 @@ import jakarta.jms.*;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -33,9 +31,6 @@ public class MessageSenderService {
         connection.start();
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Queue queue = session.createQueue(QUEUE_SERVER_PREFIX + account.getName());
-
-        //MessageProducer producer = session.createProducer(queue);
-        //producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
         queues.put(account, queue);
         return queue.getQueueName();
