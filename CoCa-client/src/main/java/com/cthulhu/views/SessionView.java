@@ -4,6 +4,8 @@ import com.cthulhu.controllers.MainController;
 import com.cthulhu.events.RollEvent;
 import com.cthulhu.models.BladeRunner;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -31,15 +33,23 @@ import org.springframework.jms.support.converter.MessageType;
 @Configuration
 @EnableJms
 public class SessionView implements IView {
+    private final String bladeRunnerName;
+    private final JmsTemplate jmsTemplate;
+
     private Text title;
     private CheckBoxTreeItem<String> root;
     private final GridPane grid;
     private final VBox vBox;
     private final Scene scene;
 
-    private final JmsTemplate jmsTemplate;
-
     public SessionView(boolean isAdmin, BladeRunner bladeRunner) {
+        if(bladeRunner == null) {
+            bladeRunnerName = "";
+        }
+        else {
+            bladeRunnerName = bladeRunner.getName();
+        }
+
         jmsTemplate = new JmsTemplate();
         jmsTemplate.setConnectionFactory(new ActiveMQConnectionFactory("tcp://localhost:61616"));
         var converter = new MappingJackson2MessageConverter();
@@ -129,14 +139,14 @@ public class SessionView implements IView {
         treeView.setPrefWidth(200);
         treeView.setCellFactory(CheckBoxTreeCell.forTreeView());
 
-        var rollbutton = new Button("Roll");
-        var rollBox = new HBox(10);
-        rollBox.setAlignment(Pos.BOTTOM_RIGHT);
-        rollBox.getChildren().add(rollbutton);
-        rollbutton.setOnAction(e -> rollAction());
+//        var rollbutton = new Button("Roll");
+//        var rollBox = new HBox(10);
+//        rollBox.setAlignment(Pos.BOTTOM_RIGHT);
+//        rollBox.getChildren().add(rollbutton);
+//        rollbutton.setOnAction(e -> rollAction());
 
         grid.add(treeView, 0, 1);
-        grid.add(rollBox, 0, 5);
+//        grid.add(rollBox, 0, 5);
     }
 
     @Override
@@ -148,10 +158,9 @@ public class SessionView implements IView {
     public void refresh() {
     }
 
-    private void rollAction() {
-        System.out.println("Roll action");
+    private void rollAction(String skill, Integer bonusDie) {
         System.out.println("Sending event to: " + MainController.getQueue());
-        var rollEvent = new RollEvent(8, null, "", 0);
+        var rollEvent = new RollEvent(bladeRunnerName, skill, bonusDie);
         jmsTemplate.convertAndSend(MainController.getQueue(), rollEvent);
     }
 
@@ -191,11 +200,31 @@ public class SessionView implements IView {
         var rollDialog = new Stage();
         rollDialog.setTitle("Roll dialog");
         rollDialog.initModality(Modality.APPLICATION_MODAL);
+
         var title = new Label("Rolling for " + s);
-        var container = new VBox(title);
-        container.setSpacing(15);
+        var bonusDieLabel = new Label("Choose bonus die");
+
+        var comboBox = new ComboBox<Integer>();
+        ObservableList<Integer> data = FXCollections.observableArrayList();
+        data.addAll(-1, 0, 1);
+        comboBox.setItems(data);
+
+        var rollbutton = new Button("Roll");
+        var rollBox = new HBox(10);
+        rollBox.setAlignment(Pos.BOTTOM_RIGHT);
+        rollBox.getChildren().add(rollbutton);
+        rollbutton.setOnAction(e -> rollAction(s, comboBox.getValue()));
+
+        var container = new GridPane();
+        container.setHgap(10);
+        container.setVgap(10);
         container.setPadding(new Insets(25));
         container.setAlignment(Pos.CENTER);
+        container.add(title, 0, 0);
+        container.add(bonusDieLabel, 0, 2);
+        container.add(comboBox, 4, 2);
+        container.add(rollBox, 0, 4);
+
         rollDialog.setScene(new Scene(container));
         rollDialog.show();
     }

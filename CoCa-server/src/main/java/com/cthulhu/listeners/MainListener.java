@@ -31,7 +31,7 @@ public class MainListener implements MessageListener {
 
             var event = tryParse(body, RollEvent.class);
             if(event != null) {
-                System.out.println("Event: " + event.getDie());
+                System.out.println("Event: " + event.getBladeRunner() + " " + event.getSkill() + " " + event.getBonusDie());
             }
             else {
                 System.out.println("Other message");
