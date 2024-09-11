@@ -25,42 +25,42 @@ public class RegistrationView implements IView {
     private final Scene scene;
 
     public RegistrationView(Runnable registerAction, Runnable backAction) {
-        GridPane grid = new GridPane();
+        var grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        Text title = new Text("Fill registration data");
+        var title = new Text("Fill registration data");
         title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(title, 0, 0, 2, 1);
 
-        Label userName = new Label("User name:");
+        var userName = new Label("User name:");
         grid.add(userName, 0, 1);
 
         nameTextField = new TextField();
         grid.add(nameTextField, 1, 1);
 
-        Label password = new Label("Password:");
+        var password = new Label("Password:");
         grid.add(password, 0, 2);
 
         passwordField = new PasswordField();
         grid.add(passwordField, 1, 2);
 
-        Label passwordRepeat = new Label("Repeat password:");
+        var passwordRepeat = new Label("Repeat password:");
         grid.add(passwordRepeat, 0, 3);
 
         passwordRepeatField = new PasswordField();
         grid.add(passwordRepeatField, 1, 3);
 
-        Button backButton = new Button("Back");
-        HBox backBox = new HBox(10);
+        var backButton = new Button("Back");
+        var backBox = new HBox(10);
         backBox.setAlignment(Pos.BOTTOM_RIGHT);
         backBox.getChildren().add(backButton);
         grid.add(backBox, 0, 4);
 
-        Button registerButton = new Button("Register");
-        HBox registerBox = new HBox(10);
+        var registerButton = new Button("Register");
+        var registerBox = new HBox(10);
         registerBox.setAlignment(Pos.BOTTOM_RIGHT);
         registerBox.getChildren().add(registerButton);
         grid.add(registerBox, 1, 4);

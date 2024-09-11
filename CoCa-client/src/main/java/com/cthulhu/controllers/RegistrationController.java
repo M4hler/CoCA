@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
@@ -22,9 +21,9 @@ public class RegistrationController extends AbstractController<RegistrationView>
     }
 
     private void registerAction() {
-        String name = view.getNameTextField().getText();
-        String password = view.getPasswordField().getText();
-        String passwordRepeat = view.getPasswordRepeatField().getText();
+        var name = view.getNameTextField().getText();
+        var password = view.getPasswordField().getText();
+        var passwordRepeat = view.getPasswordRepeatField().getText();
 
         if(name.length() < 4) {
             setErrorMessage("Name must be at least 4 characters long");
@@ -42,7 +41,7 @@ public class RegistrationController extends AbstractController<RegistrationView>
         }
 
         try {
-            HttpStatusCode status = HttpService.registerRequest(name, password);
+            var status = HttpService.registerRequest(name, password);
 
             if(Objects.equals(status, HttpStatus.CONFLICT)) {
                 setErrorMessage("User with this name already exists");
