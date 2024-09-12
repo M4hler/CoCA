@@ -26,8 +26,8 @@ public class LoginController extends AbstractController<LoginView> {
     }
 
     private void login() {
-        String name = view.getNameTextField().getText();
-        String password = view.getPasswordField().getText();
+        var name = view.getNameTextField().getText();
+        var password = view.getPasswordField().getText();
 
         if(name.isEmpty()) {
             setErrorMessage("User name can't be empty");
@@ -99,14 +99,14 @@ public class LoginController extends AbstractController<LoginView> {
     }
 
     public MessageListener createQueue(String name) throws JMSException {
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-        Connection connection = connectionFactory.createConnection();
+        var connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+        var connection = connectionFactory.createConnection();
         connection.start();
 
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Destination destination = session.createQueue(name);
+        var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        var destination = session.createQueue(name);
 
-        MessageConsumer consumer = session.createConsumer(destination);
+        var consumer = session.createConsumer(destination);
         var listener = new TestListener();
         consumer.setMessageListener(listener);
 
