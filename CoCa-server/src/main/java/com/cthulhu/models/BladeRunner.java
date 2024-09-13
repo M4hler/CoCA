@@ -1,12 +1,13 @@
 package com.cthulhu.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 @Entity
 @Getter
@@ -48,4 +49,24 @@ public class BladeRunner {
     private int promotionPoints;
     private int humanityPoints;
     private int chinyenPoints;
+
+    @JsonIgnore
+    @Transient
+    private final Map<String, Supplier<Integer>> skillsToAttribute;
+
+    public BladeRunner() {
+        skillsToAttribute = new HashMap<>();
+        skillsToAttribute.put("force", this::getStrength);
+        skillsToAttribute.put("handToHandCombat", this::getStrength);
+        skillsToAttribute.put("stamina", this::getStrength);
+        skillsToAttribute.put("firearms", this::getAgility);
+        skillsToAttribute.put("mobility", this::getAgility);
+        skillsToAttribute.put("stealth", this::getAgility);
+        skillsToAttribute.put("medicalAid", this::getIntelligence);
+        skillsToAttribute.put("observation", this::getIntelligence);
+        skillsToAttribute.put("tech", this::getIntelligence);
+        skillsToAttribute.put("connections", this::getEmpathy);
+        skillsToAttribute.put("manipulation", this::getEmpathy);
+        skillsToAttribute.put("insight", this::getEmpathy);
+    }
 }

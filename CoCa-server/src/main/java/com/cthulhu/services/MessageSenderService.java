@@ -16,13 +16,15 @@ import java.util.Map;
 public class MessageSenderService {
     private final ConnectionFactory connectionFactory;
     private final JmsTemplate jmsTemplate;
+    private final MainListener mainListener;
     private final Map<Account, Queue> queues;
     private static final String QUEUE_SERVER_PREFIX = "queue_server";
     private static final String QUEUE_PLAYER_PREFIX = "queue_player";
 
-    public MessageSenderService(ConnectionFactory connectionFactory, JmsTemplate jmsTemplate) {
+    public MessageSenderService(ConnectionFactory connectionFactory, JmsTemplate jmsTemplate, MainListener mainListener) {
         this.connectionFactory = connectionFactory;
         this.jmsTemplate = jmsTemplate;
+        this.mainListener = mainListener;
         queues = new HashMap<>();
     }
 
@@ -43,7 +45,7 @@ public class MessageSenderService {
         Queue queue = session.createQueue(QUEUE_PLAYER_PREFIX + account.getName());
 
         MessageConsumer consumer = session.createConsumer(queue);
-        consumer.setMessageListener(new MainListener());
+        consumer.setMessageListener(mainListener);
 
         return queue.getQueueName();
     }

@@ -160,7 +160,7 @@ public class SessionView implements IView {
 
     private void rollAction(String skill, Integer bonusDie) {
         System.out.println("Sending event to: " + MainController.getQueue());
-        var rollEvent = new RollEvent(bladeRunnerName, skill, bonusDie);
+        var rollEvent = new RollEvent(bladeRunnerName, skill.toLowerCase(), bonusDie);
         jmsTemplate.convertAndSend(MainController.getQueue(), rollEvent);
     }
 

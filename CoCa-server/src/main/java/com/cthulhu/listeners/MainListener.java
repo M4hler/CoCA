@@ -2,21 +2,21 @@ package com.cthulhu.listeners;
 
 import com.cthulhu.events.Event;
 import com.cthulhu.events.RollEvent;
+import com.cthulhu.services.BladeRunnerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
 import jakarta.jms.MessageListener;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 @Service
-@Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
 public class MainListener implements MessageListener {
     private final ObjectMapper mapper;
+    private final BladeRunnerService bladeRunnerService;
 
-    public MainListener() {
+    public MainListener(BladeRunnerService bladeRunnerService) {
         mapper = new ObjectMapper();
+        this.bladeRunnerService = bladeRunnerService;
     }
 
     @Override
@@ -29,6 +29,8 @@ public class MainListener implements MessageListener {
             var event = tryParse(body, RollEvent.class);
             if(event != null) {
                 System.out.println("Event: " + event.getBladeRunner() + " " + event.getSkill() + " " + event.getBonusDie());
+                var bladeRunner = bladeRunnerService.getBladeRunner(event.getBladeRunner());
+                System.out.println("Received: " + bladeRunner.getName() + " " + bladeRunner.getArchetype());
             }
             else {
                 System.out.println("Other message");
