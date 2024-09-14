@@ -1,13 +1,11 @@
 package com.cthulhu.listeners;
 
-import com.cthulhu.annotations.CoCaListener;
-import jakarta.jms.Message;
-import jakarta.jms.MessageListener;
+import com.cthulhu.events.Event;
 
-//@CoCaListener(handles = JoinEvent.class)
-public class CustomListener implements MessageListener {
-    @Override
-    public void onMessage(Message message) {
-
+public abstract class CustomListener<T extends Event> {
+    public void handleRequest(Event event) {
+        handleRequest(event);
     }
+
+    protected abstract void handle(T event);
 }

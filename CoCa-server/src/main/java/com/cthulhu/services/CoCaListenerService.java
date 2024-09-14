@@ -2,6 +2,7 @@ package com.cthulhu.services;
 
 import com.cthulhu.annotations.CoCaListener;
 import com.cthulhu.events.Event;
+import com.cthulhu.listeners.CustomListener;
 import jakarta.jms.MessageListener;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -14,9 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@Getter
 public class CoCaListenerService {
-    private static final Map<Event, MessageListener> cocaListeners = new HashMap<>();
+    @Getter
+    private static final Map<Event, CustomListener<? extends Event>> cocaListeners = new HashMap<>();
 
     public CoCaListenerService() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         var provider = new ClassPathScanningCandidateComponentProvider(false);
@@ -33,7 +34,7 @@ public class CoCaListenerService {
                     var listenerClass = Class.forName(candidate.getBeanClassName());
                     var listenerInstance = listenerClass.getDeclaredConstructor().newInstance();
 
-                    if(listenerInstance instanceof MessageListener listener && eventInstance instanceof Event event) {
+                    if(listenerInstance instanceof CustomListener<?> listener && eventInstance instanceof Event event) {
                         System.out.println("adding to map");
                         cocaListeners.put(event, listener);
                     }
