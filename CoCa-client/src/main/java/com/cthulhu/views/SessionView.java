@@ -99,6 +99,11 @@ public class SessionView implements IView {
     }
 
     private void setupUser(BladeRunner bladeRunner) {
+        if(bladeRunner == null) {
+            System.out.println("Blade runner is null and can't set up the view");
+            return;
+        }
+
         title = new Text("User view");
         title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(title, 3, 0, 2, 1);
@@ -158,10 +163,11 @@ public class SessionView implements IView {
     public void refresh() {
     }
 
-    private void rollAction(String skill, Integer bonusDie) {
+    private void rollAction(String skill, Integer bonusDie, Stage stage) {
         System.out.println("Sending event to: " + MainController.getQueue());
-        var rollEvent = new RollEvent(bladeRunnerName, skill.toLowerCase(), bonusDie);
+        var rollEvent = new RollEvent(bladeRunnerName, skill, bonusDie);
         jmsTemplate.convertAndSend(MainController.getQueue(), rollEvent);
+        stage.close();
     }
 
     private void createRow(String text, int value, int row, int size) {
@@ -213,7 +219,7 @@ public class SessionView implements IView {
         var rollBox = new HBox(10);
         rollBox.setAlignment(Pos.BOTTOM_RIGHT);
         rollBox.getChildren().add(rollbutton);
-        rollbutton.setOnAction(e -> rollAction(s, comboBox.getValue()));
+        rollbutton.setOnAction(e -> rollAction(s, comboBox.getValue(), rollDialog));
 
         var container = new GridPane();
         container.setHgap(10);

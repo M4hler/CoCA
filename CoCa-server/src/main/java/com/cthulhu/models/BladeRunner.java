@@ -2,6 +2,7 @@ package com.cthulhu.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,7 +53,12 @@ public class BladeRunner {
 
     @JsonIgnore
     @Transient
+    @Getter(AccessLevel.NONE)
     private final Map<String, Supplier<Integer>> skillsToAttribute;
+    @JsonIgnore
+    @Transient
+    @Getter(AccessLevel.NONE)
+    private final Map<String, Supplier<Integer>> skillsValues;
 
     public BladeRunner() {
         skillsToAttribute = new HashMap<>();
@@ -68,5 +74,32 @@ public class BladeRunner {
         skillsToAttribute.put("connections", this::getEmpathy);
         skillsToAttribute.put("manipulation", this::getEmpathy);
         skillsToAttribute.put("insight", this::getEmpathy);
+
+        skillsValues = new HashMap<>();
+        skillsValues.put("strength", this::getStrength);
+        skillsValues.put("agility", this::getAgility);
+        skillsValues.put("intelligence", this::getIntelligence);
+        skillsValues.put("empathy", this::getEmpathy);
+
+        skillsValues.put("force", this::getForce);
+        skillsValues.put("handToHandCombat", this::getHandToHandCombat);
+        skillsValues.put("stamina", this::getStamina);
+        skillsValues.put("firearms", this::getFirearms);
+        skillsValues.put("mobility", this::getMobility);
+        skillsValues.put("stealth", this::getStealth);
+        skillsValues.put("medicalAid", this::getMedicalAid);
+        skillsValues.put("observation", this::getObservation);
+        skillsValues.put("tech", this::getTech);
+        skillsValues.put("connections", this::getConnections);
+        skillsValues.put("manipulation", this::getManipulation);
+        skillsValues.put("insight", this::getInsight);
+    }
+
+    public int getAttributeValueForSkill(String skill) {
+        return skillsToAttribute.get(skill).get();
+    }
+
+    public int getSkillValue(String skill) {
+        return skillsValues.get(skill).get();
     }
 }
