@@ -2,6 +2,7 @@ package com.cthulhu.services;
 
 import com.cthulhu.events.BladeRunnerDataEvent;
 import com.cthulhu.events.JoinEvent;
+import com.cthulhu.events.RollResultEvent;
 import com.cthulhu.listeners.MainListener;
 import com.cthulhu.models.Account;
 import com.cthulhu.models.BladeRunner;
@@ -55,6 +56,18 @@ public class MessageSenderService {
             jmsTemplate.convertAndSend(queue.getValue().getQueueName(), new JoinEvent(name));
             if(queue.getKey().isAdmin()) {
                 jmsTemplate.convertAndSend(queue.getValue().getQueueName(), new BladeRunnerDataEvent(bladeRunner));
+            }
+        }
+    }
+
+    public void sendRollResultEvent(RollResultEvent event) {
+        for(var queue : queues.entrySet()) {
+            try {
+                jmsTemplate.convertAndSend(queue.getValue().getQueueName(), event);
+            }
+            catch(JMSException e) {
+                System.out.println("Error while sending to queue bound to account: "
+                        + queue.getKey().getName() + ", error: " + e);
             }
         }
     }
