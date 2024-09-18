@@ -21,15 +21,15 @@ public class RollEventService {
         var rollTypes = new ArrayList<RollType>();
         switch (bonusDie) {
             case -1 -> {
-                int max = Math.max(attributeDie, skillDie);
-                int roll = generatorService.rollDie(max);
+                var max = Math.max(attributeDie, skillDie);
+                var roll = generatorService.rollDie(max);
                 System.out.println("Roll result: " + roll);
                 diceRolls.add(roll);
                 rollTypes.add(RollType.ATTRIBUTE);
             }
             case 0 -> {
-                int attributeRoll = generatorService.rollDie(attributeDie);
-                int skillRoll = generatorService.rollDie(skillDie);
+                var attributeRoll = generatorService.rollDie(attributeDie);
+                var skillRoll = generatorService.rollDie(skillDie);
                 System.out.println("Roll result: " + attributeRoll + " " + skillRoll);
                 diceRolls.add(attributeRoll);
                 diceRolls.add(skillRoll);
@@ -37,10 +37,10 @@ public class RollEventService {
                 rollTypes.add(RollType.SKILL);
             }
             case 1 -> {
-                int min = Math.min(attributeDie, skillDie);
-                int attributeRoll = generatorService.rollDie(attributeDie);
-                int skillRoll = generatorService.rollDie(skillDie);
-                int bonusRoll = generatorService.rollDie(min);
+                var min = Math.min(attributeDie, skillDie);
+                var attributeRoll = generatorService.rollDie(attributeDie);
+                var skillRoll = generatorService.rollDie(skillDie);
+                var bonusRoll = generatorService.rollDie(min);
                 System.out.println("Roll result: " + attributeRoll + " " + skillRoll + " " + bonusRoll);
                 diceRolls.add(attributeRoll);
                 diceRolls.add(skillRoll);

@@ -30,22 +30,22 @@ public class MessageSenderService {
     }
 
     public String createServerQueue(Account account) throws JMSException {
-        Connection connection = connectionFactory.createConnection();
+        var connection = connectionFactory.createConnection();
         connection.start();
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Queue queue = session.createQueue(QUEUE_SERVER_PREFIX + account.getName());
+        var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        var queue = session.createQueue(QUEUE_SERVER_PREFIX + account.getName());
 
         queues.put(account, queue);
         return queue.getQueueName();
     }
 
     public String createPlayerQueue(Account account) throws JMSException {
-        Connection connection = connectionFactory.createConnection();
+        var connection = connectionFactory.createConnection();
         connection.start();
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        Queue queue = session.createQueue(QUEUE_PLAYER_PREFIX + account.getName());
+        var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        var queue = session.createQueue(QUEUE_PLAYER_PREFIX + account.getName());
 
-        MessageConsumer consumer = session.createConsumer(queue);
+        var consumer = session.createConsumer(queue);
         consumer.setMessageListener(mainListener);
 
         return queue.getQueueName();
