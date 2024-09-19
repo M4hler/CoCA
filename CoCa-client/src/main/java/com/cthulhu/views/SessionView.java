@@ -28,6 +28,9 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @Setter
 @Configuration
@@ -41,6 +44,7 @@ public class SessionView implements IView {
     private final GridPane grid;
     private final VBox vBox;
     private final Scene scene;
+    private final Map<String, String> labelToSkill;
 
     public SessionView(boolean isAdmin, BladeRunner bladeRunner) {
         if(bladeRunner == null) {
@@ -56,6 +60,20 @@ public class SessionView implements IView {
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
         jmsTemplate.setMessageConverter(converter);
+
+        labelToSkill = new HashMap<>();
+        labelToSkill.put("Force", "force");
+        labelToSkill.put("Hand-to-hand combat", "handToHandCombat");
+        labelToSkill.put("Stamina", "stamina");
+        labelToSkill.put("Firearms", "firearms");
+        labelToSkill.put("Mobility", "mobility");
+        labelToSkill.put("Stealth", "stealth");
+        labelToSkill.put("Medical aid", "medicalAid");
+        labelToSkill.put("Observation", "observation");
+        labelToSkill.put("Tech", "tech");
+        labelToSkill.put("Connections", "connections");
+        labelToSkill.put("Manipulation", "manipulation");
+        labelToSkill.put("Insight", "insight");
 
         grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -165,7 +183,7 @@ public class SessionView implements IView {
 
     private void rollAction(String skill, Integer bonusDie, Stage stage) {
         System.out.println("Sending event to: " + MainController.getQueue());
-        var rollEvent = new RollEvent(bladeRunnerName, skill, bonusDie);
+        var rollEvent = new RollEvent(bladeRunnerName, labelToSkill.get(skill), bonusDie);
         jmsTemplate.convertAndSend(MainController.getQueue(), rollEvent);
         stage.close();
     }

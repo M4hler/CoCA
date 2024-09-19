@@ -54,52 +54,52 @@ public class BladeRunner {
     @JsonIgnore
     @Transient
     @Getter(AccessLevel.NONE)
-    private final Map<String, Supplier<Integer>> skillsToAttribute;
+    private final Map<String, Supplier<Integer>> skillToAttribute;
     @JsonIgnore
     @Transient
     @Getter(AccessLevel.NONE)
-    private final Map<String, Supplier<Integer>> skillsValues;
+    private final Map<String, Supplier<Integer>> skillToValue;
 
     public BladeRunner() {
-        skillsToAttribute = new HashMap<>();
-        skillsToAttribute.put("force", this::getStrength);
-        skillsToAttribute.put("handToHandCombat", this::getStrength);
-        skillsToAttribute.put("stamina", this::getStrength);
-        skillsToAttribute.put("firearms", this::getAgility);
-        skillsToAttribute.put("mobility", this::getAgility);
-        skillsToAttribute.put("stealth", this::getAgility);
-        skillsToAttribute.put("medicalAid", this::getIntelligence);
-        skillsToAttribute.put("observation", this::getIntelligence);
-        skillsToAttribute.put("tech", this::getIntelligence);
-        skillsToAttribute.put("connections", this::getEmpathy);
-        skillsToAttribute.put("manipulation", this::getEmpathy);
-        skillsToAttribute.put("insight", this::getEmpathy);
+        skillToAttribute = new HashMap<>();
+        skillToAttribute.put("force", this::getStrength);
+        skillToAttribute.put("handToHandCombat", this::getStrength);
+        skillToAttribute.put("stamina", this::getStrength);
+        skillToAttribute.put("firearms", this::getAgility);
+        skillToAttribute.put("mobility", this::getAgility);
+        skillToAttribute.put("stealth", this::getAgility);
+        skillToAttribute.put("medicalAid", this::getIntelligence);
+        skillToAttribute.put("observation", this::getIntelligence);
+        skillToAttribute.put("tech", this::getIntelligence);
+        skillToAttribute.put("connections", this::getEmpathy);
+        skillToAttribute.put("manipulation", this::getEmpathy);
+        skillToAttribute.put("insight", this::getEmpathy);
 
-        skillsValues = new HashMap<>();
-        skillsValues.put("strength", this::getStrength);
-        skillsValues.put("agility", this::getAgility);
-        skillsValues.put("intelligence", this::getIntelligence);
-        skillsValues.put("empathy", this::getEmpathy);
+        skillToValue = new HashMap<>();
+        skillToValue.put("strength", this::getStrength);
+        skillToValue.put("agility", this::getAgility);
+        skillToValue.put("intelligence", this::getIntelligence);
+        skillToValue.put("empathy", this::getEmpathy);
 
-        skillsValues.put("force", this::getForce);
-        skillsValues.put("handToHandCombat", this::getHandToHandCombat);
-        skillsValues.put("stamina", this::getStamina);
-        skillsValues.put("firearms", this::getFirearms);
-        skillsValues.put("mobility", this::getMobility);
-        skillsValues.put("stealth", this::getStealth);
-        skillsValues.put("medicalAid", this::getMedicalAid);
-        skillsValues.put("observation", this::getObservation);
-        skillsValues.put("tech", this::getTech);
-        skillsValues.put("connections", this::getConnections);
-        skillsValues.put("manipulation", this::getManipulation);
-        skillsValues.put("insight", this::getInsight);
+        skillToValue.put("force", this::getForce);
+        skillToValue.put("handToHandCombat", this::getHandToHandCombat);
+        skillToValue.put("stamina", this::getStamina);
+        skillToValue.put("firearms", this::getFirearms);
+        skillToValue.put("mobility", this::getMobility);
+        skillToValue.put("stealth", this::getStealth);
+        skillToValue.put("medicalAid", this::getMedicalAid);
+        skillToValue.put("observation", this::getObservation);
+        skillToValue.put("tech", this::getTech);
+        skillToValue.put("connections", this::getConnections);
+        skillToValue.put("manipulation", this::getManipulation);
+        skillToValue.put("insight", this::getInsight);
     }
 
     public int getAttributeValueForSkill(String skill) {
-        return skillsToAttribute.get(skill).get();
+        return skillToAttribute.get(skill).get();
     }
 
     public int getSkillValue(String skill) {
-        return skillsValues.get(skill).get();
+        return skillToValue.get(skill).get();
     }
 }
