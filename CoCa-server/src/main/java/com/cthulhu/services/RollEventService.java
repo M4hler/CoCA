@@ -19,6 +19,7 @@ public class RollEventService {
     public void rollDice(int attributeDie, int skillDie, int bonusDie) {
         var diceRolls = new ArrayList<Integer>();
         var rollTypes = new ArrayList<RollType>();
+        int successes = 0;
         switch (bonusDie) {
             case -1 -> {
                 var max = Math.max(attributeDie, skillDie);
@@ -51,6 +52,16 @@ public class RollEventService {
             }
         }
 
+        for(var roll : diceRolls) {
+            if(roll >= 10) {
+                successes += 2;
+            }
+            else if(roll >= 6) {
+                successes++;
+            }
+        }
+
+        System.out.println("Successes: " + successes);
         var rollResultEvent = new RollResultEvent(diceRolls, rollTypes);
         messageSenderService.sendRollResultEvent(rollResultEvent);
     }
