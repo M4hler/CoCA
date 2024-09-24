@@ -22,11 +22,18 @@ public class RollEventService {
         int successes = 0;
         switch (bonusDie) {
             case -1 -> {
-                var max = Math.max(attributeDie, skillDie);
-                var roll = generatorService.rollDie(max);
-                System.out.println("Roll result: " + roll);
-                diceRolls.add(roll);
-                rollTypes.add(RollType.ATTRIBUTE);
+                if(attributeDie >= skillDie) {
+                    var roll = generatorService.rollDie(attributeDie);
+                    diceRolls.add(roll);
+                    rollTypes.add(RollType.ATTRIBUTE);
+                    System.out.println("Roll result: " + roll);
+                }
+                else {
+                    var roll = generatorService.rollDie(skillDie);
+                    diceRolls.add(roll);
+                    rollTypes.add(RollType.SKILL);
+                    System.out.println("Roll result: " + roll);
+                }
             }
             case 0 -> {
                 var attributeRoll = generatorService.rollDie(attributeDie);
