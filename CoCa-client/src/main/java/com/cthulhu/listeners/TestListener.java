@@ -1,5 +1,6 @@
-package com.cthulhu.controllers;
+package com.cthulhu.listeners;
 
+import com.cthulhu.controllers.SessionController;
 import com.cthulhu.events.BladeRunnerDataEvent;
 import com.cthulhu.events.Event;
 import com.cthulhu.events.JoinEvent;

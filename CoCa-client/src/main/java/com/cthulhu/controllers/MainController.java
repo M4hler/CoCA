@@ -1,6 +1,7 @@
 package com.cthulhu.controllers;
 
 import com.cthulhu.models.Account;
+import com.cthulhu.services.CoCaListenerService;
 import com.cthulhu.views.IView;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -20,6 +21,7 @@ public class MainController extends Application {
         account = new Account();
         loginController = new LoginController(account);
         registrationController = new RegistrationController();
+        var service = new CoCaListenerService();
 
         loginController.setRegistrationView(registrationController.getView());
         registrationController.setLoginView(loginController.getView());
