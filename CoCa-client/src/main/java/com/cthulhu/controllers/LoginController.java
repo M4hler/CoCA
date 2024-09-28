@@ -1,6 +1,6 @@
 package com.cthulhu.controllers;
 
-import com.cthulhu.listeners.TestListener;
+import com.cthulhu.listeners.MainListener;
 import com.cthulhu.models.Account;
 import com.cthulhu.services.HttpService;
 import com.cthulhu.views.LoginView;
@@ -71,7 +71,7 @@ public class LoginController extends AbstractController<LoginView> {
             if(response.getBody() != null) {
                 account.setAdmin(response.getBody().getIsAdmin());
                 var listener = createQueue(response.getBody().getServerQueue());
-                var testListener = (TestListener)listener;
+                var testListener = (MainListener)listener;
                 MainController.setQueue(response.getBody().getClientQueue());
 
                 var sessionController = new SessionController(account.isAdmin(), response.getBody().getBladeRunner());
@@ -108,7 +108,7 @@ public class LoginController extends AbstractController<LoginView> {
         var destination = session.createQueue(name);
 
         var consumer = session.createConsumer(destination);
-        var listener = new TestListener();
+        var listener = new MainListener();
         consumer.setMessageListener(listener);
 
         return listener;

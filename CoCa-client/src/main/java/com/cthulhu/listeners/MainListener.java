@@ -12,11 +12,11 @@ import jakarta.jms.MessageListener;
 import lombok.Setter;
 
 @Setter
-public class TestListener implements MessageListener {
+public class MainListener implements MessageListener {
     private final ObjectMapper mapper;
     private SessionController controller;
 
-    public TestListener() {
+    public MainListener() {
         mapper = new ObjectMapper();
     }
 
