@@ -32,6 +32,7 @@ public class CoCaListenerService {
                     var eventName = attributes.get("handles");
                     var eventClass = Class.forName(eventName.toString().substring(6)); //strips 'class' prefix
                     var eventInstance = eventClass.getDeclaredConstructor().newInstance();
+
                     var listenerClass = Class.forName(candidate.getBeanClassName());
                     var constructors = listenerClass.getConstructors();
                     var constructor = constructors[0];
