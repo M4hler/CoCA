@@ -13,10 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.text.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -37,6 +34,7 @@ import java.util.Map;
 @Configuration
 @EnableJms
 public class SessionView implements IView {
+    private final BladeRunner bladeRunner;
     private final String bladeRunnerName;
     private final String queueName;
     private final JmsTemplate jmsTemplate;
@@ -49,6 +47,7 @@ public class SessionView implements IView {
     private final Map<String, String> labelToSkill;
 
     public SessionView(boolean isAdmin, BladeRunner bladeRunner, String queueName) {
+        this.bladeRunner = bladeRunner;
         this.queueName = queueName;
         if(bladeRunner == null) {
             bladeRunnerName = "";
@@ -113,22 +112,35 @@ public class SessionView implements IView {
         });
     }
 
-    public void addToVBoxRollResult(List<Integer> diceRolls, List<RollType> rollTypes, int successes) {
-        var text = new Text();
+    public void addToVBoxRollResult(String name, String attribute, String skill, List<Integer> diceRolls, List<RollType> rollTypes, int successes) {
+        var text = new TextFlow();
+        int attributeValue = bladeRunner.getSkillValue(attribute);
+        int skillValue = bladeRunner.getSkillValue(skill);
+        var t1 = new Text(name + " rolled for " + attribute + "(" + map(attributeValue) + ")" + " and "
+                + skill + "(" + map(skillValue) + ")" + " and achieved ");
+        t1.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
+
+        var t2 = new Text();
+        t2.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
         if(successes == 0) {
-            text.setText("FAILURE");
-            text.setFill(Color.FIREBRICK);
+            t2.setText("FAILURE");
+            t2.setFill(Color.FIREBRICK);
         }
         else {
-            text.setText("SUCCESS");
-            text.setFill(Color.GREEN);
+            t2.setText("SUCCESS");
+            t2.setFill(Color.GREEN);
         }
 
-        Platform.runLater(() -> {
-            text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
-            text.setTextAlignment(TextAlignment.LEFT);
-            vBox.getChildren().add(text);
-        });
+        var t3 = new Text(" rolling ");
+        t3.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
+        for(int i = 0; i < diceRolls.size(); i++) {
+            t3.setText(t3.getText() + diceRolls.get(i) + " for " + rollTypes.get(i).name());
+        }
+
+        text.setTextAlignment(TextAlignment.LEFT);
+        text.getChildren().addAll(t1, t2, t3);
+
+        Platform.runLater(() -> vBox.getChildren().add(text));
     }
 
     public void addToTreeView(String name) {

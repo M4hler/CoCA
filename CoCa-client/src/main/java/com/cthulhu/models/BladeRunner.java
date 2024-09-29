@@ -1,7 +1,12 @@
 package com.cthulhu.models;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 @Getter
 @Setter
@@ -37,4 +42,32 @@ public class BladeRunner {
     private int promotionPoints;
     private int humanityPoints;
     private int chinyenPoints;
+
+    @Getter(AccessLevel.NONE)
+    private final Map<String, Supplier<Integer>> skillToValue;
+
+    public BladeRunner() {
+        skillToValue = new HashMap<>();
+        skillToValue.put("strength", this::getStrength);
+        skillToValue.put("agility", this::getAgility);
+        skillToValue.put("intelligence", this::getIntelligence);
+        skillToValue.put("empathy", this::getEmpathy);
+
+        skillToValue.put("force", this::getForce);
+        skillToValue.put("handToHandCombat", this::getHandToHandCombat);
+        skillToValue.put("stamina", this::getStamina);
+        skillToValue.put("firearms", this::getFirearms);
+        skillToValue.put("mobility", this::getMobility);
+        skillToValue.put("stealth", this::getStealth);
+        skillToValue.put("medicalAid", this::getMedicalAid);
+        skillToValue.put("observation", this::getObservation);
+        skillToValue.put("tech", this::getTech);
+        skillToValue.put("connections", this::getConnections);
+        skillToValue.put("manipulation", this::getManipulation);
+        skillToValue.put("insight", this::getInsight);
+    }
+
+    public int getSkillValue(String skill) {
+        return skillToValue.get(skill).get();
+    }
 }
