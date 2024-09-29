@@ -1,5 +1,6 @@
 package com.cthulhu.views;
 
+import com.cthulhu.enums.RollType;
 import com.cthulhu.events.RollEvent;
 import com.cthulhu.models.BladeRunner;
 import javafx.application.Platform;
@@ -28,6 +29,7 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -111,6 +113,24 @@ public class SessionView implements IView {
         });
     }
 
+    public void addToVBoxRollResult(List<Integer> diceRolls, List<RollType> rollTypes, int successes) {
+        var text = new Text();
+        if(successes == 0) {
+            text.setText("FAILURE");
+            text.setFill(Color.FIREBRICK);
+        }
+        else {
+            text.setText("SUCCESS");
+            text.setFill(Color.GREEN);
+        }
+
+        Platform.runLater(() -> {
+            text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
+            text.setTextAlignment(TextAlignment.LEFT);
+            vBox.getChildren().add(text);
+        });
+    }
+
     public void addToTreeView(String name) {
         Platform.runLater(() -> root.getChildren().add(new TreeItem<>(name)));
     }
@@ -181,7 +201,6 @@ public class SessionView implements IView {
     }
 
     private void rollAction(String skill, Integer bonusDie, Stage stage) {
-        System.out.println("Sending event to: " + queueName);
         var rollEvent = new RollEvent(bladeRunnerName, labelToSkill.get(skill), bonusDie);
         jmsTemplate.convertAndSend(queueName, rollEvent);
         stage.close();

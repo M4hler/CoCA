@@ -42,6 +42,6 @@ public class SessionController extends AbstractController<SessionView> {
     }
 
     public void addToVBoxRollResult(RollResultEvent event) {
-        System.out.println("Adding to vbox roll result");
+        view.addToVBoxRollResult(event.getDiceRolls(), event.getRollTypes(), event.getSuccesses());
     }
 }
