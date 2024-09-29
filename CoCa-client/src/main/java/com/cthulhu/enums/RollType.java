@@ -1,4 +1,4 @@
-package com.cthulhu.models.enums;
+package com.cthulhu.enums;
 
 public enum RollType {
     ATTRIBUTE,

@@ -1,7 +1,7 @@
 package com.cthulhu.services;
 
 import com.cthulhu.events.RollResultEvent;
-import com.cthulhu.models.enums.RollType;
+import com.cthulhu.enums.RollType;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
