@@ -34,13 +34,6 @@ public class MainListener implements MessageListener {
                     listener.handleRequest(event);
                 }
             }
-//            var event1 = tryParse(body, BladeRunnerDataEvent.class);
-//            if(event1 != null) {
-//                if(event1.getBladeRunner() != null) {
-//                    System.out.println("BladeRunner data: " + event1.getBladeRunner().getName());
-//                    controller.test2(event1.getBladeRunner().getName());
-//                }
-//            }
         }
         catch (JMSException e) {
             System.out.println("Encountered error: " + e);
