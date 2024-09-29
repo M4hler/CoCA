@@ -16,7 +16,7 @@ public class RollEventService {
         this.messageSenderService = messageSenderService;
     }
 
-    public void rollDice(int attributeDie, int skillDie, int bonusDie) {
+    public void rollDice(String name, String attribute, String skill, int attributeDie, int skillDie, int bonusDie) {
         var diceRolls = new ArrayList<Integer>();
         var rollTypes = new ArrayList<RollType>();
         int successes = 0;
@@ -64,7 +64,7 @@ public class RollEventService {
             }
         }
 
-        var rollResultEvent = new RollResultEvent(diceRolls, rollTypes, successes);
+        var rollResultEvent = new RollResultEvent(name, attribute, skill, diceRolls, rollTypes, successes);
         messageSenderService.sendRollResultEvent(rollResultEvent);
     }
 }

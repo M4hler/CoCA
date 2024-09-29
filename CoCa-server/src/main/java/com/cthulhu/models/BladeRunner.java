@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.util.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class BladeRunner {
     @JsonIgnore
     @Transient
     @Getter(AccessLevel.NONE)
-    private final Map<String, Supplier<Integer>> skillToAttribute;
+    private final Map<String, Pair<String, Supplier<Integer>>> skillToAttribute;
     @JsonIgnore
     @Transient
     @Getter(AccessLevel.NONE)
@@ -62,18 +63,18 @@ public class BladeRunner {
 
     public BladeRunner() {
         skillToAttribute = new HashMap<>();
-        skillToAttribute.put("force", this::getStrength);
-        skillToAttribute.put("handToHandCombat", this::getStrength);
-        skillToAttribute.put("stamina", this::getStrength);
-        skillToAttribute.put("firearms", this::getAgility);
-        skillToAttribute.put("mobility", this::getAgility);
-        skillToAttribute.put("stealth", this::getAgility);
-        skillToAttribute.put("medicalAid", this::getIntelligence);
-        skillToAttribute.put("observation", this::getIntelligence);
-        skillToAttribute.put("tech", this::getIntelligence);
-        skillToAttribute.put("connections", this::getEmpathy);
-        skillToAttribute.put("manipulation", this::getEmpathy);
-        skillToAttribute.put("insight", this::getEmpathy);
+        skillToAttribute.put("force", Pair.of("strength", this::getStrength));
+        skillToAttribute.put("handToHandCombat", Pair.of("strength", this::getStrength));
+        skillToAttribute.put("stamina", Pair.of("strength", this::getStrength));
+        skillToAttribute.put("firearms", Pair.of("agility", this::getAgility));
+        skillToAttribute.put("mobility", Pair.of("agility", this::getAgility));
+        skillToAttribute.put("stealth", Pair.of("agility", this::getAgility));
+        skillToAttribute.put("medicalAid", Pair.of("intelligence", this::getIntelligence));
+        skillToAttribute.put("observation", Pair.of("intelligence", this::getIntelligence));
+        skillToAttribute.put("tech", Pair.of("intelligence", this::getIntelligence));
+        skillToAttribute.put("connections", Pair.of("empathy", this::getEmpathy));
+        skillToAttribute.put("manipulation", Pair.of("empathy", this::getEmpathy));
+        skillToAttribute.put("insight", Pair.of("empathy", this::getEmpathy));
 
         skillToValue = new HashMap<>();
         skillToValue.put("strength", this::getStrength);
@@ -96,7 +97,11 @@ public class BladeRunner {
     }
 
     public int getAttributeValueForSkill(String skill) {
-        return skillToAttribute.get(skill).get();
+        return skillToAttribute.get(skill).getSecond().get();
+    }
+
+    public String getAttributeForSkill(String skill) {
+        return skillToAttribute.get(skill).getFirst();
     }
 
     public int getSkillValue(String skill) {

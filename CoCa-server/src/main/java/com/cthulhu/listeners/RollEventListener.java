@@ -20,9 +20,11 @@ public class RollEventListener extends CustomListener<RollEvent> {
     @Override
     public void handle(RollEvent event) {
         var bladeRunner = bladeRunnerService.getBladeRunner(event.getBladeRunner());
-        var attributeDie = bladeRunner.getAttributeValueForSkill(event.getSkill());
+        var skill = event.getSkill();
+        var attribute = bladeRunner.getAttributeForSkill(skill);
+        var attributeDie = bladeRunner.getAttributeValueForSkill(skill);
         var skillDie = bladeRunner.getSkillValue(event.getSkill());
         var bonusDie = event.getBonusDie() != null ? event.getBonusDie() : 0;
-        rollEventService.rollDice(attributeDie, skillDie, bonusDie);
+        rollEventService.rollDice(event.getBladeRunner(), attribute, skill, attributeDie, skillDie, bonusDie);
     }
 }

@@ -11,6 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RollResultEvent extends Event {
+    private String bladeRunnerName;
+    private String attribute;
+    private String skill;
     private List<Integer> diceRolls;
     private List<RollType> rollTypes;
     private int successes;
