@@ -23,10 +23,7 @@ public class MainListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
         try {
-            System.out.println("onMessage");
             String body = message.getBody(String.class);
-            System.out.println("Received message! " + body);
-
             for(var entry : listeners.entrySet()) {
                 var event = tryParse(body, entry.getKey().getClass());
                 if(event != null) {

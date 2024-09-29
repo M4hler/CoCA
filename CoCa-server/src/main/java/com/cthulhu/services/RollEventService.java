@@ -26,19 +26,16 @@ public class RollEventService {
                     var roll = generatorService.rollDie(attributeDie);
                     diceRolls.add(roll);
                     rollTypes.add(RollType.ATTRIBUTE);
-                    System.out.println("Roll result: " + roll);
                 }
                 else {
                     var roll = generatorService.rollDie(skillDie);
                     diceRolls.add(roll);
                     rollTypes.add(RollType.SKILL);
-                    System.out.println("Roll result: " + roll);
                 }
             }
             case 0 -> {
                 var attributeRoll = generatorService.rollDie(attributeDie);
                 var skillRoll = generatorService.rollDie(skillDie);
-                System.out.println("Roll result: " + attributeRoll + " " + skillRoll);
                 diceRolls.add(attributeRoll);
                 diceRolls.add(skillRoll);
                 rollTypes.add(RollType.ATTRIBUTE);
@@ -49,7 +46,6 @@ public class RollEventService {
                 var attributeRoll = generatorService.rollDie(attributeDie);
                 var skillRoll = generatorService.rollDie(skillDie);
                 var bonusRoll = generatorService.rollDie(min);
-                System.out.println("Roll result: " + attributeRoll + " " + skillRoll + " " + bonusRoll);
                 diceRolls.add(attributeRoll);
                 diceRolls.add(skillRoll);
                 diceRolls.add(bonusRoll);
@@ -68,8 +64,7 @@ public class RollEventService {
             }
         }
 
-        System.out.println("Successes: " + successes);
-        var rollResultEvent = new RollResultEvent(diceRolls, rollTypes);
+        var rollResultEvent = new RollResultEvent(diceRolls, rollTypes, successes);
         messageSenderService.sendRollResultEvent(rollResultEvent);
     }
 }

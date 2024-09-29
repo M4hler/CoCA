@@ -7,7 +7,6 @@ import com.cthulhu.events.JoinEvent;
 public class JoinEventListener extends CustomListener<JoinEvent> {
     @Override
     protected void handle(JoinEvent event) {
-        System.out.println("Handling request in JoinEventListener");
         acceptHook(event);
     }
 }

@@ -24,9 +24,7 @@ public class MainListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
         try {
-            System.out.println("onMessage in javafx application");
             String body = message.getBody(String.class);
-
             for(var entry : listeners.entrySet()) {
                 var event = tryParse(body, entry.getKey().getClass());
                 if(event != null) {

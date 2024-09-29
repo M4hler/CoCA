@@ -103,7 +103,6 @@ public class SessionView implements IView {
     }
 
     public void addToVBox(String message) {
-        System.out.println("Adding to vbox");
         Platform.runLater(() -> {
             var text = new Text("Player " + message + " joined game");
             text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
@@ -113,7 +112,6 @@ public class SessionView implements IView {
     }
 
     public void addToTreeView(String name) {
-        System.out.println("Adding to treeView");
         Platform.runLater(() -> root.getChildren().add(new TreeItem<>(name)));
     }
 

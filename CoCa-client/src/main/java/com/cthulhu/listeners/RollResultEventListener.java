@@ -7,7 +7,6 @@ import com.cthulhu.events.RollResultEvent;
 public class RollResultEventListener extends CustomListener<RollResultEvent> {
     @Override
     protected void handle(RollResultEvent event) {
-        System.out.println("Received RollResultEvent");
         acceptHook(event);
     }
 }
