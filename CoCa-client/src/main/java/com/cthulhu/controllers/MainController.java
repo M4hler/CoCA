@@ -1,6 +1,6 @@
 package com.cthulhu.controllers;
 
-import com.cthulhu.models.Account;
+import com.cthulhu.models.BladeRunner;
 import com.cthulhu.services.CoCaListenerService;
 import com.cthulhu.views.IView;
 import javafx.application.Application;
@@ -9,18 +9,14 @@ import javafx.stage.Stage;
 import lombok.Getter;
 
 public class MainController extends Application {
-    private static Scene currentScene;
-    private static Stage stage;
-    private final LoginController loginController;
-    private final RegistrationController registrationController;
-    private Account account;
+    private Scene currentScene;
+    private Stage stage;
     @Getter
-    private static String queue;
+    private String queue;
 
     public MainController() {
-        account = new Account();
-        loginController = new LoginController(account);
-        registrationController = new RegistrationController();
+        LoginController loginController = new LoginController(this);
+        RegistrationController registrationController = new RegistrationController(this);
         var service = new CoCaListenerService();
 
         loginController.setRegistrationView(registrationController.getView());
@@ -31,19 +27,24 @@ public class MainController extends Application {
 
     @Override
     public void start(Stage stage) {
-        MainController.stage = stage;
+        this.stage = stage;
         stage.setTitle("CoCa");
         stage.setScene(currentScene);
         stage.show();
     }
 
-    public static void setCurrentScene(IView view) {
+    public void setCurrentScene(IView view) {
         currentScene = view.getScene();
         view.refresh();
         stage.setScene(currentScene);
     }
 
-    public static void setQueue(String name) {
+    public void setQueue(String name) {
         queue = name;
+    }
+
+    public void transitionControlToSessionController(boolean isAdmin, BladeRunner bladeRunner) {
+        var sessionController = new SessionController(this, isAdmin, bladeRunner);
+        setCurrentScene(sessionController.getView());
     }
 }

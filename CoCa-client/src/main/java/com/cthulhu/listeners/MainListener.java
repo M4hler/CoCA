@@ -1,9 +1,7 @@
 package com.cthulhu.listeners;
 
-import com.cthulhu.controllers.SessionController;
-import com.cthulhu.events.BladeRunnerDataEvent;
 import com.cthulhu.events.Event;
-import com.cthulhu.events.JoinEvent;
+import com.cthulhu.services.CoCaListenerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.JMSException;
@@ -11,13 +9,16 @@ import jakarta.jms.Message;
 import jakarta.jms.MessageListener;
 import lombok.Setter;
 
+import java.util.Map;
+
 @Setter
 public class MainListener implements MessageListener {
     private final ObjectMapper mapper;
-    private SessionController controller;
+    private final Map<Event, CustomListener<? extends Event>> listeners;
 
     public MainListener() {
         mapper = new ObjectMapper();
+        listeners = CoCaListenerService.getCocaListeners();
     }
 
     @Override
@@ -25,25 +26,24 @@ public class MainListener implements MessageListener {
         try {
             System.out.println("onMessage in javafx application");
             String body = message.getBody(String.class);
-            var event = tryParse(body, JoinEvent.class);
-            if(event != null) {
-                System.out.println("JoinEvent: " + event.getName());
-                if(controller != null) {
-                    controller.test(event.getName());
-                }
-                return;
-            }
 
-            var event1 = tryParse(body, BladeRunnerDataEvent.class);
-            if(event1 != null) {
-                if(event1.getBladeRunner() != null) {
-                    System.out.println("BladeRunner data: " + event1.getBladeRunner().getName());
-                    controller.test2(event1.getBladeRunner().getName());
+            for(var entry : listeners.entrySet()) {
+                var event = tryParse(body, entry.getKey().getClass());
+                if(event != null) {
+                    var listener = entry.getValue();
+                    listener.handleRequest(event);
                 }
             }
+//            var event1 = tryParse(body, BladeRunnerDataEvent.class);
+//            if(event1 != null) {
+//                if(event1.getBladeRunner() != null) {
+//                    System.out.println("BladeRunner data: " + event1.getBladeRunner().getName());
+//                    controller.test2(event1.getBladeRunner().getName());
+//                }
+//            }
         }
         catch (JMSException e) {
-            e.printStackTrace();
+            System.out.println("Encountered error: " + e);
         }
     }
 

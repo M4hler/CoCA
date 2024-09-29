@@ -1,6 +1,5 @@
 package com.cthulhu.views;
 
-import com.cthulhu.controllers.MainController;
 import com.cthulhu.events.RollEvent;
 import com.cthulhu.models.BladeRunner;
 import javafx.application.Platform;
@@ -37,6 +36,7 @@ import java.util.Map;
 @EnableJms
 public class SessionView implements IView {
     private final String bladeRunnerName;
+    private final String queueName;
     private final JmsTemplate jmsTemplate;
 
     private Text title;
@@ -46,7 +46,8 @@ public class SessionView implements IView {
     private final Scene scene;
     private final Map<String, String> labelToSkill;
 
-    public SessionView(boolean isAdmin, BladeRunner bladeRunner) {
+    public SessionView(boolean isAdmin, BladeRunner bladeRunner, String queueName) {
+        this.queueName = queueName;
         if(bladeRunner == null) {
             bladeRunnerName = "";
         }
@@ -182,9 +183,9 @@ public class SessionView implements IView {
     }
 
     private void rollAction(String skill, Integer bonusDie, Stage stage) {
-        System.out.println("Sending event to: " + MainController.getQueue());
+        System.out.println("Sending event to: " + queueName);
         var rollEvent = new RollEvent(bladeRunnerName, labelToSkill.get(skill), bonusDie);
-        jmsTemplate.convertAndSend(MainController.getQueue(), rollEvent);
+        jmsTemplate.convertAndSend(queueName, rollEvent);
         stage.close();
     }
 

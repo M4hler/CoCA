@@ -60,4 +60,15 @@ public class CoCaListenerService {
             return null;
         }
     }
+
+    public static CustomListener<? extends Event> getListener(Class<?> clazz) {
+        for(var entry : cocaListeners.values()) {
+            if(clazz.isInstance(entry)) {
+                System.out.println("Found instance");
+                return entry;
+            }
+        }
+        System.out.println("Returning null");
+        return null;
+    }
 }

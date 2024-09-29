@@ -18,11 +18,11 @@ import java.util.Objects;
 @Getter
 @Setter
 public class LoginController extends AbstractController<LoginView> {
+    private final MainController mainController;
     private RegistrationView registrationView;
-    private Account account;
 
-    public LoginController(Account account) {
-        this.account = account;
+    public LoginController(MainController mainController) {
+        this.mainController = mainController;
         view = new LoginView(this::login, this::register);
     }
 
@@ -69,14 +69,9 @@ public class LoginController extends AbstractController<LoginView> {
             }
 
             if(response.getBody() != null) {
-                account.setAdmin(response.getBody().getIsAdmin());
-                var listener = createQueue(response.getBody().getServerQueue());
-                var testListener = (MainListener)listener;
-                MainController.setQueue(response.getBody().getClientQueue());
-
-                var sessionController = new SessionController(account.isAdmin(), response.getBody().getBladeRunner());
-                testListener.setController(sessionController);
-                MainController.setCurrentScene(sessionController.getView());
+                createQueue(response.getBody().getServerQueue());
+                mainController.setQueue(response.getBody().getClientQueue());
+                mainController.transitionControlToSessionController(response.getBody().getIsAdmin(), response.getBody().getBladeRunner());
             }
             else {
                setErrorMessage("Body was null");
@@ -91,7 +86,7 @@ public class LoginController extends AbstractController<LoginView> {
     }
 
     private void register() {
-        MainController.setCurrentScene(registrationView);
+        mainController.setCurrentScene(registrationView);
     }
 
     private void setErrorMessage(String message) {
@@ -99,7 +94,7 @@ public class LoginController extends AbstractController<LoginView> {
         view.getErrorText().setText(message);
     }
 
-    public MessageListener createQueue(String name) throws JMSException {
+    public void createQueue(String name) throws JMSException {
         var connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
         var connection = connectionFactory.createConnection();
         connection.start();
@@ -110,7 +105,5 @@ public class LoginController extends AbstractController<LoginView> {
         var consumer = session.createConsumer(destination);
         var listener = new MainListener();
         consumer.setMessageListener(listener);
-
-        return listener;
     }
 }

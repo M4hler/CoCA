@@ -14,9 +14,11 @@ import java.util.Objects;
 @Getter
 @Setter
 public class RegistrationController extends AbstractController<RegistrationView> {
+    private final MainController mainController;
     private LoginView loginView;
 
-    public RegistrationController() {
+    public RegistrationController(MainController mainController) {
+        this.mainController = mainController;
         view = new RegistrationView(this::registerAction, this::backAction);
     }
 
@@ -61,7 +63,7 @@ public class RegistrationController extends AbstractController<RegistrationView>
     }
 
     private void backAction() {
-        MainController.setCurrentScene(loginView);
+        mainController.setCurrentScene(loginView);
     }
 
     private void setErrorMessage(String message) {
