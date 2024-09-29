@@ -84,6 +84,7 @@ public class SessionView implements IView {
         grid.setPadding(new Insets(25, 25, 25, 25));
 
         vBox = new VBox();
+        vBox.setMaxWidth(400);
 
         var scrollPane = new ScrollPane();
         scrollPane.setPrefSize(400, 600);
@@ -114,6 +115,7 @@ public class SessionView implements IView {
 
     public void addToVBoxRollResult(String name, String attribute, String skill, List<Integer> diceRolls, List<RollType> rollTypes, int successes) {
         var text = new TextFlow();
+        text.setMaxWidth(400);
         int attributeValue = bladeRunner.getSkillValue(attribute);
         int skillValue = bladeRunner.getSkillValue(skill);
         var t1 = new Text(name + " rolled for " + attribute + "(" + map(attributeValue) + ")" + " and "
@@ -134,7 +136,7 @@ public class SessionView implements IView {
         var t3 = new Text(" rolling ");
         t3.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
         for(int i = 0; i < diceRolls.size(); i++) {
-            t3.setText(t3.getText() + diceRolls.get(i) + " for " + rollTypes.get(i).name());
+            t3.setText(t3.getText() + diceRolls.get(i) + " for " + rollTypes.get(i).name() + " ");
         }
 
         text.setTextAlignment(TextAlignment.LEFT);
