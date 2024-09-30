@@ -64,7 +64,7 @@ public class RollEventService {
             }
         }
 
-        var rollResultEvent = new RollResultEvent(name, attribute, skill, diceRolls, rollTypes, successes);
+        var rollResultEvent = new RollResultEvent(name, attribute, skill, attributeDie, skillDie, diceRolls, rollTypes, successes);
         messageSenderService.sendRollResultEvent(rollResultEvent);
     }
 }

@@ -42,7 +42,7 @@ public class SessionController extends AbstractController<SessionView> {
     }
 
     public void addToVBoxRollResult(RollResultEvent event) {
-        view.addToVBoxRollResult(event.getBladeRunnerName(), event.getAttribute(), event.getSkill(),
-                event.getDiceRolls(), event.getRollTypes(), event.getSuccesses());
+        view.addToVBoxRollResult(event.getBladeRunnerName(), event.getAttribute(), event.getSkill(), event.getAttributeValue(),
+                event.getSkillValue(), event.getDiceRolls(), event.getRollTypes(), event.getSuccesses());
     }
 }

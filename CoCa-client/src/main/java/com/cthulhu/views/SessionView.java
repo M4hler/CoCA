@@ -113,11 +113,11 @@ public class SessionView implements IView {
         });
     }
 
-    public void addToVBoxRollResult(String name, String attribute, String skill, List<Integer> diceRolls, List<RollType> rollTypes, int successes) {
+    public void addToVBoxRollResult(String name, String attribute, String skill, int attributeValue, int skillValue,
+                                    List<Integer> diceRolls, List<RollType> rollTypes, int successes) {
         var text = new TextFlow();
         text.setMaxWidth(400);
-        int attributeValue = bladeRunner.getSkillValue(attribute);
-        int skillValue = bladeRunner.getSkillValue(skill);
+        text.setPadding(new Insets(5, 5, 5, 5));
         var t1 = new Text(name + " rolled for " + attribute + "(" + map(attributeValue) + ")" + " and "
                 + skill + "(" + map(skillValue) + ")" + " and achieved ");
         t1.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
