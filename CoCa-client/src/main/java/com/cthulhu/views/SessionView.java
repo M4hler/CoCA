@@ -118,8 +118,8 @@ public class SessionView implements IView {
         var text = new TextFlow();
         text.setMaxWidth(400);
         text.setPadding(new Insets(5, 5, 5, 5));
-        var t1 = new Text(name + " rolled for " + attribute + "(" + map(attributeValue) + ")" + " and "
-                + skill + "(" + map(skillValue) + ")" + " and achieved ");
+        var t1 = new Text(String.format("%s rolled for %s(%s) and %s(%s) and achieved",
+                name, attribute, map(attributeValue), skill, map(skillValue)));
         t1.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
 
         var t2 = new Text();
