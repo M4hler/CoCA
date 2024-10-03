@@ -23,8 +23,9 @@ public class RollEventService {
         if(!rollStates.containsKey(name)) {
             var initialRoll = new InitialRoll(generatorService);
             rollStates.put(name, initialRoll);
-            var result = initialRoll.roll(name, attribute, skill, attributeDie, skillDie, bonusDie);
-            messageSenderService.sendRollResultEvent(result);
         }
+
+        var result = rollStates.get(name).roll(name, attribute, skill, attributeDie, skillDie, bonusDie);
+        messageSenderService.sendRollResultEvent(result);
     }
 }
