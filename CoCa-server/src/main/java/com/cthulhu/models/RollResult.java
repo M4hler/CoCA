@@ -1,17 +1,14 @@
-package com.cthulhu.events;
+package com.cthulhu.models;
 
 import com.cthulhu.enums.RollType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
-public class RollResultEvent extends Event {
-    private String bladeRunnerName;
+public class RollResult {
     private String attribute;
     private String skill;
     private int attributeValue;

@@ -1,15 +1,15 @@
 package com.cthulhu.states;
 
-import com.cthulhu.events.RollResultEvent;
+import com.cthulhu.models.RollResult;
 import com.cthulhu.services.GeneratorService;
 
 public class ForceRoll extends RollState {
-    public ForceRoll(GeneratorService generatorService) {
-        super(generatorService);
+    public ForceRoll(GeneratorService generatorService, RollResult rollResult, boolean isHuman, boolean canForce) {
+        super(generatorService, rollResult, isHuman, canForce);
     }
 
     @Override
-    public RollResultEvent roll(String name, String attribute, String skill, int attributeDie, int skillDie, int bonusDie) {
-        return null;
+    public RollState transition() {
+        return new InitialRoll(generatorService, null, isHuman, true);
     }
 }
