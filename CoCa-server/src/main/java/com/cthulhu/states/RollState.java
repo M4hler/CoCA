@@ -10,13 +10,13 @@ public abstract class RollState {
     protected final GeneratorService generatorService;
     protected RollResult rollResult;
     protected final boolean isHuman;
-    protected final boolean canForce;
+    protected final boolean canPush;
 
-    public RollState(GeneratorService generatorService, RollResult rollResult, boolean isHuman, boolean canForce) {
+    public RollState(GeneratorService generatorService, RollResult rollResult, boolean isHuman, boolean canPush) {
         this.generatorService = generatorService;
         this.rollResult = rollResult;
         this.isHuman = isHuman;
-        this.canForce = canForce;
+        this.canPush = canPush;
     }
 
     public abstract RollState transition();
@@ -69,7 +69,7 @@ public abstract class RollState {
             }
         }
 
-        rollResult = new RollResult(attribute, skill, attributeDie, skillDie, diceRolls, rollTypes, successes, canForce);
+        rollResult = new RollResult(attribute, skill, attributeDie, skillDie, diceRolls, rollTypes, successes, canPush);
         return rollResult;
     }
 }

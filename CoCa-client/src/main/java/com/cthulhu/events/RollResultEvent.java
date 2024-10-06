@@ -19,5 +19,5 @@ public class RollResultEvent extends Event {
     private List<Integer> diceRolls;
     private List<RollType> rollTypes;
     private int successes;
-    private boolean canForce;
+    private boolean canPush;
 }

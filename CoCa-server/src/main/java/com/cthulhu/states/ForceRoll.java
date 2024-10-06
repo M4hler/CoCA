@@ -4,8 +4,8 @@ import com.cthulhu.models.RollResult;
 import com.cthulhu.services.GeneratorService;
 
 public class ForceRoll extends RollState {
-    public ForceRoll(GeneratorService generatorService, RollResult rollResult, boolean isHuman, boolean canForce) {
-        super(generatorService, rollResult, isHuman, canForce);
+    public ForceRoll(GeneratorService generatorService, RollResult rollResult, boolean isHuman, boolean canPush) {
+        super(generatorService, rollResult, isHuman, canPush);
     }
 
     @Override

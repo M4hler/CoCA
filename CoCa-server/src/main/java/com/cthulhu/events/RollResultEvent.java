@@ -20,7 +20,7 @@ public class RollResultEvent extends Event {
     private List<Integer> diceRolls;
     private List<RollType> rollTypes;
     private int successes;
-    private boolean canForce;
+    private boolean canPush;
 
     public RollResultEvent(String name, RollResult rollResult) {
         bladeRunnerName = name;
@@ -31,6 +31,6 @@ public class RollResultEvent extends Event {
         diceRolls = rollResult.getDiceRolls();
         rollTypes = rollResult.getRollTypes();
         successes = rollResult.getSuccesses();
-        canForce = rollResult.isCanForce();
+        canPush = rollResult.isCanPush();
     }
 }
