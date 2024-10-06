@@ -12,9 +12,17 @@ import com.cthulhu.views.SessionView;
 
 public class SessionController extends AbstractController<SessionView> {
     private final MainController mainController;
+    private final String bladeRunnerName;
 
     public SessionController(MainController mainController, boolean isAdmin, BladeRunner bladeRunner) {
         this.mainController = mainController;
+        if(bladeRunner != null) {
+            bladeRunnerName = bladeRunner.getName();
+        }
+        else {
+            bladeRunnerName = "";
+        }
+
         JoinEventListener joinEventListener = (JoinEventListener) CoCaListenerService.getListener(JoinEventListener.class);
         BladeRunnerDataEventListener bladeRunnerDataEventListener = (BladeRunnerDataEventListener) CoCaListenerService.getListener(BladeRunnerDataEventListener.class);
         RollResultEventListener rollResultEventListener = (RollResultEventListener) CoCaListenerService.getListener(RollResultEventListener.class);
@@ -44,5 +52,9 @@ public class SessionController extends AbstractController<SessionView> {
     public void addToVBoxRollResult(RollResultEvent event) {
         view.addToVBoxRollResult(event.getBladeRunnerName(), event.getAttribute(), event.getSkill(), event.getAttributeValue(),
                 event.getSkillValue(), event.getDiceRolls(), event.getRollTypes(), event.getSuccesses());
+
+        if(bladeRunnerName.equals(event.getBladeRunnerName())) {
+            view.setPushButtonVisible(event.isCanPush());
+        }
     }
 }

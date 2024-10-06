@@ -16,8 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
@@ -29,8 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Getter
-@Setter
 @Configuration
 @EnableJms
 public class SessionView implements IView {
@@ -43,6 +39,7 @@ public class SessionView implements IView {
     private CheckBoxTreeItem<String> root;
     private final GridPane grid;
     private final VBox vBox;
+    private final Button pushButton;
     private final Scene scene;
     private final Map<String, String> labelToSkill;
 
@@ -94,6 +91,14 @@ public class SessionView implements IView {
 
         grid.add(scrollPane, 3, 1, 20, 20);
 
+        pushButton = new Button("Push roll");
+        var pushBox = new HBox(10);
+        pushBox.setAlignment(Pos.BOTTOM_RIGHT);
+        pushBox.getChildren().add(pushButton);
+        pushButton.setOnAction(e -> rollPushAction());
+        pushButton.setVisible(false);
+        grid.add(pushBox, 25, 22);
+
         scene = new Scene(grid, 800, 600);
 
         if(isAdmin) {
@@ -118,7 +123,7 @@ public class SessionView implements IView {
         var text = new TextFlow();
         text.setMaxWidth(400);
         text.setPadding(new Insets(5, 5, 5, 5));
-        var t1 = new Text(String.format("%s rolled for %s(%s) and %s(%s) and achieved",
+        var t1 = new Text(String.format("%s rolled for %s(%s) and %s(%s) and achieved ",
                 name, attribute, map(attributeValue), skill, map(skillValue)));
         t1.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
 
@@ -143,6 +148,10 @@ public class SessionView implements IView {
         text.getChildren().addAll(t1, t2, t3);
 
         Platform.runLater(() -> vBox.getChildren().add(text));
+    }
+
+    public void setPushButtonVisible(boolean visible) {
+        pushButton.setVisible(visible);
     }
 
     public void addToTreeView(String name) {
@@ -218,6 +227,10 @@ public class SessionView implements IView {
         var rollEvent = new RollEvent(bladeRunnerName, labelToSkill.get(skill), bonusDie);
         jmsTemplate.convertAndSend(queueName, rollEvent);
         stage.close();
+    }
+
+    private void rollPushAction() {
+        System.out.println("PUSH");
     }
 
     private void createRow(String text, int value, int row, int size) {
