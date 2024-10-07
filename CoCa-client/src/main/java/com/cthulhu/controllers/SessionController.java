@@ -55,6 +55,7 @@ public class SessionController extends AbstractController<SessionView> {
 
         if(bladeRunnerName.equals(event.getBladeRunnerName())) {
             view.setPushButtonVisible(event.isCanPush());
+            view.setAcceptButtonVisible(event.isCanPush());
         }
     }
 }

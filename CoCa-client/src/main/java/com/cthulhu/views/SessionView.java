@@ -40,6 +40,7 @@ public class SessionView implements IView {
     private final GridPane grid;
     private final VBox vBox;
     private final Button pushButton;
+    private final Button acceptButton;
     private final Scene scene;
     private final Map<String, String> labelToSkill;
 
@@ -92,12 +93,17 @@ public class SessionView implements IView {
         grid.add(scrollPane, 3, 1, 20, 20);
 
         pushButton = new Button("Push roll");
-        var pushBox = new HBox(10);
-        pushBox.setAlignment(Pos.BOTTOM_RIGHT);
-        pushBox.getChildren().add(pushButton);
         pushButton.setOnAction(e -> rollPushAction());
         pushButton.setVisible(false);
-        grid.add(pushBox, 25, 22);
+        acceptButton = new Button("Accept");
+        acceptButton.setOnAction(e -> rollAcceptAction());
+        acceptButton.setVisible(false);
+
+        var rollReactionBox = new HBox(20);
+        rollReactionBox.setAlignment(Pos.BOTTOM_RIGHT);
+        rollReactionBox.getChildren().add(pushButton);
+        rollReactionBox.getChildren().add(acceptButton);
+        grid.add(rollReactionBox, 25, 22);
 
         scene = new Scene(grid, 800, 600);
 
@@ -152,6 +158,10 @@ public class SessionView implements IView {
 
     public void setPushButtonVisible(boolean visible) {
         pushButton.setVisible(visible);
+    }
+
+    public void setAcceptButtonVisible(boolean visible) {
+        acceptButton.setVisible(visible);
     }
 
     public void addToTreeView(String name) {
@@ -231,6 +241,10 @@ public class SessionView implements IView {
 
     private void rollPushAction() {
         System.out.println("PUSH");
+    }
+
+    private void rollAcceptAction() {
+        System.out.println("ACCEPT");
     }
 
     private void createRow(String text, int value, int row, int size) {
