@@ -25,12 +25,12 @@ public class RollEventService {
     public void rollDice(String name, String attribute, String skill, int attributeDie, int skillDie, int bonusDie) {
         if(!rollStates.containsKey(name)) {
             var isHuman = bladeRunnerService.getBladeRunner(name).isHuman();
-            var noActiveRoll = new NoActiveRoll(generatorService, isHuman);
+            var noActiveRoll = new NoActiveRoll(generatorService, isHuman, attribute, skill, attributeDie, skillDie, bonusDie);
             rollStates.put(name, noActiveRoll);
         }
 
         var state = rollStates.get(name);
-        var result = state.roll(attribute, skill, attributeDie, skillDie, bonusDie);
+        var result = state.roll();
         rollStates.put(name, state.transition());
         messageSenderService.sendRollResultEvent(new RollResultEvent(name, result));
     }

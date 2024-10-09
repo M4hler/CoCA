@@ -14,6 +14,7 @@ public class RollResult {
     private int attributeValue;
     private int skillValue;
     private List<Integer> diceRolls;
+    private List<Integer> diceSizes;
     private List<RollType> rollTypes;
     private int successes;
     private boolean canPush;

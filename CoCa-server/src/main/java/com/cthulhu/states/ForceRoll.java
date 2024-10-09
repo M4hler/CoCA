@@ -9,6 +9,11 @@ public class ForceRoll extends RollState {
     }
 
     @Override
+    public RollResult roll() {
+        return null;
+    }
+
+    @Override
     public RollState transition() {
         return new InitialRoll(generatorService, null, isHuman, true);
     }
