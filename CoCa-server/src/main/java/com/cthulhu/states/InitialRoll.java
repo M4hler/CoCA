@@ -47,7 +47,7 @@ public class InitialRoll extends RollState {
             return new InitialRoll(generatorService, null, true, true);
         }
         else {
-            return new ForceRoll(generatorService, rollResult, false, false);
+            return new PushRoll(generatorService, rollResult, false, false);
         }
     }
 }
