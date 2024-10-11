@@ -15,7 +15,7 @@ public class NoActiveRoll extends RollState {
     private final int bonusDie;
 
     public NoActiveRoll(GeneratorService generatorService, boolean isHuman, String attribute, String skill, int attributeDie, int skillDie, int bonusDie) {
-        super(generatorService, null, isHuman, true);
+        super(generatorService, null, isHuman);
         this.attribute = attribute;
         this.skill = skill;
         this.attributeDie = attributeDie;
@@ -53,12 +53,12 @@ public class NoActiveRoll extends RollState {
         var diceRolls = roll(dice);
         int successes = countSuccesses(diceRolls);
 
-        rollResult = new RollResult(attribute, skill, attributeDie, skillDie, diceRolls, dice, rollTypes, successes, canPush);
+        rollResult = new RollResult(attribute, skill, attributeDie, skillDie, diceRolls, dice, rollTypes, successes,true);
         return rollResult;
     }
 
     @Override
     public RollState transition() {
-        return new InitialRoll(generatorService, rollResult, isHuman, true);
+        return new InitialRoll(generatorService, rollResult, isHuman);
     }
 }

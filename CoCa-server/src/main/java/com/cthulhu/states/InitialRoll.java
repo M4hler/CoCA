@@ -7,8 +7,8 @@ import com.cthulhu.services.GeneratorService;
 import java.util.ArrayList;
 
 public class InitialRoll extends RollState {
-    public InitialRoll(GeneratorService generatorService, RollResult rollResult, boolean isHuman, boolean canPush) {
-        super(generatorService, rollResult, isHuman, canPush);
+    public InitialRoll(GeneratorService generatorService, RollResult rollResult, boolean isHuman) {
+        super(generatorService, rollResult, isHuman);
     }
 
     @Override
@@ -44,10 +44,10 @@ public class InitialRoll extends RollState {
     @Override
     public RollState transition() {
         if(isHuman) {
-            return new InitialRoll(generatorService, null, true, true);
+            return new InitialRoll(generatorService, null, true);
         }
         else {
-            return new PushRoll(generatorService, rollResult, false, false);
+            return new PushRoll(generatorService, rollResult, false);
         }
     }
 }

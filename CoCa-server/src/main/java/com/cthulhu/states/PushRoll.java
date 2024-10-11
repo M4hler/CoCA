@@ -4,8 +4,8 @@ import com.cthulhu.models.RollResult;
 import com.cthulhu.services.GeneratorService;
 
 public class PushRoll extends RollState {
-    public PushRoll(GeneratorService generatorService, RollResult rollResult, boolean isHuman, boolean canPush) {
-        super(generatorService, rollResult, isHuman, canPush);
+    public PushRoll(GeneratorService generatorService, RollResult rollResult, boolean isHuman) {
+        super(generatorService, rollResult, isHuman);
     }
 
     @Override
@@ -15,6 +15,6 @@ public class PushRoll extends RollState {
 
     @Override
     public RollState transition() {
-        return new InitialRoll(generatorService, null, isHuman, true);
+        return new InitialRoll(generatorService, null, isHuman);
     }
 }

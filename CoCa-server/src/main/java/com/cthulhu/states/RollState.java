@@ -10,13 +10,11 @@ public abstract class RollState {
     protected final GeneratorService generatorService;
     protected RollResult rollResult;
     protected final boolean isHuman;
-    protected final boolean canPush;
 
-    public RollState(GeneratorService generatorService, RollResult rollResult, boolean isHuman, boolean canPush) {
+    public RollState(GeneratorService generatorService, RollResult rollResult, boolean isHuman) {
         this.generatorService = generatorService;
         this.rollResult = rollResult;
         this.isHuman = isHuman;
-        this.canPush = canPush;
     }
 
     public abstract RollState transition();
