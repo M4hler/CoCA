@@ -4,6 +4,7 @@ import com.cthulhu.enums.RollType;
 import com.cthulhu.events.PushEvent;
 import com.cthulhu.events.RollEvent;
 import com.cthulhu.models.BladeRunner;
+import com.cthulhu.models.MessageCode;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -236,12 +237,14 @@ public class SessionView implements IView {
 
     private void rollAction(String skill, Integer bonusDie, Stage stage) {
         var rollEvent = new RollEvent(bladeRunnerName, labelToSkill.get(skill), bonusDie);
+        rollEvent.setMessageCode(MessageCode.getMessageCode(RollEvent.class));
         jmsTemplate.convertAndSend(queueName, rollEvent);
         stage.close();
     }
 
     private void rollPushAction() {
         var pushEvent = new PushEvent(bladeRunnerName);
+        pushEvent.setMessageCode(MessageCode.getMessageCode(PushEvent.class));
         jmsTemplate.convertAndSend(queueName, pushEvent);
     }
 

@@ -1,6 +1,7 @@
 package com.cthulhu.listeners;
 
 import com.cthulhu.events.Event;
+import com.cthulhu.models.MessageCode;
 import com.cthulhu.services.CoCaListenerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.JMSException;
@@ -13,7 +14,7 @@ import java.util.Map;
 @Service
 public class MainListener implements MessageListener {
     private final ObjectMapper mapper;
-    private final Map<Event, CustomListener<? extends Event>> listeners;
+    private final Map<Class<? extends Event>, CustomListener<? extends Event>> listeners;
 
     public MainListener() {
         mapper = new ObjectMapper();
@@ -24,12 +25,17 @@ public class MainListener implements MessageListener {
     public void onMessage(Message message) {
         try {
             String body = message.getBody(String.class);
-            for(var entry : listeners.entrySet()) {
-                var event = tryParse(body, entry.getKey().getClass());
-                if(event != null) {
-                    var listener = entry.getValue();
-                    listener.handleRequest(event);
-                }
+            var pattern = "\"messageCode\":";
+            var lowerLimit = body.lastIndexOf(pattern);
+            var upperLimit = body.indexOf(",", lowerLimit);
+            var code = body.substring(lowerLimit + pattern.length(), upperLimit);
+            int messageCode = Integer.parseInt(code);
+            var eventClass = MessageCode.getEvent(messageCode);
+
+            var event = tryParse(body, eventClass);
+            if(event != null) {
+                var listener = listeners.get(eventClass);
+                listener.handleRequest(event);
             }
         }
         catch (JMSException e) {

@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class CoCaListenerService {
     @Getter
-    private static final Map<Event, CustomListener<? extends Event>> cocaListeners = new HashMap<>();
+    private static final Map<Class<? extends Event>, CustomListener<? extends Event>> cocaListeners = new HashMap<>();
 
     public CoCaListenerService(ApplicationContext context) throws ClassNotFoundException, NoSuchMethodException,
             InvocationTargetException, InstantiationException, IllegalAccessException {
@@ -49,7 +49,7 @@ public class CoCaListenerService {
                     var listenerInstance = constructor.newInstance(beans);
 
                     if(listenerInstance instanceof CustomListener<?> listener && eventInstance instanceof Event event) {
-                        cocaListeners.put(event, listener);
+                        cocaListeners.put(event.getClass(), listener);
                     }
                 }
             }

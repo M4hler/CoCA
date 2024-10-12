@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class CoCaListenerService {
     @Getter
-    private static final Map<Event, CustomListener<? extends Event>> cocaListeners = new HashMap<>();
+    private static final Map<Class<? extends Event>, CustomListener<? extends Event>> cocaListeners = new HashMap<>();
     private static final String PACKAGE_NAME = "com.cthulhu.listeners";
     public CoCaListenerService() {
         var inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(PACKAGE_NAME.replaceAll("[.]", "/"));
@@ -42,7 +42,7 @@ public class CoCaListenerService {
                 var listenerInstance = listenerClass.getDeclaredConstructor().newInstance();
 
                 if(listenerInstance instanceof CustomListener<?> listener && eventInstance instanceof Event event) {
-                    cocaListeners.put(event, listener);
+                    cocaListeners.put(event.getClass(), listener);
                 }
             }
             catch(ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {

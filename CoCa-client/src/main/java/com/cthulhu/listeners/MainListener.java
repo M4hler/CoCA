@@ -14,7 +14,7 @@ import java.util.Map;
 @Setter
 public class MainListener implements MessageListener {
     private final ObjectMapper mapper;
-    private final Map<Event, CustomListener<? extends Event>> listeners;
+    private final Map<Class<? extends Event>, CustomListener<? extends Event>> listeners;
 
     public MainListener() {
         mapper = new ObjectMapper();
@@ -26,7 +26,7 @@ public class MainListener implements MessageListener {
         try {
             String body = message.getBody(String.class);
             for(var entry : listeners.entrySet()) {
-                var event = tryParse(body, entry.getKey().getClass());
+                var event = tryParse(body, entry.getKey());
                 if(event != null) {
                     var listener = entry.getValue();
                     listener.handleRequest(event);

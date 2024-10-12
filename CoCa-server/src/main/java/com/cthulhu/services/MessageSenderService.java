@@ -6,6 +6,7 @@ import com.cthulhu.events.RollResultEvent;
 import com.cthulhu.listeners.MainListener;
 import com.cthulhu.models.Account;
 import com.cthulhu.models.BladeRunner;
+import com.cthulhu.models.MessageCode;
 import jakarta.jms.*;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -53,9 +54,13 @@ public class MessageSenderService {
 
     public void sendJoinEvent(String name, BladeRunner bladeRunner) throws JMSException {
         for(var queue : queues.entrySet()) {
-            jmsTemplate.convertAndSend(queue.getValue().getQueueName(), new JoinEvent(name));
+            var event = new JoinEvent(name);
+            event.setMessageCode(MessageCode.getMessageCode(JoinEvent.class));
+            jmsTemplate.convertAndSend(queue.getValue().getQueueName(), event);
             if(queue.getKey().isAdmin()) {
-                jmsTemplate.convertAndSend(queue.getValue().getQueueName(), new BladeRunnerDataEvent(bladeRunner));
+                var dataEvent = new BladeRunnerDataEvent(bladeRunner);
+                dataEvent.setMessageCode(MessageCode.getMessageCode(BladeRunnerDataEvent.class));
+                jmsTemplate.convertAndSend(queue.getValue().getQueueName(), dataEvent);
             }
         }
     }
@@ -63,6 +68,7 @@ public class MessageSenderService {
     public void sendRollResultEvent(RollResultEvent event) {
         for(var queue : queues.entrySet()) {
             try {
+                event.setMessageCode(MessageCode.getMessageCode(RollResultEvent.class));
                 jmsTemplate.convertAndSend(queue.getValue().getQueueName(), event);
             }
             catch(JMSException e) {
