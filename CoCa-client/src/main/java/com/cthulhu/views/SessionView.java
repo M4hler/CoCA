@@ -1,6 +1,7 @@
 package com.cthulhu.views;
 
 import com.cthulhu.enums.RollType;
+import com.cthulhu.events.PushEvent;
 import com.cthulhu.events.RollEvent;
 import com.cthulhu.models.BladeRunner;
 import javafx.application.Platform;
@@ -240,7 +241,8 @@ public class SessionView implements IView {
     }
 
     private void rollPushAction() {
-        System.out.println("PUSH");
+        var pushEvent = new PushEvent(bladeRunnerName);
+        jmsTemplate.convertAndSend(queueName, pushEvent);
     }
 
     private void rollAcceptAction() {

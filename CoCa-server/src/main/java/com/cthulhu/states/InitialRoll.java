@@ -44,7 +44,7 @@ public class InitialRoll extends RollState {
     @Override
     public RollState transition() {
         if(isHuman) {
-            return new InitialRoll(generatorService, null, true);
+            return null;
         }
         else {
             return new PushRoll(generatorService, rollResult, false);

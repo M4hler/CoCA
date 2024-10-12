@@ -10,11 +10,11 @@ public class PushRoll extends RollState {
 
     @Override
     public RollResult roll() {
-        return null;
+        return rollResult;
     }
 
     @Override
     public RollState transition() {
-        return new InitialRoll(generatorService, null, isHuman);
+        return null;
     }
 }
