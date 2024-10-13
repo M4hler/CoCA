@@ -1,6 +1,7 @@
 package com.cthulhu.listeners;
 
 import com.cthulhu.events.Event;
+import com.cthulhu.models.MessageCode;
 import com.cthulhu.services.CoCaListenerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,15 +26,16 @@ public class MainListener implements MessageListener {
     public void onMessage(Message message) {
         try {
             String body = message.getBody(String.class);
-            for(var entry : listeners.entrySet()) {
-                var event = tryParse(body, entry.getKey());
-                if(event != null) {
-                    var listener = entry.getValue();
-                    listener.handleRequest(event);
-                }
+            var tree = mapper.readTree(body);
+            int messageCode = tree.get("messageCode").asInt();
+            var eventClass = MessageCode.getEvent(messageCode);
+            var event = tryParse(body, eventClass);
+            if(event != null) {
+                var listener = listeners.get(eventClass);
+                listener.handleRequest(event);
             }
         }
-        catch (JMSException e) {
+        catch (JMSException | JsonProcessingException e) {
             System.out.println("Encountered error: " + e);
         }
     }
