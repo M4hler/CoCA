@@ -1,6 +1,7 @@
 package com.cthulhu.views;
 
 import com.cthulhu.enums.RollType;
+import com.cthulhu.events.AcceptEvent;
 import com.cthulhu.events.PushEvent;
 import com.cthulhu.events.RollEvent;
 import com.cthulhu.models.BladeRunner;
@@ -260,7 +261,11 @@ public class SessionView implements IView {
     }
 
     private void rollAcceptAction() {
-        System.out.println("ACCEPT");
+        var acceptEvent = new AcceptEvent(bladeRunnerName);
+        acceptEvent.setMessageCode(MessageCode.getMessageCode(AcceptEvent.class));
+        jmsTemplate.convertAndSend(queueName, acceptEvent);
+        setPushButtonVisible(false);
+        setAcceptButtonVisible(false);
     }
 
     private void createRow(String text, int value, int row, int size) {

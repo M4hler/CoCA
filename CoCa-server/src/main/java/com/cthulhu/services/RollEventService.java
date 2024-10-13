@@ -41,4 +41,8 @@ public class RollEventService {
         rollStates.put(name, state.transition());
         messageSenderService.sendRollResultEvent(new RollResultEvent(name, result));
     }
+
+    public void accept(String name) {
+        rollStates.put(name, null);
+    }
 }

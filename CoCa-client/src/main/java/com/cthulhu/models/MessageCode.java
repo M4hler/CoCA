@@ -28,6 +28,7 @@ public class MessageCode {
         messageCodes.put(RollEvent.class, 3);
         messageCodes.put(RollResultEvent.class, 4);
         messageCodes.put(PushEvent.class, 5);
+        messageCodes.put(AcceptEvent.class, 6);
 
         return messageCodes;
     }
