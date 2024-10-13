@@ -137,7 +137,7 @@ public class SessionView implements IView {
         text.setMaxWidth(400);
         text.setPadding(new Insets(5, 5, 5, 5));
         var t1 = new Text(String.format("%s rolled for %s(%s) and %s(%s) and achieved ",
-                name, attribute, map(attributeValue), convertSkillToLabel(skill), map(skillValue)));
+                name, capitalize(attribute), map(attributeValue), convertSkillToLabel(skill), map(skillValue)));
         t1.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
 
         var t2 = new Text();
@@ -341,6 +341,10 @@ public class SessionView implements IView {
         }
 
         return skill;
+    }
+
+    private String capitalize(String text) {
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
     }
 
     private String map(int value) {
