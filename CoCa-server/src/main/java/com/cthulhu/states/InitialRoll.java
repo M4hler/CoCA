@@ -27,7 +27,7 @@ public class InitialRoll extends RollState {
                 continue;
             }
 
-            dice.add(roll);
+            dice.add(rollResult.getDiceSizes().get(i));
             rollTypes.add(rollResult.getRollTypes().get(i));
         }
 

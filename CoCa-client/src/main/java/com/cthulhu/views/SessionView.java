@@ -41,6 +41,7 @@ public class SessionView implements IView {
     private CheckBoxTreeItem<String> root;
     private final GridPane grid;
     private final VBox vBox;
+    private final ScrollPane scrollPane;
     private final Button pushButton;
     private final Button acceptButton;
     private final Scene scene;
@@ -84,9 +85,9 @@ public class SessionView implements IView {
         grid.setPadding(new Insets(25, 25, 25, 25));
 
         vBox = new VBox();
-        vBox.setMaxWidth(400);
+        vBox.setMaxWidth(390);
 
-        var scrollPane = new ScrollPane();
+        scrollPane = new ScrollPane();
         scrollPane.setPrefSize(400, 600);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -119,10 +120,13 @@ public class SessionView implements IView {
 
     public void addToVBox(String message) {
         Platform.runLater(() -> {
+            var textFlow = new TextFlow();
             var text = new Text("Player " + message + " joined game");
             text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
             text.setTextAlignment(TextAlignment.LEFT);
-            vBox.getChildren().add(text);
+            textFlow.setPadding(new Insets(5, 5, 5, 5));
+            textFlow.getChildren().add(text);
+            vBox.getChildren().add(textFlow);
         });
     }
 
@@ -142,20 +146,26 @@ public class SessionView implements IView {
             t2.setFill(Color.FIREBRICK);
         }
         else {
-            t2.setText("SUCCESS");
+            t2.setText(String.format("SUCCESS(%d)", successes));
             t2.setFill(Color.GREEN);
         }
 
         var t3 = new Text(" rolling ");
         t3.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
         for(int i = 0; i < diceRolls.size(); i++) {
-            t3.setText(t3.getText() + diceRolls.get(i) + " for " + rollTypes.get(i).name() + " ");
+            t3.setText(String.format("%s%d for %s", t3.getText(), diceRolls.get(i), rollTypes.get(i).name()));
+            if(i < diceRolls.size() - 1) {
+                t3.setText(t3.getText() + ", ");
+            }
         }
 
         text.setTextAlignment(TextAlignment.LEFT);
         text.getChildren().addAll(t1, t2, t3);
 
-        Platform.runLater(() -> vBox.getChildren().add(text));
+        Platform.runLater(() -> {
+            vBox.getChildren().add(text);
+            scrollPane.setVvalue(1.0);
+        });
     }
 
     public void setPushButtonVisible(boolean visible) {
