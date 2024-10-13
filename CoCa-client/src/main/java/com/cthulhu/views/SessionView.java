@@ -136,7 +136,7 @@ public class SessionView implements IView {
         text.setMaxWidth(400);
         text.setPadding(new Insets(5, 5, 5, 5));
         var t1 = new Text(String.format("%s rolled for %s(%s) and %s(%s) and achieved ",
-                name, attribute, map(attributeValue), skill, map(skillValue)));
+                name, attribute, map(attributeValue), convertSkillToLabel(skill), map(skillValue)));
         t1.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
 
         var t2 = new Text();
@@ -164,6 +164,7 @@ public class SessionView implements IView {
 
         Platform.runLater(() -> {
             vBox.getChildren().add(text);
+            //vBox.getChildren().addListener();
             scrollPane.setVvalue(1.0);
         });
     }
@@ -325,6 +326,16 @@ public class SessionView implements IView {
 
         rollDialog.setScene(new Scene(container));
         rollDialog.show();
+    }
+
+    private String convertSkillToLabel(String skill) {
+        for(var entry : labelToSkill.entrySet()) {
+            if(entry.getValue().equals(skill)) {
+                return entry.getKey();
+            }
+        }
+
+        return skill;
     }
 
     private String map(int value) {

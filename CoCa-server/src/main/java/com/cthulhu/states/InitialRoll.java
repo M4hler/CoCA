@@ -5,6 +5,7 @@ import com.cthulhu.models.RollResult;
 import com.cthulhu.services.GeneratorService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InitialRoll extends RollState {
     public InitialRoll(GeneratorService generatorService, RollResult rollResult, boolean isHuman) {
@@ -36,8 +37,7 @@ public class InitialRoll extends RollState {
         rollTypes.addAll(skippedRollTypes);
         var successes = countSuccesses(diceRolls);
 
-        rollResult = new RollResult(rollResult.getAttribute(), rollResult.getSkill(), rollResult.getAttributeValue(),
-                rollResult.getSkillValue(), diceRolls, dice, rollTypes, successes, !isHuman);
+        rollResult = createResult(diceRolls, dice, rollTypes, successes);
         return rollResult;
     }
 
@@ -49,5 +49,10 @@ public class InitialRoll extends RollState {
         else {
             return new PushRoll(generatorService, rollResult, false);
         }
+    }
+
+    protected RollResult createResult(List<Integer> diceRolls, List<Integer> dice, List<RollType> rollTypes, int successes) {
+        return new RollResult(rollResult.getAttribute(), rollResult.getSkill(), rollResult.getAttributeValue(),
+                rollResult.getSkillValue(), diceRolls, dice, rollTypes, successes, !isHuman);
     }
 }
