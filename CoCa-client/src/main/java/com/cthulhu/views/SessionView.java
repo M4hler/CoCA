@@ -39,6 +39,11 @@ public class SessionView implements IView {
     private final JmsTemplate jmsTemplate;
 
     private Text title;
+    private Label healthLabel;
+    private Label resolveLabel;
+    private Label promotionPointsLabel;
+    private Label humanityPointsLabel;
+    private Label chinyenPointsLabel;
     private CheckBoxTreeItem<String> root;
     private final GridPane grid;
     private final VBox vBox;
@@ -214,6 +219,12 @@ public class SessionView implements IView {
         createRow("Connections", bladeRunner.getConnections(), 15, 12);
         createRow("Insight", bladeRunner.getInsight(), 16, 12);
         createRow("Manipulation", bladeRunner.getManipulation(), 17, 12);
+
+        createStatusRowWithLimit(healthLabel, "Health", "health", 2);
+        createStatusRowWithLimit(resolveLabel, "Resolve", "resolve", 3);
+        createStatusRow(promotionPointsLabel, "Promotion points", "promotionPoints", 4);
+        createStatusRow(humanityPointsLabel, "Humanity points", "humanityPoints", 5);
+        createStatusRow(chinyenPointsLabel, "Chinyen points", "chinyenPoints", 6);
     }
 
     private void setupAdmin() {
@@ -227,14 +238,13 @@ public class SessionView implements IView {
         treeView.setPrefHeight(100);
         treeView.setPrefWidth(200);
         treeView.setCellFactory(CheckBoxTreeCell.forTreeView());
+        grid.add(treeView, 0, 1);
 
 //        var rollbutton = new Button("Roll");
 //        var rollBox = new HBox(10);
 //        rollBox.setAlignment(Pos.BOTTOM_RIGHT);
 //        rollBox.getChildren().add(rollbutton);
 //        rollbutton.setOnAction(e -> rollAction());
-
-        grid.add(treeView, 0, 1);
 //        grid.add(rollBox, 0, 5);
     }
 
@@ -280,6 +290,20 @@ public class SessionView implements IView {
         var valueLabel = createLabel(map(value), size);
         grid.add(label, 0, row, 2, 1);
         grid.add(valueLabel, 2, row, 1, 1);
+    }
+
+    private void createStatusRowWithLimit(Label labelValue, String text, String status, int row) {
+        var label = createLabel(text, 12);
+        labelValue = createLabel(String.format("%d/%d", bladeRunner.getCurrentStatusValue(status), 10), 12);
+        grid.add(label, 25, row);
+        grid.add(labelValue, 26, row);
+    }
+
+    private void createStatusRow(Label labelValue, String text, String status, int row) {
+        var label = createLabel(text, 12);
+        labelValue = createLabel(String.valueOf(bladeRunner.getCurrentStatusValue(status)), 12);
+        grid.add(label, 25, row);
+        grid.add(labelValue, 26, row);
     }
 
     private Label createLabel(String s, int size) {

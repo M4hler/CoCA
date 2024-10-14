@@ -45,6 +45,8 @@ public class BladeRunner {
 
     @Getter(AccessLevel.NONE)
     private final Map<String, Supplier<Integer>> skillToValue;
+    @Getter(AccessLevel.NONE)
+    private final Map<String, Supplier<Integer>> currentStatusToValue;
 
     public BladeRunner() {
         skillToValue = new HashMap<>();
@@ -65,9 +67,20 @@ public class BladeRunner {
         skillToValue.put("connections", this::getConnections);
         skillToValue.put("manipulation", this::getManipulation);
         skillToValue.put("insight", this::getInsight);
+
+        currentStatusToValue = new HashMap<>();
+        currentStatusToValue.put("health", this::getHealth);
+        currentStatusToValue.put("resolve", this::getResolve);
+        currentStatusToValue.put("promotionPoints", this::getPromotionPoints);
+        currentStatusToValue.put("humanityPoints", this::getHumanityPoints);
+        currentStatusToValue.put("chinyenPoints", this::getChinyenPoints);
     }
 
     public int getSkillValue(String skill) {
         return skillToValue.get(skill).get();
+    }
+
+    public int getCurrentStatusValue(String status) {
+        return currentStatusToValue.get(status).get();
     }
 }
