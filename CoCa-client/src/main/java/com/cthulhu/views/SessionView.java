@@ -220,11 +220,11 @@ public class SessionView implements IView {
         createRow("Insight", bladeRunner.getInsight(), 16, 12);
         createRow("Manipulation", bladeRunner.getManipulation(), 17, 12);
 
-        healthLabel = createStatusRowWithLimit("Health", "health", 2);
-        resolveLabel = createStatusRowWithLimit("Resolve", "resolve", 3);
-        promotionPointsLabel = createStatusRow("Promotion points", "promotionPoints", 4);
-        humanityPointsLabel = createStatusRow("Humanity points", "humanityPoints", 5);
-        chinyenPointsLabel = createStatusRow("Chinyen points", "chinyenPoints", 6);
+        healthLabel = createStatusRowWithLimit("Health",  bladeRunner.getHealth(), 10, 2);
+        resolveLabel = createStatusRowWithLimit("Resolve", bladeRunner.getResolve(), 11, 3);
+        promotionPointsLabel = createStatusRow("Promotion points", bladeRunner.getPromotionPoints(), 4);
+        humanityPointsLabel = createStatusRow("Humanity points", bladeRunner.getHumanityPoints(), 5);
+        chinyenPointsLabel = createStatusRow("Chinyen points", bladeRunner.getChinyenPoints(), 6);
     }
 
     private void setupAdmin() {
@@ -292,18 +292,18 @@ public class SessionView implements IView {
         grid.add(valueLabel, 2, row, 1, 1);
     }
 
-    private Label createStatusRowWithLimit(String text, String status, int row) {
+    private Label createStatusRowWithLimit(String text, int value, int limit, int row) {
         var label = createLabel(text, 12);
-        var labelValue = createLabel(String.format("%d/%d", bladeRunner.getCurrentStatusValue(status), 10), 12);
+        var labelValue = createLabel(String.format("%d/%d", value, limit), 12);
         grid.add(label, 25, row);
         grid.add(labelValue, 26, row);
 
         return labelValue;
     }
 
-    private Label createStatusRow(String text, String status, int row) {
+    private Label createStatusRow(String text, int value, int row) {
         var label = createLabel(text, 12);
-        var labelValue = createLabel(String.valueOf(bladeRunner.getCurrentStatusValue(status)), 12);
+        var labelValue = createLabel(String.valueOf(value), 12);
         grid.add(label, 25, row);
         grid.add(labelValue, 26, row);
 
