@@ -39,6 +39,7 @@ public class SessionView implements IView {
     private final JmsTemplate jmsTemplate;
 
     private Text title;
+    private Text shift;
     private Label healthLabel;
     private Label resolveLabel;
     private Label promotionPointsLabel;
@@ -93,13 +94,17 @@ public class SessionView implements IView {
         vBox = new VBox();
         vBox.setMaxWidth(390);
 
+        shift = new Text("Morning shift");
+        shift.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(shift, 3, 1, 1, 1);
+
         scrollPane = new ScrollPane();
         scrollPane.setPrefSize(400, 600);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setContent(vBox);
 
-        grid.add(scrollPane, 3, 1, 20, 20);
+        grid.add(scrollPane, 3, 2, 20, 20);
 
         pushButton = new Button("Push roll");
         pushButton.setOnAction(e -> rollPushAction());
