@@ -245,12 +245,12 @@ public class SessionView implements IView {
         treeView.setCellFactory(CheckBoxTreeCell.forTreeView());
         grid.add(treeView, 0, 1);
 
-//        var rollbutton = new Button("Roll");
-//        var rollBox = new HBox(10);
-//        rollBox.setAlignment(Pos.BOTTOM_RIGHT);
-//        rollBox.getChildren().add(rollbutton);
-//        rollbutton.setOnAction(e -> rollAction());
-//        grid.add(rollBox, 0, 5);
+        var shiftButton = new Button("Change shift");
+        shiftButton.setOnAction(e -> changeShiftAction());
+        var box = new HBox(10);
+        box.setAlignment(Pos.BOTTOM_RIGHT);
+        box.getChildren().add(shiftButton);
+        grid.add(box, 0, 5);
     }
 
     @Override
@@ -273,6 +273,10 @@ public class SessionView implements IView {
         var pushEvent = new PushEvent(bladeRunnerName);
         pushEvent.setMessageCode(MessageCode.getMessageCode(PushEvent.class));
         jmsTemplate.convertAndSend(queueName, pushEvent);
+    }
+
+    private void changeShiftAction() {
+        System.out.println("Change shift");
     }
 
     private void rollAcceptAction() {
