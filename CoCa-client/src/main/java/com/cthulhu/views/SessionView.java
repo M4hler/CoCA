@@ -97,7 +97,7 @@ public class SessionView implements IView {
         vBox = new VBox();
         vBox.setMaxWidth(390);
 
-        shift = new Text("Morning shift");
+        shift = new Text("Shift: Morning");
         shift.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(shift, 3, 1, 1, 1);
 
@@ -193,6 +193,10 @@ public class SessionView implements IView {
 
     public void addToTreeView(String name) {
         Platform.runLater(() -> root.getChildren().add(new TreeItem<>(name)));
+    }
+
+    public void changeShift(Shift shift) {
+        this.shift.setText("Shift: " + shift.name());
     }
 
     private void setupUser(BladeRunner bladeRunner) {

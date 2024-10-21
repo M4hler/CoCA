@@ -68,6 +68,6 @@ public class SessionController extends AbstractController<SessionView> {
     }
 
     public void changeShift(ShiftChangeResultEvent event) {
-        System.out.println("Shift: " + event.getShift());
+        view.changeShift(event.getShift());
     }
 }
