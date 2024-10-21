@@ -1,6 +1,7 @@
 package com.cthulhu.views;
 
 import com.cthulhu.enums.RollType;
+import com.cthulhu.enums.Shift;
 import com.cthulhu.events.AcceptEvent;
 import com.cthulhu.events.PushEvent;
 import com.cthulhu.events.RollEvent;
@@ -26,6 +27,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -243,14 +245,14 @@ public class SessionView implements IView {
         treeView.setPrefHeight(100);
         treeView.setPrefWidth(200);
         treeView.setCellFactory(CheckBoxTreeCell.forTreeView());
-        grid.add(treeView, 0, 1);
+        grid.add(treeView, 0, 3);
 
         var shiftButton = new Button("Change shift");
-        shiftButton.setOnAction(e -> changeShiftAction());
+        shiftButton.setOnAction(e -> createShiftChangeDialog());
         var box = new HBox(10);
         box.setAlignment(Pos.BOTTOM_RIGHT);
         box.getChildren().add(shiftButton);
-        grid.add(box, 0, 5);
+        grid.add(box, 0, 21);
     }
 
     @Override
@@ -275,8 +277,8 @@ public class SessionView implements IView {
         jmsTemplate.convertAndSend(queueName, pushEvent);
     }
 
-    private void changeShiftAction() {
-        System.out.println("Change shift");
+    private void changeShiftAction(Shift shift) {
+        System.out.println("Change shift to: " + shift.name());
     }
 
     private void rollAcceptAction() {
@@ -368,6 +370,35 @@ public class SessionView implements IView {
 
         rollDialog.setScene(new Scene(container));
         rollDialog.show();
+    }
+
+    private void createShiftChangeDialog() {
+        var shiftDialog = new Stage();
+        shiftDialog.setTitle("Change shift dialog");
+        shiftDialog.initModality(Modality.APPLICATION_MODAL);
+
+        var comboBox = new ComboBox<Shift>();
+        ObservableList<Shift> data = FXCollections.observableArrayList();
+        List<Shift> values = Arrays.asList(Shift.values());
+        data.addAll(values);
+        comboBox.setItems(data);
+
+        var changeButton = new Button("Change shift");
+        var box = new HBox(10);
+        box.setAlignment(Pos.BOTTOM_RIGHT);
+        box.getChildren().add(changeButton);
+        changeButton.setOnAction(e -> changeShiftAction(comboBox.getValue()));
+
+        var container = new GridPane();
+        container.setHgap(10);
+        container.setVgap(10);
+        container.setPadding(new Insets(25));
+        container.setAlignment(Pos.CENTER);
+        container.add(comboBox, 0, 0);
+        container.add(changeButton, 0, 1);
+
+        shiftDialog.setScene(new Scene(container));
+        shiftDialog.show();
     }
 
     private String convertSkillToLabel(String skill) {
