@@ -3,6 +3,7 @@ package com.cthulhu.views;
 import com.cthulhu.enums.RollType;
 import com.cthulhu.enums.Shift;
 import com.cthulhu.events.AcceptEvent;
+import com.cthulhu.events.ShiftChangeEvent;
 import com.cthulhu.events.PushEvent;
 import com.cthulhu.events.RollEvent;
 import com.cthulhu.models.BladeRunner;
@@ -278,7 +279,9 @@ public class SessionView implements IView {
     }
 
     private void changeShiftAction(Shift shift) {
-        System.out.println("Change shift to: " + shift.name());
+        var changeEvent = new ShiftChangeEvent(shift);
+        changeEvent.setMessageCode(MessageCode.getMessageCode(ShiftChangeEvent.class));
+        jmsTemplate.convertAndSend(queueName, changeEvent);
     }
 
     private void rollAcceptAction() {

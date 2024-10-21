@@ -29,6 +29,8 @@ public class MessageCode {
         messageCodes.put(RollResultEvent.class, 4);
         messageCodes.put(PushEvent.class, 5);
         messageCodes.put(AcceptEvent.class, 6);
+        messageCodes.put(ShiftChangeEvent.class, 7);
+        messageCodes.put(ShiftChangeResultEvent.class, 8);
 
         return messageCodes;
     }
