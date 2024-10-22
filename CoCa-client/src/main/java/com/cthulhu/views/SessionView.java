@@ -97,7 +97,7 @@ public class SessionView implements IView {
         vBox = new VBox();
         vBox.setMaxWidth(390);
 
-        shift = new Text("Shift: Morning");
+        shift = new Text("Shift: MORNING");
         shift.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(shift, 3, 1, 1, 1);
 
@@ -391,10 +391,13 @@ public class SessionView implements IView {
         comboBox.setItems(data);
 
         var changeButton = new Button("Change shift");
+        var nextButton = new Button("Next shift");
         var box = new HBox(10);
         box.setAlignment(Pos.BOTTOM_RIGHT);
         box.getChildren().add(changeButton);
+        box.getChildren().add(nextButton);
         changeButton.setOnAction(e -> changeShiftAction(comboBox.getValue()));
+        nextButton.setOnAction(e -> changeShiftAction(Shift.valueOf(shift.getText().replaceAll("Shift:", "").trim()).next()));
 
         var container = new GridPane();
         container.setHgap(10);
@@ -402,7 +405,7 @@ public class SessionView implements IView {
         container.setPadding(new Insets(25));
         container.setAlignment(Pos.CENTER);
         container.add(comboBox, 0, 0);
-        container.add(changeButton, 0, 1);
+        container.add(box, 0, 1);
 
         shiftDialog.setScene(new Scene(container));
         shiftDialog.show();
