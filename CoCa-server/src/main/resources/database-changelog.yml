@@ -171,3 +171,117 @@ databaseChangeLog:
                   type: integer
                   constraints:
                     nullable: false
+  - changeSet:
+      id: Create NPC table
+      author: M4hler
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: NPC
+            columns:
+              - column:
+                  name: name
+                  type: varchar(40)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: NpcPrimaryKey
+              - column:
+                  name: is_human
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: years_on_the_force
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: strength
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: agility
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: intelligence
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: empathy
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: force
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hand_to_hand_combat
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stamina
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: firearms
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mobility
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stealth
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: medical_aid
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: observation
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tech
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: connections
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: manipulation
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: insight
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: health
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resolve
+                  type: integer
+                  constraints:
+                    nullable: false
