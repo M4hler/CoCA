@@ -191,11 +191,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: years_on_the_force
-                  type: integer
-                  constraints:
-                    nullable: false
-              - column:
                   name: strength
                   type: integer
                   constraints:
