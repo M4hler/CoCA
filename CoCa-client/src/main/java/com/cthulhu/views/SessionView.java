@@ -252,6 +252,13 @@ public class SessionView implements IView {
         treeView.setCellFactory(CheckBoxTreeCell.forTreeView());
         grid.add(treeView, 0, 3);
 
+        var npcButton = new Button("Create NPC");
+        npcButton.setOnAction(e -> createNpcDialog());
+        var npcBox = new HBox(10);
+        npcBox.setAlignment(Pos.BOTTOM_RIGHT);
+        npcBox.getChildren().add(npcButton);
+        grid.add(npcBox, 0, 20);
+
         var shiftButton = new Button("Change shift");
         shiftButton.setOnAction(e -> createShiftChangeDialog());
         var box = new HBox(10);
@@ -409,6 +416,10 @@ public class SessionView implements IView {
 
         shiftDialog.setScene(new Scene(container));
         shiftDialog.show();
+    }
+
+    private void createNpcDialog() {
+        System.out.println("Create NPC");
     }
 
     private String convertSkillToLabel(String skill) {
