@@ -31,6 +31,7 @@ public class MessageCode {
         messageCodes.put(AcceptEvent.class, 6);
         messageCodes.put(ShiftChangeEvent.class, 7);
         messageCodes.put(ShiftChangeResultEvent.class, 8);
+        messageCodes.put(NpcDataEvent.class, 9);
 
         return messageCodes;
     }
