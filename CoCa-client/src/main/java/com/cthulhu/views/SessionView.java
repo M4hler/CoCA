@@ -419,7 +419,18 @@ public class SessionView implements IView {
     }
 
     private void createNpcDialog() {
-        System.out.println("Create NPC");
+        var shiftDialog = new Stage();
+        shiftDialog.setTitle("Create NPC dialog");
+        shiftDialog.initModality(Modality.APPLICATION_MODAL);
+
+        var container = new GridPane();
+        container.setHgap(10);
+        container.setVgap(10);
+        container.setPadding(new Insets(25));
+        container.setAlignment(Pos.CENTER);
+
+        shiftDialog.setScene(new Scene(container));
+        shiftDialog.show();
     }
 
     private String convertSkillToLabel(String skill) {
