@@ -423,11 +423,20 @@ public class SessionView implements IView {
         shiftDialog.setTitle("Create NPC dialog");
         shiftDialog.initModality(Modality.APPLICATION_MODAL);
 
+        var nameLabel = new Label("Name");
+        var nameTextField = new TextField();
+        var isHumanLabel = new Label("Human");
+        var isHumanCheckbox = new CheckBox();
+
         var container = new GridPane();
         container.setHgap(10);
         container.setVgap(10);
         container.setPadding(new Insets(25));
         container.setAlignment(Pos.CENTER);
+        container.add(nameLabel, 0, 0);
+        container.add(nameTextField, 0, 1);
+        container.add(isHumanLabel, 1, 0);
+        container.add(isHumanCheckbox, 1, 1);
 
         shiftDialog.setScene(new Scene(container));
         shiftDialog.show();
