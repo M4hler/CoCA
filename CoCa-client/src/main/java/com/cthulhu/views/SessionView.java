@@ -428,6 +428,13 @@ public class SessionView implements IView {
         var isHumanLabel = new Label("Human");
         var isHumanCheckbox = new CheckBox();
 
+        ObservableList<String> skillData = FXCollections.observableArrayList();
+        skillData.addAll("A", "B", "C", "D");
+
+        var strengthLabel = new Label("Strength");
+        var strengthValue = new ComboBox<String>();
+        strengthValue.setItems(skillData);
+
         var container = new GridPane();
         container.setHgap(10);
         container.setVgap(10);
@@ -437,6 +444,8 @@ public class SessionView implements IView {
         container.add(nameTextField, 0, 1);
         container.add(isHumanLabel, 1, 0);
         container.add(isHumanCheckbox, 1, 1);
+        container.add(strengthLabel, 2, 0);
+        container.add(strengthValue, 2, 1);
 
         shiftDialog.setScene(new Scene(container));
         shiftDialog.show();
