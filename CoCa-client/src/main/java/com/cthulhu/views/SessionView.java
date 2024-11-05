@@ -434,6 +434,15 @@ public class SessionView implements IView {
         var strengthLabel = new Label("Strength");
         var strengthValue = new ComboBox<String>();
         strengthValue.setItems(skillData);
+        var agility = new Label("Agility");
+        var agilityValue = new ComboBox<String>();
+        agilityValue.setItems(skillData);
+        var intelligence = new Label("Intelligence");
+        var intelligenceValue = new ComboBox<String>();
+        intelligenceValue.setItems(skillData);
+        var empathy = new Label("Empathy");
+        var empathyValue = new ComboBox<String>();
+        empathyValue.setItems(skillData);
 
         var container = new GridPane();
         container.setHgap(10);
