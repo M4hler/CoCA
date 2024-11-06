@@ -434,13 +434,13 @@ public class SessionView implements IView {
         var strengthLabel = new Label("Strength");
         var strengthValue = new ComboBox<String>();
         strengthValue.setItems(skillData);
-        var agility = new Label("Agility");
+        var agilityLabel = new Label("Agility");
         var agilityValue = new ComboBox<String>();
         agilityValue.setItems(skillData);
-        var intelligence = new Label("Intelligence");
+        var intelligenceLabel = new Label("Intelligence");
         var intelligenceValue = new ComboBox<String>();
         intelligenceValue.setItems(skillData);
-        var empathy = new Label("Empathy");
+        var empathyLabel = new Label("Empathy");
         var empathyValue = new ComboBox<String>();
         empathyValue.setItems(skillData);
 
@@ -455,6 +455,12 @@ public class SessionView implements IView {
         container.add(isHumanCheckbox, 1, 1);
         container.add(strengthLabel, 2, 0);
         container.add(strengthValue, 2, 1);
+        container.add(agilityLabel, 3, 0);
+        container.add(agilityValue, 3, 1);
+        container.add(intelligenceLabel, 4, 0);
+        container.add(intelligenceValue, 4, 1);
+        container.add(empathyLabel, 5, 0);
+        container.add(empathyValue, 5, 1);
 
         shiftDialog.setScene(new Scene(container));
         shiftDialog.show();
