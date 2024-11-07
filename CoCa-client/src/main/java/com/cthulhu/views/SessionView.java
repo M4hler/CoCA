@@ -450,17 +450,17 @@ public class SessionView implements IView {
         container.setPadding(new Insets(25));
         container.setAlignment(Pos.CENTER);
         container.add(nameLabel, 0, 0);
-        container.add(nameTextField, 0, 1);
-        container.add(isHumanLabel, 1, 0);
+        container.add(nameTextField, 1, 0);
+        container.add(isHumanLabel, 0, 1);
         container.add(isHumanCheckbox, 1, 1);
-        container.add(strengthLabel, 2, 0);
-        container.add(strengthValue, 2, 1);
-        container.add(agilityLabel, 3, 0);
-        container.add(agilityValue, 3, 1);
-        container.add(intelligenceLabel, 4, 0);
-        container.add(intelligenceValue, 4, 1);
-        container.add(empathyLabel, 5, 0);
-        container.add(empathyValue, 5, 1);
+        container.add(strengthLabel, 0, 2);
+        container.add(strengthValue, 1, 2);
+        container.add(agilityLabel, 0, 3);
+        container.add(agilityValue, 1, 3);
+        container.add(intelligenceLabel, 0, 4);
+        container.add(intelligenceValue, 1, 4);
+        container.add(empathyLabel, 0, 5);
+        container.add(empathyValue, 1, 5);
 
         shiftDialog.setScene(new Scene(container));
         shiftDialog.show();
