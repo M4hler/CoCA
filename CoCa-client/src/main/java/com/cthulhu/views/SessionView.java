@@ -432,17 +432,20 @@ public class SessionView implements IView {
         skillData.addAll("A", "B", "C", "D");
 
         var strengthLabel = new Label("Strength");
-        var strengthValue = new ComboBox<String>();
-        strengthValue.setItems(skillData);
+        var strengthValue = new ComboBox<>(skillData);
         var agilityLabel = new Label("Agility");
-        var agilityValue = new ComboBox<String>();
-        agilityValue.setItems(skillData);
+        var agilityValue = new ComboBox<>(skillData);
         var intelligenceLabel = new Label("Intelligence");
-        var intelligenceValue = new ComboBox<String>();
-        intelligenceValue.setItems(skillData);
+        var intelligenceValue = new ComboBox<>(skillData);
         var empathyLabel = new Label("Empathy");
-        var empathyValue = new ComboBox<String>();
-        empathyValue.setItems(skillData);
+        var empathyValue = new ComboBox<>(skillData);
+
+        var forceLabel = new Label("Force");
+        var forceValue = new ComboBox<>(skillData);
+        var handToHandCombatLabel = new Label("Hand-to-hand combat");
+        var handToHandCombatValue = new ComboBox<>(skillData);
+        var staminaLabel = new Label("Stamina");
+        var staminaValue = new ComboBox<>(skillData);
 
         var container = new GridPane();
         container.setHgap(10);
