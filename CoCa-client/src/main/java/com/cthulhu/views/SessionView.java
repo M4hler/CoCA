@@ -447,6 +447,27 @@ public class SessionView implements IView {
         var staminaLabel = new Label("Stamina");
         var staminaValue = new ComboBox<>(skillData);
 
+        var firearmsLabel = new Label("Firearms");
+        var firearmsValue = new ComboBox<>(skillData);
+        var mobilityLabel = new Label("Mobility");
+        var mobilityValue = new ComboBox<>(skillData);
+        var stealthLabel = new Label("Stealth");
+        var stealthValue = new ComboBox<>(skillData);
+
+        var medicalAidLabel = new Label("Medical aid");
+        var medicalAidValue = new ComboBox<>(skillData);
+        var observationLabel = new Label("Observation");
+        var observationValue = new ComboBox<>(skillData);
+        var techLabel = new Label("Tech");
+        var techValue = new ComboBox<>(skillData);
+
+        var connectionsLabel = new Label("Connections");
+        var connectionsValue = new ComboBox<>(skillData);
+        var manipulationLabel = new Label("Manipulation");
+        var manipulationValue = new ComboBox<>(skillData);
+        var insightLabel = new Label("Insight");
+        var insightValue = new ComboBox<>(skillData);
+
         var container = new GridPane();
         container.setHgap(10);
         container.setVgap(10);
@@ -464,6 +485,30 @@ public class SessionView implements IView {
         container.add(intelligenceValue, 1, 4);
         container.add(empathyLabel, 0, 5);
         container.add(empathyValue, 1, 5);
+        container.add(forceLabel, 0, 6);
+        container.add(forceValue, 1, 6);
+        container.add(handToHandCombatLabel, 0, 7);
+        container.add(handToHandCombatValue, 1, 7);
+        container.add(staminaLabel, 0, 8);
+        container.add(staminaValue, 1, 8);
+        container.add(firearmsLabel, 0, 9);
+        container.add(firearmsValue, 1, 9);
+        container.add(mobilityLabel, 0, 10);
+        container.add(mobilityValue, 1, 10);
+        container.add(stealthLabel, 0, 11);
+        container.add(stealthValue, 1, 11);
+        container.add(medicalAidLabel, 0, 12);
+        container.add(medicalAidValue, 1, 12);
+        container.add(observationLabel, 0, 13);
+        container.add(observationValue, 1, 13);
+        container.add(techLabel, 0, 14);
+        container.add(techValue, 1, 14);
+        container.add(connectionsLabel, 0, 15);
+        container.add(connectionsValue, 1, 15);
+        container.add(manipulationLabel, 0, 16);
+        container.add(manipulationValue, 1, 16);
+        container.add(insightLabel, 0, 17);
+        container.add(insightValue, 1, 17);
 
         shiftDialog.setScene(new Scene(container));
         shiftDialog.show();
