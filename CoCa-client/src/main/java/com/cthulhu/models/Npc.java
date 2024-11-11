@@ -1,10 +1,12 @@
 package com.cthulhu.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Npc {
     private String name;
     private boolean isHuman;

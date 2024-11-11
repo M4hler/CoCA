@@ -2,12 +2,10 @@ package com.cthulhu.views;
 
 import com.cthulhu.enums.RollType;
 import com.cthulhu.enums.Shift;
-import com.cthulhu.events.AcceptEvent;
-import com.cthulhu.events.ShiftChangeEvent;
-import com.cthulhu.events.PushEvent;
-import com.cthulhu.events.RollEvent;
+import com.cthulhu.events.*;
 import com.cthulhu.models.BladeRunner;
 import com.cthulhu.models.MessageCode;
+import com.cthulhu.models.Npc;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -295,6 +293,19 @@ public class SessionView implements IView {
         jmsTemplate.convertAndSend(queueName, changeEvent);
     }
 
+    private void createNpc(String name, boolean isHuman, int strength, int agility, int intelligence, int empathy,
+                           int force, int handToHandCombat, int stamina, int firearms, int mobility, int stealth,
+                           int medicalAid, int observation, int tech, int connections, int manipulation, int insight) {
+        var health = (strength + agility + 2) / 4;
+        var resolve = (intelligence + empathy + 2) / 4;
+        var npc = new Npc(name, isHuman, strength, agility, intelligence, empathy, health, resolve, force,
+                handToHandCombat, stamina, firearms, mobility, stealth, medicalAid, observation, tech, connections,
+                manipulation, insight);
+        var npcEvent = new NpcDataEvent(npc);
+        npcEvent.setMessageCode(MessageCode.getMessageCode(NpcDataEvent.class));
+        jmsTemplate.convertAndSend(queueName, npcEvent);
+    }
+
     private void rollAcceptAction() {
         var acceptEvent = new AcceptEvent(bladeRunnerName);
         acceptEvent.setMessageCode(MessageCode.getMessageCode(AcceptEvent.class));
@@ -468,6 +479,17 @@ public class SessionView implements IView {
         var insightLabel = new Label("Insight");
         var insightValue = new ComboBox<>(skillData);
 
+        var createButton = new Button("Create");
+        var box = new HBox(10);
+        box.setAlignment(Pos.BOTTOM_RIGHT);
+        box.getChildren().add(createButton);
+        createButton.setOnAction(e -> createNpc(nameTextField.getText(), isHumanCheckbox.isSelected(),
+                map(strengthValue.getValue()), map(agilityValue.getValue()), map(intelligenceValue.getValue()), map(empathyValue.getValue()),
+                map(forceValue.getValue()), map(handToHandCombatValue.getValue()), map(staminaValue.getValue()),
+                map(firearmsValue.getValue()), map(mobilityValue.getValue()), map(stealthValue.getValue()),
+                map(medicalAidValue.getValue()), map(observationValue.getValue()), map(techValue.getValue()),
+                map(connectionsValue.getValue()), map(manipulationValue.getValue()), map(insightValue.getValue())));
+
         var container = new GridPane();
         container.setHgap(10);
         container.setVgap(10);
@@ -509,6 +531,7 @@ public class SessionView implements IView {
         container.add(manipulationValue, 1, 16);
         container.add(insightLabel, 0, 17);
         container.add(insightValue, 1, 17);
+        container.add(createButton, 0, 18);
 
         shiftDialog.setScene(new Scene(container));
         shiftDialog.show();
@@ -544,6 +567,26 @@ public class SessionView implements IView {
             }
             default -> {
                 return "?";
+            }
+        }
+    }
+
+    private int map(String value) {
+        switch (value) {
+            case "D" -> {
+                return 6;
+            }
+            case "C" -> {
+                return 8;
+            }
+            case "B" -> {
+                return 10;
+            }
+            case "A" -> {
+                return 12;
+            }
+            default -> {
+                return 0;
             }
         }
     }
