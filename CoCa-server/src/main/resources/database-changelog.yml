@@ -280,3 +280,27 @@ databaseChangeLog:
                   type: integer
                   constraints:
                     nullable: false
+  - changeSet:
+      id: Create Mainframe table
+      author: M4hler
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: mainframe
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: MainframePrimaryKey
+              - column:
+                  name: title
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+                  constraints:
+                    nullable: false
