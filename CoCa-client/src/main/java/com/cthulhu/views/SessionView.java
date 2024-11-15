@@ -120,6 +120,13 @@ public class SessionView implements IView {
         rollReactionBox.getChildren().add(acceptButton);
         grid.add(rollReactionBox, 25, 22);
 
+        var mainframeButton = new Button("Mainframe");
+        mainframeButton.setOnAction(e -> createMainframeDialog());
+        var mainframeBox = new HBox(10);
+        mainframeBox.setAlignment(Pos.BOTTOM_RIGHT);
+        mainframeBox.getChildren().add(mainframeButton);
+        grid.add(mainframeBox, 25, 21);
+
         scene = new Scene(grid, 800, 600);
 
         if(isAdmin) {
@@ -535,6 +542,10 @@ public class SessionView implements IView {
 
         shiftDialog.setScene(new Scene(container));
         shiftDialog.show();
+    }
+
+    private void createMainframeDialog() {
+        System.out.println("Dialog");
     }
 
     private String convertSkillToLabel(String skill) {

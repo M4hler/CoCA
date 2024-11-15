@@ -32,6 +32,8 @@ public class MessageCode {
         messageCodes.put(ShiftChangeEvent.class, 7);
         messageCodes.put(ShiftChangeResultEvent.class, 8);
         messageCodes.put(NpcDataEvent.class, 9);
+        messageCodes.put(MainframeAddDataEvent.class, 10);
+        messageCodes.put(MainframeAllDataEvent.class, 11);
 
         return messageCodes;
     }
