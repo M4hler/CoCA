@@ -11,8 +11,8 @@ public class Mainframe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Lob
+    //@Lob
     private String title;
-    @Lob
+    //@Lob
     private String description;
 }
