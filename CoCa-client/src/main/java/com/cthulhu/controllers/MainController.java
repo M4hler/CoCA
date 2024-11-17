@@ -13,16 +13,20 @@ public class MainController extends Application {
     private Stage stage;
     @Getter
     private String queue;
+    @Getter
+    private String serverAddress;
+    private final LoginController loginController;
 
     public MainController() {
-        LoginController loginController = new LoginController(this);
-        RegistrationController registrationController = new RegistrationController(this);
+        var serverController = new ServerController(this);
+        loginController = new LoginController(this);
+        var registrationController = new RegistrationController(this);
         var service = new CoCaListenerService();
 
         loginController.setRegistrationView(registrationController.getView());
         registrationController.setLoginView(loginController.getView());
 
-        currentScene = loginController.getView().getScene();
+        currentScene = serverController.getView().getScene();
     }
 
     @Override
@@ -41,6 +45,11 @@ public class MainController extends Application {
 
     public void setQueue(String name) {
         queue = name;
+    }
+
+    public void transitionToLoginController(String address) {
+        serverAddress = address;
+        setCurrentScene(loginController.getView());
     }
 
     public void transitionControlToSessionController(boolean isAdmin, BladeRunner bladeRunner) {

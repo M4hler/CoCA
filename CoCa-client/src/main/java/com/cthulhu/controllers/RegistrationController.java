@@ -43,7 +43,7 @@ public class RegistrationController extends AbstractController<RegistrationView>
         }
 
         try {
-            var status = HttpService.registerRequest(name, password);
+            var status = HttpService.registerRequest(name, password, mainController.getServerAddress());
 
             if(Objects.equals(status, HttpStatus.CONFLICT)) {
                 setErrorMessage("User with this name already exists");

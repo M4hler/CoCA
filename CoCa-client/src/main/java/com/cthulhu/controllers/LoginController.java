@@ -1,7 +1,6 @@
 package com.cthulhu.controllers;
 
 import com.cthulhu.listeners.MainListener;
-import com.cthulhu.models.Account;
 import com.cthulhu.services.HttpService;
 import com.cthulhu.views.LoginView;
 import com.cthulhu.views.RegistrationView;
@@ -41,7 +40,7 @@ public class LoginController extends AbstractController<LoginView> {
         }
 
         try {
-            var response = HttpService.loginRequest(name, password);
+            var response = HttpService.loginRequest(name, password, mainController.getServerAddress());
 
             if(Objects.equals(response.getStatusCode(), HttpStatus.NOT_FOUND)) {
                 setErrorMessage("User with name " + name + " not found");
