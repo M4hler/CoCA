@@ -296,11 +296,11 @@ databaseChangeLog:
                     primaryKeyName: MainframePrimaryKey
               - column:
                   name: title
-                  type: text
+                  type: varchar(64)
                   constraints:
                     nullable: false
               - column:
                   name: description
-                  type: text
+                  type: varchar(256)
                   constraints:
                     nullable: false
