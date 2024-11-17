@@ -7,13 +7,6 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
-  activemq:
-    broker-url: tcp://localhost:61616
-    packages:
-      trust-all: true
-    in-memory: true
-    user: admin
-    password: admin
 
 logging:
   level:
@@ -38,6 +31,13 @@ spring:
       path: /h2
     settings:
       web-allow-others: true
+  activemq:
+    broker-url: tcp://localhost:61616
+    packages:
+      trust-all: true
+    in-memory: true
+    user: admin
+    password: admin
 
 ---
 spring:
@@ -51,3 +51,9 @@ spring:
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
+  artemis:
+    mode: native
+    host: localhost
+    port: 61616
+    user: artemis
+    password: artemis

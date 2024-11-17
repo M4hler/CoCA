@@ -95,7 +95,7 @@ public class LoginController extends AbstractController<LoginView> {
 
     public void createQueue(String name) throws JMSException {
         var connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-        var connection = connectionFactory.createConnection();
+        var connection = connectionFactory.createConnection("artemis", "artemis");
         connection.start();
 
         var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
