@@ -68,9 +68,10 @@ public class LoginController extends AbstractController<LoginView> {
             }
 
             if(response.getBody() != null) {
-                createQueue(response.getBody().getServerQueue());
-                mainController.setQueue(response.getBody().getClientQueue());
-                mainController.transitionControlToSessionController(response.getBody().getIsAdmin(), response.getBody().getBladeRunner());
+                var body = response.getBody();
+                createQueue(body.getServerQueue(), body.getBrokerUrl(), body.getBrokerUsername(), body.getBrokerPassword());
+                mainController.setQueue(body.getClientQueue());
+                mainController.transitionControlToSessionController(body.getIsAdmin(), body.getBladeRunner());
             }
             else {
                setErrorMessage("Body was null");
@@ -93,9 +94,9 @@ public class LoginController extends AbstractController<LoginView> {
         view.getErrorText().setText(message);
     }
 
-    public void createQueue(String name) throws JMSException {
-        var connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-        var connection = connectionFactory.createConnection("artemis", "artemis");
+    public void createQueue(String name, String url, String username, String password) throws JMSException {
+        var connectionFactory = new ActiveMQConnectionFactory(url);
+        var connection = connectionFactory.createConnection(username, password);
         connection.start();
 
         var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);

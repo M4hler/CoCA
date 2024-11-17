@@ -12,6 +12,9 @@ import lombok.ToString;
 public class LoginResponse {
     private String serverQueue;
     private String clientQueue;
+    private String brokerUrl;
+    private String brokerUsername;
+    private String brokerPassword;
     private Boolean isAdmin;
     private BladeRunner bladeRunner;
 }
