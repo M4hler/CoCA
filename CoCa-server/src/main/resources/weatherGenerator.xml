@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weatherGenerator xsi="$LOCAL_SCHEMA$">
+    <node id="start">
+        <transition target="state.1" weight="100"/>
+    </node>
+
+    <node id="state.1">
+        <transition target="state.2" weight="75"/>
+        <transition target="state.3" weight="25"/>
+    </node>
+
+    <node id="state.2">
+        <transition target="state.3" weight="80"/>
+        <transition target="end" weight="20"/>
+    </node>
+
+    <node id="state.3">
+        <transition target="end" weight="100"/>
+    </node>
+
+    <node id="end">
+    </node>
+</weatherGenerator>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="weatherGenerator">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="node" type="Node" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="Node">
+        <xsd:sequence>
+            <xsd:element name="transition" type="Transition" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Transition">
+        <xsd:attribute name="target" type="Node" use="required"/>
+        <xsd:attribute name="weight" type="xsd:integer" use="required"/>
+    </xsd:complexType>
+</xsd:schema>
