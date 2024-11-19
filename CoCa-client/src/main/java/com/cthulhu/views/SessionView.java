@@ -4,6 +4,7 @@ import com.cthulhu.enums.RollType;
 import com.cthulhu.enums.Shift;
 import com.cthulhu.events.*;
 import com.cthulhu.models.BladeRunner;
+import com.cthulhu.models.Mainframe;
 import com.cthulhu.models.MessageCode;
 import com.cthulhu.models.Npc;
 import javafx.application.Platform;
@@ -313,6 +314,13 @@ public class SessionView implements IView {
         jmsTemplate.convertAndSend(queueName, npcEvent);
     }
 
+    private void sendToMainframe(String title, String description) {
+        var mainframeData = new Mainframe(0, title, description);
+        var mainframeEvent = new MainframeAddDataEvent(mainframeData);
+        mainframeEvent.setMessageCode(MessageCode.getMessageCode(MainframeAddDataEvent.class));
+        jmsTemplate.convertAndSend(queueName, mainframeEvent);
+    }
+
     private void rollAcceptAction() {
         var acceptEvent = new AcceptEvent(bladeRunnerName);
         acceptEvent.setMessageCode(MessageCode.getMessageCode(AcceptEvent.class));
@@ -437,9 +445,9 @@ public class SessionView implements IView {
     }
 
     private void createNpcDialog() {
-        var shiftDialog = new Stage();
-        shiftDialog.setTitle("Create NPC dialog");
-        shiftDialog.initModality(Modality.APPLICATION_MODAL);
+        var npcDialog = new Stage();
+        npcDialog.setTitle("Create NPC dialog");
+        npcDialog.initModality(Modality.APPLICATION_MODAL);
 
         var nameLabel = new Label("Name");
         var nameTextField = new TextField();
@@ -540,12 +548,41 @@ public class SessionView implements IView {
         container.add(insightValue, 1, 17);
         container.add(createButton, 0, 18);
 
-        shiftDialog.setScene(new Scene(container));
-        shiftDialog.show();
+        npcDialog.setScene(new Scene(container));
+        npcDialog.show();
     }
 
     private void createMainframeDialog() {
-        System.out.println("Dialog");
+        var mainframeDialog = new Stage();
+        mainframeDialog.setTitle("Report to Mainframe");
+        mainframeDialog.initModality(Modality.APPLICATION_MODAL);
+
+        var idLabel = new Label("Title");
+        var idTextField = new TextField();
+        var reportLabel = new Label("Report");
+        var reportTextArea = new TextArea();
+        reportTextArea.setWrapText(true);
+        reportTextArea.setPrefSize(200, 200);
+
+        var sendButton = new Button("Send");
+        var box = new HBox(10);
+        box.setAlignment(Pos.BOTTOM_RIGHT);
+        box.getChildren().add(sendButton);
+        sendButton.setOnAction(e -> sendToMainframe(idTextField.getText(), reportTextArea.getText()));
+
+        var container = new GridPane();
+        container.setHgap(10);
+        container.setVgap(10);
+        container.setPadding(new Insets(25));
+        container.setAlignment(Pos.CENTER);
+        container.add(idLabel, 0, 0);
+        container.add(idTextField, 0, 1);
+        container.add(reportLabel, 0, 2);
+        container.add(reportTextArea, 0, 3);
+        container.add(box, 0, 4);
+
+        mainframeDialog.setScene(new Scene(container));
+        mainframeDialog.show();
     }
 
     private String convertSkillToLabel(String skill) {

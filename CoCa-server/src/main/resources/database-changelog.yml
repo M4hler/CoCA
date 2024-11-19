@@ -291,6 +291,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: integer
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     primaryKeyName: MainframePrimaryKey
