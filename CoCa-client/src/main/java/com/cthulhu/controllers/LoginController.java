@@ -1,9 +1,12 @@
 package com.cthulhu.controllers;
 
 import com.cthulhu.listeners.MainListener;
+import com.cthulhu.models.LoginResponse;
 import com.cthulhu.services.HttpService;
 import com.cthulhu.views.LoginView;
 import com.cthulhu.views.RegistrationView;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.*;
 import javafx.scene.paint.Color;
 import lombok.Getter;
@@ -19,9 +22,11 @@ import java.util.Objects;
 public class LoginController extends AbstractController<LoginView> {
     private final MainController mainController;
     private RegistrationView registrationView;
+    private final ObjectMapper mapper;
 
     public LoginController(MainController mainController) {
         this.mainController = mainController;
+        this.mapper = new ObjectMapper();
         view = new LoginView(this::login, this::register);
     }
 
@@ -42,33 +47,34 @@ public class LoginController extends AbstractController<LoginView> {
         try {
             var response = HttpService.loginRequest(name, password, mainController.getServerAddress());
 
-            if(Objects.equals(response.getStatusCode(), HttpStatus.NOT_FOUND)) {
+            if(Objects.equals(response.statusCode(), HttpStatus.NOT_FOUND.value())) {
                 setErrorMessage("User with name " + name + " not found");
                 return;
             }
 
-            if(Objects.equals(response.getStatusCode(), HttpStatus.FORBIDDEN)) {
+            if(Objects.equals(response.statusCode(), HttpStatus.FORBIDDEN.value())) {
                 setErrorMessage("Wrong password");
                 return;
             }
 
-            if(Objects.equals(response.getStatusCode(), HttpStatus.EXPECTATION_FAILED)) {
+            if(Objects.equals(response.statusCode(), HttpStatus.EXPECTATION_FAILED.value())) {
                 setErrorMessage("No Blade Runner is linked to this account");
                 return;
             }
 
-            if(Objects.equals(response.getStatusCode(), HttpStatus.NOT_ACCEPTABLE)) {
+            if(Objects.equals(response.statusCode(), HttpStatus.NOT_ACCEPTABLE.value())) {
                 setErrorMessage("Admin hasn't started the session yet");
                 return;
             }
 
-            if(!Objects.equals(response.getStatusCode(), HttpStatus.OK)) {
-                setErrorMessage("Server responded with error, code: " + response.getStatusCode().value());
+            if(!Objects.equals(response.statusCode(), HttpStatus.OK.value())) {
+                setErrorMessage("Server responded with error, code: " + response.statusCode());
                 return;
             }
 
-            if(response.getBody() != null) {
-                var body = response.getBody();
+            if(response.body() != null) {
+                var responseBody = response.body();
+                var body = mapper.readValue(responseBody, LoginResponse.class);
                 createQueue(body.getServerQueue(), body.getBrokerUrl(), body.getBrokerUsername(), body.getBrokerPassword());
                 mainController.setQueue(body.getClientQueue());
                 mainController.transitionControlToSessionController(body.getIsAdmin(), body.getBladeRunner());
@@ -82,6 +88,9 @@ public class LoginController extends AbstractController<LoginView> {
         }
         catch(JMSException e) {
             setErrorMessage("Couldn't create queue");
+        }
+        catch (JsonProcessingException e) {
+            setErrorMessage("Couldn't read message body");
         }
     }
 

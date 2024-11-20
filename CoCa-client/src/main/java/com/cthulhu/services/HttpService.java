@@ -1,56 +1,62 @@
 package com.cthulhu.services;
 
 import com.cthulhu.models.LoginData;
-import com.cthulhu.models.LoginResponse;
-import org.springframework.http.*;
-import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HttpService {
-    private static final RestTemplate restTemplate = new RestTemplate();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
-    public static HttpStatusCode healthCheckRequest(String address) {
-        var response = makeHealthCheckRequest(address);
-        return response.getStatusCode();
+    public static HttpResponse<String> healthCheckRequest(String address) {
+        return makeHealthCheckRequest(address);
     }
 
-    public static ResponseEntity<LoginResponse> loginRequest(String name, String password, String address) throws NoSuchAlgorithmException {
-        return makeRequest(name, password, "login", LoginResponse.class, address);
+    public static HttpResponse<String> loginRequest(String name, String password, String address) throws NoSuchAlgorithmException {
+        return makeLoginDataRequest(name, password, address, "/login");
     }
 
-    public static HttpStatusCode registerRequest(String name, String password, String address) throws NoSuchAlgorithmException {
-        var response = makeRequest(name, password, "register", String.class, address);
-        return response.getStatusCode();
+    public static HttpResponse<String> registerRequest(String name, String password, String address) throws NoSuchAlgorithmException {
+        return makeLoginDataRequest(name, password, address, "/register");
     }
 
-    private static ResponseEntity<String> makeHealthCheckRequest(String address) {
+    private static HttpResponse<String> makeLoginDataRequest(String name, String password, String address, String endpoint) {
         try {
-            String url = address + "health";
-            return restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null), String.class);
+            var hash = getHash(password);
+            var loginData = new LoginData(name, hash);
+            var requestBody = mapper.writeValueAsString(loginData);
+            var uri = new URI(address + endpoint);
+            var request = HttpRequest.newBuilder()
+                    .uri(uri)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+            return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         }
         catch(Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("Exception: " + e);
+            return null;
         }
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    private static <T> ResponseEntity<T> makeRequest(String name, String password, String endpoint, Class<T> responseType,
-                                                     String address) throws NoSuchAlgorithmException {
-        String hash = getHash(password);
-        LoginData loginData = new LoginData(name, hash);
-        String url = address + endpoint;
-        HttpEntity<LoginData> request = new HttpEntity<>(loginData);
-
+    private static HttpResponse<String> makeHealthCheckRequest(String address) {
         try {
-            return restTemplate.exchange(url, HttpMethod.POST, request, responseType);
+            var uri = new URI(address + "/health");
+            var request = HttpRequest.newBuilder()
+                    .uri(uri)
+                    .GET()
+                    .build();
+            return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         }
-        catch (RestClientResponseException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAs(responseType));
+        catch(Exception e) {
+            System.out.println("Exception: " + e);
+            return null;
         }
     }
 

@@ -43,15 +43,15 @@ public class RegistrationController extends AbstractController<RegistrationView>
         }
 
         try {
-            var status = HttpService.registerRequest(name, password, mainController.getServerAddress());
+            var response = HttpService.registerRequest(name, password, mainController.getServerAddress());
 
-            if(Objects.equals(status, HttpStatus.CONFLICT)) {
+            if(Objects.equals(response.statusCode(), HttpStatus.CONFLICT.value())) {
                 setErrorMessage("User with this name already exists");
                 return;
             }
 
-            if(!Objects.equals(status, HttpStatus.OK)) {
-                setErrorMessage("Server responded with error, code: " + status.value());
+            if(!Objects.equals(response.statusCode(), HttpStatus.OK.value())) {
+                setErrorMessage("Server responded with error, code: " + response.statusCode());
                 return;
             }
 
