@@ -21,7 +21,6 @@ import javafx.scene.text.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
@@ -32,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Configuration
 @EnableJms
 public class SessionView implements IView {
     private final BladeRunner bladeRunner;

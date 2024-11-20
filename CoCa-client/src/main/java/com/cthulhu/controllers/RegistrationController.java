@@ -6,7 +6,6 @@ import com.cthulhu.views.RegistrationView;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
@@ -45,12 +44,12 @@ public class RegistrationController extends AbstractController<RegistrationView>
         try {
             var response = HttpService.registerRequest(name, password, mainController.getServerAddress());
 
-            if(Objects.equals(response.statusCode(), HttpStatus.CONFLICT.value())) {
+            if(Objects.equals(response.statusCode(), 409)) {
                 setErrorMessage("User with this name already exists");
                 return;
             }
 
-            if(!Objects.equals(response.statusCode(), HttpStatus.OK.value())) {
+            if(!Objects.equals(response.statusCode(), 200)) {
                 setErrorMessage("Server responded with error, code: " + response.statusCode());
                 return;
             }
