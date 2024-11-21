@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.net.HttpURLConnection;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
@@ -44,12 +45,12 @@ public class RegistrationController extends AbstractController<RegistrationView>
         try {
             var response = HttpService.registerRequest(name, password, mainController.getServerAddress());
 
-            if(Objects.equals(response.statusCode(), 409)) {
+            if(Objects.equals(response.statusCode(), HttpURLConnection.HTTP_CONFLICT)) {
                 setErrorMessage("User with this name already exists");
                 return;
             }
 
-            if(!Objects.equals(response.statusCode(), 200)) {
+            if(!Objects.equals(response.statusCode(), HttpURLConnection.HTTP_OK)) {
                 setErrorMessage("Server responded with error, code: " + response.statusCode());
                 return;
             }

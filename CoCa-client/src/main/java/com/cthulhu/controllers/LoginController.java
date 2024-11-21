@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
+import java.net.HttpURLConnection;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
@@ -46,27 +47,27 @@ public class LoginController extends AbstractController<LoginView> {
         try {
             var response = HttpService.loginRequest(name, password, mainController.getServerAddress());
 
-            if(Objects.equals(response.statusCode(), 404)) {
+            if(Objects.equals(response.statusCode(), HttpURLConnection.HTTP_NOT_FOUND)) {
                 setErrorMessage("User with name " + name + " not found");
                 return;
             }
 
-            if(Objects.equals(response.statusCode(), 403)) {
+            if(Objects.equals(response.statusCode(), HttpURLConnection.HTTP_FORBIDDEN)) {
                 setErrorMessage("Wrong password");
                 return;
             }
 
-            if(Objects.equals(response.statusCode(), 417)) {
+            if(Objects.equals(response.statusCode(), HttpURLConnection.HTTP_GONE)) {
                 setErrorMessage("No Blade Runner is linked to this account");
                 return;
             }
 
-            if(Objects.equals(response.statusCode(), 406)) {
+            if(Objects.equals(response.statusCode(), HttpURLConnection.HTTP_NOT_ACCEPTABLE)) {
                 setErrorMessage("Admin hasn't started the session yet");
                 return;
             }
 
-            if(!Objects.equals(response.statusCode(), 200)) {
+            if(!Objects.equals(response.statusCode(), HttpURLConnection.HTTP_OK)) {
                 setErrorMessage("Server responded with error, code: " + response.statusCode());
                 return;
             }

@@ -3,6 +3,7 @@ package com.cthulhu.controllers;
 import com.cthulhu.services.HttpService;
 import com.cthulhu.views.ServerView;
 
+import java.net.HttpURLConnection;
 import java.util.Objects;
 
 public class ServerController extends AbstractController<ServerView> {
@@ -15,7 +16,7 @@ public class ServerController extends AbstractController<ServerView> {
 
     public void tryConnect(String address) {
         var response = HttpService.healthCheckRequest(address);
-        if(Objects.equals(response.statusCode(), 200)) {
+        if(Objects.equals(response.statusCode(), HttpURLConnection.HTTP_OK)) {
             mainController.transitionToLoginController(address);
         }
     }

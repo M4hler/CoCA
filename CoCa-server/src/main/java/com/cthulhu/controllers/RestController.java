@@ -54,7 +54,7 @@ public class RestController {
         }
 
         if(!account.isAdmin() && account.getBladeRunners().isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>(null, HttpStatus.GONE);
         }
 
         if(!account.isAdmin() && !messageSenderService.isAdminOnline()) {
