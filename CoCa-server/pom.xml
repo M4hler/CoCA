@@ -138,7 +138,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.1.5</version>
                 <configuration>
-                    <mainClass>com.cthulhu.Application</mainClass>
+                    <mainClass>com.coca.server.Application</mainClass>
                     <layout>JAR</layout>
                 </configuration>
 <!--                <executions>-->

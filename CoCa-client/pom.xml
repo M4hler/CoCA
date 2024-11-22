@@ -63,7 +63,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.cthulhu.controllers.MainController</mainClass>
+                    <mainClass>com.coca.client.controllers.MainController</mainClass>
                 </configuration>
             </plugin>
         </plugins>
