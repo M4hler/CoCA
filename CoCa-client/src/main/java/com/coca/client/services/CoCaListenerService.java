@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 public class CoCaListenerService {
     @Getter
     private static final Map<Class<? extends Event>, CustomListener<? extends Event>> cocaListeners = new HashMap<>();
-    private static final String PACKAGE_NAME = "com.cthulhu.listeners";
+    private static final String PACKAGE_NAME = "com.coca.client.listeners";
+
     public CoCaListenerService() {
         var inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(PACKAGE_NAME.replaceAll("[.]", "/"));
         if(inputStream == null) {

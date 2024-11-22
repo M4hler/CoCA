@@ -23,7 +23,7 @@ public class CoCaListenerService {
             InvocationTargetException, InstantiationException, IllegalAccessException {
         var provider = new ClassPathScanningCandidateComponentProvider(false);
         provider.addIncludeFilter(new AnnotationTypeFilter(CoCaListener.class));
-        var candidates = provider.findCandidateComponents("com.cthulhu");
+        var candidates = provider.findCandidateComponents("com.coca.server");
 
         for(var candidate : candidates) {
             if(candidate instanceof AnnotatedBeanDefinition abd) {
