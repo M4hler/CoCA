@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<weatherGenerator xsi="$LOCAL_SCHEMA$">
+<weatherGenerator>
     <node id="start">
         <transition target="state.1" weight="100"/>
     </node>

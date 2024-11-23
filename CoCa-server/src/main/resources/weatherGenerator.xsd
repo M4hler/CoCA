@@ -16,7 +16,7 @@
     </xsd:complexType>
 
     <xsd:complexType name="Transition">
-        <xsd:attribute name="target" type="Node" use="required"/>
+        <xsd:attribute name="target" type="xsd:string" use="required"/>
         <xsd:attribute name="weight" type="xsd:integer" use="required"/>
     </xsd:complexType>
 </xsd:schema>
