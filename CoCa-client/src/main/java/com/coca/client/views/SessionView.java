@@ -313,7 +313,8 @@ public class SessionView implements IView {
     }
 
     private void sendToMainframe(String title, String description) {
-        var mainframeData = new Mainframe(0, title, description);
+        var author = bladeRunner == null ? "unknown": bladeRunnerName;
+        var mainframeData = new Mainframe(0, author, title, description);
         var mainframeEvent = new MainframeAddDataEvent(mainframeData);
         mainframeEvent.setMessageCode(MessageCode.getMessageCode(MainframeAddDataEvent.class));
         jmsTemplate.convertAndSend(queueName, mainframeEvent);

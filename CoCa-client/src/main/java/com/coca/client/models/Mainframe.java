@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Mainframe {
     private int id;
+    private String author;
     private String title;
     private String description;
 }

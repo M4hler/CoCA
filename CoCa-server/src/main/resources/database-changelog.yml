@@ -296,6 +296,11 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: MainframePrimaryKey
               - column:
+                  name: author
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
                   name: title
                   type: varchar(64)
                   constraints:
@@ -305,3 +310,6 @@ databaseChangeLog:
                   type: varchar(256)
                   constraints:
                     nullable: false
+              - column:
+                  name: timestamp
+                  type: timestamp
