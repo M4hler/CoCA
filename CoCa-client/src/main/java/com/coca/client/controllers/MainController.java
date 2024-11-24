@@ -29,6 +29,10 @@ public class MainController extends Application {
         currentScene = serverController.getView().getScene();
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) {
         this.stage = stage;
