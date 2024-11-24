@@ -34,6 +34,7 @@ public class MessageCode {
         messageCodes.put(NpcDataEvent.class, 9);
         messageCodes.put(MainframeAddDataEvent.class, 10);
         messageCodes.put(MainframeAllDataEvent.class, 11);
+        messageCodes.put(MainframeAllDataRequestEvent.class, 12);
 
         return messageCodes;
     }

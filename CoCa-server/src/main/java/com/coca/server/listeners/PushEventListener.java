@@ -3,6 +3,7 @@ package com.coca.server.listeners;
 import com.coca.server.annotations.CoCaListener;
 import com.coca.server.events.PushEvent;
 import com.coca.server.services.RollEventService;
+import jakarta.jms.Queue;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +16,7 @@ public class PushEventListener extends CustomListener<PushEvent> {
     }
 
     @Override
-    protected void handle(PushEvent event) {
+    protected void handle(PushEvent event, Queue source) {
         rollEventService.pushRoll(event.getBladeRunner());
     }
 }

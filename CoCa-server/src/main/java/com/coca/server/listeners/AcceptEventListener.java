@@ -3,6 +3,7 @@ package com.coca.server.listeners;
 import com.coca.server.annotations.CoCaListener;
 import com.coca.server.events.AcceptEvent;
 import com.coca.server.services.RollEventService;
+import jakarta.jms.Queue;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +16,7 @@ public class AcceptEventListener extends CustomListener<AcceptEvent> {
     }
 
     @Override
-    protected void handle(AcceptEvent event) {
+    protected void handle(AcceptEvent event, Queue source) {
         rollEventService.accept(event.getBladeRunner());
     }
 }

@@ -16,7 +16,8 @@ public class MessageSenderService {
     private final ConnectionFactory connectionFactory;
     private final JmsTemplate jmsTemplate;
     private final MainListener mainListener;
-    private final Map<Account, Queue> queues;
+    private final Map<Account, Queue> serverQueues;
+    private final Map<Account, Queue> playerQueues;
     private static final String QUEUE_SERVER_PREFIX = "queue_server";
     private static final String QUEUE_PLAYER_PREFIX = "queue_player";
 
@@ -24,7 +25,8 @@ public class MessageSenderService {
         this.connectionFactory = connectionFactory;
         this.jmsTemplate = jmsTemplate;
         this.mainListener = mainListener;
-        queues = new HashMap<>();
+        serverQueues = new HashMap<>();
+        playerQueues = new HashMap<>();
     }
 
     public String createServerQueue(Account account) throws JMSException {
@@ -33,7 +35,7 @@ public class MessageSenderService {
         var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         var queue = session.createQueue(QUEUE_SERVER_PREFIX + account.getName());
 
-        queues.put(account, queue);
+        serverQueues.put(account, queue);
         return queue.getQueueName();
     }
 
@@ -46,19 +48,20 @@ public class MessageSenderService {
         var consumer = session.createConsumer(queue);
         consumer.setMessageListener(mainListener);
 
+        playerQueues.put(account, queue);
         return queue.getQueueName();
     }
 
     public void sendToAll(Event event) {
-        for(var queue : queues.entrySet()) {
-            sendToQueue(event, queue.getValue());
+        for(var entry : serverQueues.entrySet()) {
+            sendToQueue(event, entry.getValue());
         }
     }
 
     public void sendToAdminQueue(Event event) {
-        for(var queue : queues.entrySet()) {
-            if(queue.getKey().isAdmin()) {
-                sendToQueue(event, queue.getValue());
+        for(var entry : serverQueues.entrySet()) {
+            if(entry.getKey().isAdmin()) {
+                sendToQueue(event, entry.getValue());
             }
         }
     }
@@ -73,7 +76,19 @@ public class MessageSenderService {
         }
     }
 
+    public void respondToQueue(Event event, Queue source) {
+        for (var entry : playerQueues.entrySet()) {
+            try {
+                if (entry.getValue().getQueueName().equals(source.getQueueName())) {
+                    sendToQueue(event, serverQueues.get(entry.getKey()));
+                }
+            } catch (JMSException e) {
+                System.out.println("Error when getting queue name");
+            }
+        }
+    }
+
     public boolean isAdminOnline() {
-        return queues.entrySet().stream().anyMatch(x -> x.getKey().isAdmin());
+        return serverQueues.entrySet().stream().anyMatch(x -> x.getKey().isAdmin());
     }
 }

@@ -4,6 +4,7 @@ import com.coca.server.events.RollEvent;
 import com.coca.server.annotations.CoCaListener;
 import com.coca.server.services.BladeRunnerService;
 import com.coca.server.services.RollEventService;
+import jakarta.jms.Queue;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +19,7 @@ public class RollEventListener extends CustomListener<RollEvent> {
     }
 
     @Override
-    public void handle(RollEvent event) {
+    public void handle(RollEvent event, Queue source) {
         var bladeRunner = bladeRunnerService.getBladeRunner(event.getBladeRunner());
         var skill = event.getSkill();
         var attribute = bladeRunner.getAttributeForSkill(skill);

@@ -3,6 +3,7 @@ package com.coca.server.listeners;
 import com.coca.server.annotations.CoCaListener;
 import com.coca.server.events.NpcDataEvent;
 import com.coca.server.services.NpcService;
+import jakarta.jms.Queue;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +16,7 @@ public class NpcDataEventListener extends CustomListener<NpcDataEvent> {
     }
 
     @Override
-    protected void handle(NpcDataEvent event) {
+    protected void handle(NpcDataEvent event, Queue source) {
         npcService.save(event.getNpc());
     }
 }

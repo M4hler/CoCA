@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
 import jakarta.jms.MessageListener;
+import jakarta.jms.Queue;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -25,17 +26,17 @@ public class MainListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
         try {
-            String body = message.getBody(String.class);
+            var queue = (Queue) message.getJMSDestination();
+            var body = message.getBody(String.class);
             var tree = mapper.readTree(body);
-            int messageCode = tree.get("messageCode").asInt();
+            var messageCode = tree.get("messageCode").asInt();
             var eventClass = MessageCode.getEvent(messageCode);
             var event = tryParse(body, eventClass);
-            if(event != null) {
+            if (event != null) {
                 var listener = listeners.get(eventClass);
-                listener.handleRequest(event);
+                listener.handleRequest(event, queue);
             }
-        }
-        catch (JMSException | JsonProcessingException e) {
+        } catch (JMSException | JsonProcessingException e) {
             System.out.println("Encountered error: " + e);
         }
     }
@@ -43,8 +44,7 @@ public class MainListener implements MessageListener {
     private <T extends Event> T tryParse(String body, Class<T> toCast) {
         try {
             return mapper.readValue(body, toCast);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
