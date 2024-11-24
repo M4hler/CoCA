@@ -154,7 +154,7 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
-                            <finalName>CoCa-server-0.0.1-repackaged.jar</finalName>
+                            <finalName>CoCa-server-0.0.1-repackaged</finalName>
                         </configuration>
                     </execution>
                 </executions>
