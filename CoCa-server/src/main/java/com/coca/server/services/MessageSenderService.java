@@ -1,13 +1,9 @@
 package com.coca.server.services;
 
-import com.coca.server.events.BladeRunnerDataEvent;
-import com.coca.server.events.JoinEvent;
-import com.coca.server.events.ShiftChangeResultEvent;
+import com.coca.server.events.*;
 import com.coca.server.listeners.MainListener;
 import com.coca.server.models.Account;
-import com.coca.server.models.BladeRunner;
 import com.coca.server.models.MessageCode;
-import com.coca.server.events.RollResultEvent;
 import jakarta.jms.*;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -53,42 +49,27 @@ public class MessageSenderService {
         return queue.getQueueName();
     }
 
-    public void sendJoinEvent(String name, BladeRunner bladeRunner) throws JMSException {
+    public void sendToAll(Event event) {
         for(var queue : queues.entrySet()) {
-            var event = new JoinEvent(name);
-            event.setMessageCode(MessageCode.getMessageCode(JoinEvent.class));
-            jmsTemplate.convertAndSend(queue.getValue().getQueueName(), event);
+            sendToQueue(event, queue.getValue());
+        }
+    }
+
+    public void sendToAdminQueue(Event event) {
+        for(var queue : queues.entrySet()) {
             if(queue.getKey().isAdmin()) {
-                var dataEvent = new BladeRunnerDataEvent(bladeRunner);
-                dataEvent.setMessageCode(MessageCode.getMessageCode(BladeRunnerDataEvent.class));
-                jmsTemplate.convertAndSend(queue.getValue().getQueueName(), dataEvent);
+                sendToQueue(event, queue.getValue());
             }
         }
     }
 
-    public void sendRollResultEvent(RollResultEvent event) {
-        for(var queue : queues.entrySet()) {
-            try {
-                event.setMessageCode(MessageCode.getMessageCode(RollResultEvent.class));
-                jmsTemplate.convertAndSend(queue.getValue().getQueueName(), event);
-            }
-            catch(JMSException e) {
-                System.out.println("Error while sending to queue bound to account: "
-                        + queue.getKey().getName() + ", error: " + e);
-            }
+    public void sendToQueue(Event event, Queue queue) {
+        try {
+            event.setMessageCode(MessageCode.getMessageCode(event.getClass()));
+            jmsTemplate.convertAndSend(queue.getQueueName(), event);
         }
-    }
-
-    public void sendShiftChangeEvent(ShiftChangeResultEvent event) {
-        for(var queue : queues.entrySet()) {
-            try {
-                event.setMessageCode(MessageCode.getMessageCode(ShiftChangeResultEvent.class));
-                jmsTemplate.convertAndSend(queue.getValue().getQueueName(), event);
-            }
-            catch(JMSException e) {
-                System.out.println("Error while sending to queue bound to account: "
-                        + queue.getKey().getName() + ", error: " + e);
-            }
+        catch(JMSException e) {
+            System.out.println("Error while sending event: " + event.getClass() + " to queue " + e);
         }
     }
 

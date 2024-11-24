@@ -32,14 +32,14 @@ public class RollEventService {
         var state = rollStates.get(name);
         var result = state.roll();
         rollStates.put(name, state.transition());
-        messageSenderService.sendRollResultEvent(new RollResultEvent(name, result));
+        messageSenderService.sendToAll(new RollResultEvent(name, result));
     }
 
     public void pushRoll(String name) {
         var state = rollStates.get(name);
         var result = state.roll();
         rollStates.put(name, state.transition());
-        messageSenderService.sendRollResultEvent(new RollResultEvent(name, result));
+        messageSenderService.sendToAll(new RollResultEvent(name, result));
     }
 
     public void accept(String name) {

@@ -1,5 +1,7 @@
 package com.coca.server.controllers;
 
+import com.coca.server.events.BladeRunnerDataEvent;
+import com.coca.server.events.JoinEvent;
 import com.coca.server.models.Account;
 import com.coca.server.services.AccountService;
 import com.coca.server.models.BladeRunner;
@@ -70,7 +72,8 @@ public class RestController {
             }
 
             var body = new LoginResponse(serverQueue, playerQueue, "tcp://localhost:61616", "artemis", "artemis", account.isAdmin(), bladeRunner);
-            messageSenderService.sendJoinEvent(loginData.getName(), bladeRunner);
+            messageSenderService.sendToAll(new JoinEvent(loginData.getName()));
+            messageSenderService.sendToAdminQueue(new BladeRunnerDataEvent(bladeRunner));
             return new ResponseEntity<>(body, HttpStatus.OK);
         }
         catch(JMSException e) {

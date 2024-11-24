@@ -14,6 +14,6 @@ public class ShiftService {
 
     public void changeShift(Shift shift) {
         var event = new ShiftChangeResultEvent(shift);
-        messageSenderService.sendShiftChangeEvent(event);
+        messageSenderService.sendToAll(event);
     }
 }
