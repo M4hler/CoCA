@@ -10,6 +10,7 @@ import com.coca.server.models.LoginResponse;
 import com.coca.server.services.MessageSenderService;
 import jakarta.jms.*;
 import jakarta.transaction.Transactional;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,18 +20,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
     private final AccountService accountService;
     private final MessageSenderService messageSenderService;
+    private Environment environment;
     private final MessageDigest messageDigest;
 
     public RestController(AccountService accountService,
-                          MessageSenderService messageSenderService) throws NoSuchAlgorithmException {
+                          MessageSenderService messageSenderService,
+                          Environment environment) throws NoSuchAlgorithmException {
         this.accountService = accountService;
         this.messageSenderService = messageSenderService;
+        this.environment = environment;
         messageDigest = MessageDigest.getInstance("SHA-512");
     }
 
@@ -71,6 +78,10 @@ public class RestController {
                 bladeRunner = account.getBladeRunners().get(0);
             }
 
+            var credentials = brokerCredentials();
+            for (var entry : credentials.entrySet()) {
+                System.out.println(entry.getKey() + " " + entry.getValue());
+            }
             var body = new LoginResponse(serverQueue, playerQueue, "tcp://localhost:61616", "artemis", "artemis", account.isAdmin(), bladeRunner);
             messageSenderService.sendToAll(new JoinEvent(loginData.getName()));
             messageSenderService.sendToAdminQueue(new BladeRunnerDataEvent(bladeRunner));
@@ -102,5 +113,22 @@ public class RestController {
         byte[] hash = messageDigest.digest();
         String result = new String(hash, StandardCharsets.UTF_8);
         return result.substring(0, Math.min(result.length(), 64));
+    }
+
+    private Map<String, String> brokerCredentials() {
+        var map = new HashMap<String, String>();
+        System.out.println("profile: " + environment.getProperty("spring.profiles.active"));
+        if (Objects.equals(environment.getProperty("spring.profiles.active"), "local")) {
+            map.put("brokerUrl", environment.getProperty("spring.activemq.broker-url"));
+            map.put("brokerUser", environment.getProperty("spring.activemq.user"));
+            map.put("brokerPassword", environment.getProperty("spring.activemq.password"));
+        }
+        else {
+            map.put("brokerUrl", environment.getProperty("spring.artemis.broker-url"));
+            map.put("brokerUser", environment.getProperty("spring.artemis.user"));
+            map.put("brokerPassword", environment.getProperty("spring.artemis.password"));
+        }
+
+        return map;
     }
 }
