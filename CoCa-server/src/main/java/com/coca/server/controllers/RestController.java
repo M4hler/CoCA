@@ -29,7 +29,7 @@ import java.util.UUID;
 public class RestController {
     private final AccountService accountService;
     private final MessageSenderService messageSenderService;
-    private Environment environment;
+    private final Environment environment;
     private final MessageDigest messageDigest;
 
     public RestController(AccountService accountService,
@@ -79,10 +79,8 @@ public class RestController {
             }
 
             var credentials = brokerCredentials();
-            for (var entry : credentials.entrySet()) {
-                System.out.println(entry.getKey() + " " + entry.getValue());
-            }
-            var body = new LoginResponse(serverQueue, playerQueue, "tcp://localhost:61616", "artemis", "artemis", account.isAdmin(), bladeRunner);
+            var body = new LoginResponse(serverQueue, playerQueue, credentials.get("brokerUrl"),
+                    credentials.get("brokerUser"), credentials.get("brokerPassword"), account.isAdmin(), bladeRunner);
             messageSenderService.sendToAll(new JoinEvent(loginData.getName()));
             messageSenderService.sendToAdminQueue(new BladeRunnerDataEvent(bladeRunner));
             return new ResponseEntity<>(body, HttpStatus.OK);
