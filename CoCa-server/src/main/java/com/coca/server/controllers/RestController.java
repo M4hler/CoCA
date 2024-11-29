@@ -53,10 +53,10 @@ public class RestController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        Account account = accountService.getAccount(loginData.getName());
-        String salt = accountService.getSalt(loginData.getName());
-        String password = getPassword(loginData.getPassword(), salt);
-        String dbPassword = accountService.getPassword(loginData.getName());
+        var account = accountService.getAccount(loginData.getName());
+        var salt = accountService.getSalt(loginData.getName());
+        var password = getPassword(loginData.getPassword(), salt);
+        var dbPassword = accountService.getPassword(loginData.getName());
 
         if(!dbPassword.equals(password)) {
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
@@ -71,8 +71,8 @@ public class RestController {
         }
 
         try {
-            String serverQueue = messageSenderService.createServerQueue(account);
-            String playerQueue = messageSenderService.createPlayerQueue(account);
+            var serverQueue = messageSenderService.createServerQueue(account);
+            var playerQueue = messageSenderService.createPlayerQueue(account);
             BladeRunner bladeRunner = null;
             if(!account.isAdmin()) {
                 bladeRunner = account.getBladeRunners().get(0);
@@ -96,26 +96,25 @@ public class RestController {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
 
-        String salt = UUID.randomUUID().toString().substring(0, 16);
-        String password = getPassword(loginData.getPassword(), salt);
+        var salt = UUID.randomUUID().toString().substring(0, 16);
+        var password = getPassword(loginData.getPassword(), salt);
 
-        Account account = new Account(loginData.getName(), password, salt, false, null);
+        var account = new Account(loginData.getName(), password, salt, false, null);
         accountService.save(account);
 
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     private String getPassword(String password, String salt) {
-        String toHash = password + salt;
+        var toHash = password + salt;
         messageDigest.update(toHash.getBytes());
-        byte[] hash = messageDigest.digest();
-        String result = new String(hash, StandardCharsets.UTF_8);
+        var hash = messageDigest.digest();
+        var result = new String(hash, StandardCharsets.UTF_8);
         return result.substring(0, Math.min(result.length(), 64));
     }
 
     private Map<String, String> brokerCredentials() {
         var map = new HashMap<String, String>();
-        System.out.println("profile: " + environment.getProperty("spring.profiles.active"));
         if (Objects.equals(environment.getProperty("spring.profiles.active"), "local")) {
             map.put("brokerUrl", environment.getProperty("spring.activemq.broker-url"));
             map.put("brokerUser", environment.getProperty("spring.activemq.user"));
