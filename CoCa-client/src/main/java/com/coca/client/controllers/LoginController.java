@@ -75,7 +75,8 @@ public class LoginController extends AbstractController<LoginView> {
             if(response.body() != null) {
                 var responseBody = response.body();
                 var body = mapper.readValue(responseBody, LoginResponse.class);
-                createQueue(body.getServerQueue(), body.getBrokerUrl(), body.getBrokerUsername(), body.getBrokerPassword());
+                var connectionFactory = createQueue(body.getServerQueue(), body.getBrokerUrl(), body.getBrokerUsername(), body.getBrokerPassword());
+                mainController.setConnectionFactory(connectionFactory);
                 mainController.setQueue(body.getClientQueue());
                 mainController.transitionControlToSessionController(body.getIsAdmin(), body.getBladeRunner());
             }
@@ -103,9 +104,9 @@ public class LoginController extends AbstractController<LoginView> {
         view.getErrorText().setText(message);
     }
 
-    public void createQueue(String name, String url, String username, String password) throws JMSException {
-        var connectionFactory = new ActiveMQConnectionFactory(url);
-        var connection = connectionFactory.createConnection(username, password);
+    public ConnectionFactory createQueue(String name, String url, String username, String password) throws JMSException {
+        var connectionFactory = new ActiveMQConnectionFactory(username, password, url);
+        var connection = connectionFactory.createConnection();
         connection.start();
 
         var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -114,5 +115,7 @@ public class LoginController extends AbstractController<LoginView> {
         var consumer = session.createConsumer(destination);
         var listener = new MainListener();
         consumer.setMessageListener(listener);
+
+        return connectionFactory;
     }
 }

@@ -67,13 +67,8 @@ public class MessageSenderService {
     }
 
     public void sendToQueue(Event event, Queue queue) {
-        try {
-            event.setMessageCode(MessageCode.getMessageCode(event.getClass()));
-            jmsTemplate.convertAndSend(queue.getQueueName(), event);
-        }
-        catch(JMSException e) {
-            System.out.println("Error while sending event: " + event.getClass() + " to queue " + e);
-        }
+        event.setMessageCode(MessageCode.getMessageCode(event.getClass()));
+        jmsTemplate.convertAndSend(queue, event);
     }
 
     public void respondToQueue(Event event, Queue source) {

@@ -30,7 +30,7 @@ public class SessionController extends AbstractController<SessionView> {
         var rollResultEventListener = (RollResultEventListener) CoCaListenerService.getListener(RollResultEventListener.class);
         var shiftChangeResultEventListener = (ShiftChangeResultEventListener) CoCaListenerService.getListener(ShiftChangeResultEventListener.class);
 
-        view = new SessionView(isAdmin, bladeRunner, mainController.getQueue());
+        view = new SessionView(isAdmin, bladeRunner, mainController.getQueue(), mainController.getConnectionFactory());
 
         if(joinEventListener != null) {
             joinEventListener.setHook(this::addToVBox);

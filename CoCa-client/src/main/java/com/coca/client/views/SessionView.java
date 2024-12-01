@@ -7,6 +7,7 @@ import com.coca.client.models.BladeRunner;
 import com.coca.client.models.Mainframe;
 import com.coca.client.models.MessageCode;
 import com.coca.client.models.Npc;
+import jakarta.jms.ConnectionFactory;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
@@ -54,7 +54,7 @@ public class SessionView implements IView {
     private final Scene scene;
     private final Map<String, String> labelToSkill;
 
-    public SessionView(boolean isAdmin, BladeRunner bladeRunner, String queueName) {
+    public SessionView(boolean isAdmin, BladeRunner bladeRunner, String queueName, ConnectionFactory connectionFactory) {
         this.bladeRunner = bladeRunner;
         this.queueName = queueName;
         if(bladeRunner == null) {
@@ -65,7 +65,7 @@ public class SessionView implements IView {
         }
 
         jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory(new ActiveMQConnectionFactory("tcp://localhost:61616"));
+        jmsTemplate.setConnectionFactory(connectionFactory);
         var converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");

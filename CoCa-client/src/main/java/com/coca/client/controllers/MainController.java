@@ -3,6 +3,7 @@ package com.coca.client.controllers;
 import com.coca.client.services.CoCaListenerService;
 import com.coca.client.views.IView;
 import com.coca.client.models.BladeRunner;
+import jakarta.jms.ConnectionFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -11,6 +12,8 @@ import lombok.Getter;
 public class MainController extends Application {
     private Scene currentScene;
     private Stage stage;
+    @Getter
+    private ConnectionFactory connectionFactory;
     @Getter
     private String queue;
     @Getter
@@ -45,6 +48,10 @@ public class MainController extends Application {
         currentScene = view.getScene();
         view.refresh();
         stage.setScene(currentScene);
+    }
+
+    public void setConnectionFactory(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
     public void setQueue(String name) {
