@@ -54,7 +54,7 @@ public class SessionView implements IView {
     private final Scene scene;
     private final Map<String, String> labelToSkill;
 
-    public SessionView(boolean isAdmin, BladeRunner bladeRunner, String queueName, ConnectionFactory connectionFactory) {
+    public SessionView(boolean isAdmin, BladeRunner bladeRunner, String queueName, JmsTemplate jmsTemplate) {
         this.bladeRunner = bladeRunner;
         this.queueName = queueName;
         if(bladeRunner == null) {
@@ -64,12 +64,7 @@ public class SessionView implements IView {
             bladeRunnerName = bladeRunner.getName();
         }
 
-        jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory(connectionFactory);
-        var converter = new MappingJackson2MessageConverter();
-        converter.setTargetType(MessageType.TEXT);
-        converter.setTypeIdPropertyName("_type");
-        jmsTemplate.setMessageConverter(converter);
+        this.jmsTemplate = jmsTemplate;
 
         labelToSkill = new HashMap<>();
         labelToSkill.put("Force", "force");

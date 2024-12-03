@@ -7,6 +7,6 @@ import com.coca.client.events.MainframeAllDataEvent;
 public class MainframeAllDataEventListener extends CustomListener<MainframeAllDataEvent> {
     @Override
     protected void handle(MainframeAllDataEvent event) {
-
+        acceptHook(event);
     }
 }

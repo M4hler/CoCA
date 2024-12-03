@@ -1,27 +1,24 @@
 package com.coca.client.controllers;
 
-import com.coca.client.events.BladeRunnerDataEvent;
-import com.coca.client.events.RollResultEvent;
-import com.coca.client.listeners.BladeRunnerDataEventListener;
-import com.coca.client.listeners.JoinEventListener;
-import com.coca.client.listeners.RollResultEventListener;
+import com.coca.client.events.*;
+import com.coca.client.listeners.*;
 import com.coca.client.models.BladeRunner;
 import com.coca.client.services.CoCaListenerService;
 import com.coca.client.views.SessionView;
-import com.coca.client.events.JoinEvent;
-import com.coca.client.events.ShiftChangeResultEvent;
-import com.coca.client.listeners.ShiftChangeResultEventListener;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
+import org.springframework.jms.support.converter.MessageType;
 
 public class SessionController extends AbstractController<SessionView> {
     private final MainController mainController;
     private final String bladeRunnerName;
+    private final JmsTemplate jmsTemplate;
 
     public SessionController(MainController mainController, boolean isAdmin, BladeRunner bladeRunner) {
         this.mainController = mainController;
-        if(bladeRunner != null) {
+        if (bladeRunner != null) {
             bladeRunnerName = bladeRunner.getName();
-        }
-        else {
+        } else {
             bladeRunnerName = "";
         }
 
@@ -29,45 +26,69 @@ public class SessionController extends AbstractController<SessionView> {
         var bladeRunnerDataEventListener = (BladeRunnerDataEventListener) CoCaListenerService.getListener(BladeRunnerDataEventListener.class);
         var rollResultEventListener = (RollResultEventListener) CoCaListenerService.getListener(RollResultEventListener.class);
         var shiftChangeResultEventListener = (ShiftChangeResultEventListener) CoCaListenerService.getListener(ShiftChangeResultEventListener.class);
+        var mainframeAllDataEventListener = (MainframeAllDataEventListener) CoCaListenerService.getListener(MainframeAllDataEventListener.class);
 
-        view = new SessionView(isAdmin, bladeRunner, mainController.getQueue(), mainController.getConnectionFactory());
+        jmsTemplate = new JmsTemplate();
+        jmsTemplate.setConnectionFactory(mainController.getConnectionFactory());
+        var converter = new MappingJackson2MessageConverter();
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("_type");
+        jmsTemplate.setMessageConverter(converter);
+        view = new SessionView(isAdmin, bladeRunner, mainController.getQueue(), jmsTemplate);
 
-        if(joinEventListener != null) {
+        if (joinEventListener != null) {
             joinEventListener.setHook(this::addToVBox);
         }
 
-        if(bladeRunnerDataEventListener != null) {
+        if (bladeRunnerDataEventListener != null) {
             bladeRunnerDataEventListener.setHook(this::addToTreeView);
         }
 
-        if(rollResultEventListener != null) {
+        if (rollResultEventListener != null) {
             rollResultEventListener.setHook(this::addToVBoxRollResult);
         }
 
-        if(shiftChangeResultEventListener != null) {
+        if (shiftChangeResultEventListener != null) {
             shiftChangeResultEventListener.setHook(this::changeShift);
         }
+
+        if (mainframeAllDataEventListener != null) {
+            mainframeAllDataEventListener.setHook(this::getMainframeData);
+        }
+
+        requestMainframeData();
     }
 
-    public void addToVBox(JoinEvent event) {
+    private void addToVBox(JoinEvent event) {
         view.addToVBox(event.getName());
     }
 
-    public void addToTreeView(BladeRunnerDataEvent event) {
+    private void addToTreeView(BladeRunnerDataEvent event) {
         view.addToTreeView(event.getBladeRunner().getName());
     }
 
-    public void addToVBoxRollResult(RollResultEvent event) {
+    private void addToVBoxRollResult(RollResultEvent event) {
         view.addToVBoxRollResult(event.getBladeRunnerName(), event.getAttribute(), event.getSkill(), event.getAttributeValue(),
                 event.getSkillValue(), event.getDiceRolls(), event.getRollTypes(), event.getSuccesses());
 
-        if(bladeRunnerName.equals(event.getBladeRunnerName())) {
+        if (bladeRunnerName.equals(event.getBladeRunnerName())) {
             view.setPushButtonVisible(event.isCanPush());
             view.setAcceptButtonVisible(event.isCanPush());
         }
     }
 
-    public void changeShift(ShiftChangeResultEvent event) {
+    private void changeShift(ShiftChangeResultEvent event) {
         view.changeShift(event.getShift());
+    }
+
+    private void requestMainframeData() {
+        var event = new MainframeAllDataRequestEvent();
+        jmsTemplate.convertAndSend(mainController.getQueue(), event);
+    }
+
+    private void getMainframeData(MainframeAllDataEvent event) {
+        for (var data : event.getMainframeList()) {
+            System.out.println("Data: " + data.getAuthor() + " " + data.getDescription());
+        }
     }
 }
