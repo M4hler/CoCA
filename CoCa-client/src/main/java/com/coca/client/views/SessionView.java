@@ -7,7 +7,6 @@ import com.coca.client.models.BladeRunner;
 import com.coca.client.models.Mainframe;
 import com.coca.client.models.MessageCode;
 import com.coca.client.models.Npc;
-import jakarta.jms.ConnectionFactory;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,8 +22,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
-import org.springframework.jms.support.converter.MessageType;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -3,6 +3,7 @@ package com.coca.client.controllers;
 import com.coca.client.events.*;
 import com.coca.client.listeners.*;
 import com.coca.client.models.BladeRunner;
+import com.coca.client.models.MessageCode;
 import com.coca.client.services.CoCaListenerService;
 import com.coca.client.views.SessionView;
 import org.springframework.jms.core.JmsTemplate;
@@ -83,6 +84,7 @@ public class SessionController extends AbstractController<SessionView> {
 
     private void requestMainframeData() {
         var event = new MainframeAllDataRequestEvent();
+        event.setMessageCode(MessageCode.getMessageCode(MainframeAllDataRequestEvent.class));
         jmsTemplate.convertAndSend(mainController.getQueue(), event);
     }
 
