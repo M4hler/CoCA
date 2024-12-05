@@ -18,7 +18,7 @@ public class MainListener implements MessageListener {
     private final Map<Class<? extends Event>, CustomListener<? extends Event>> listeners;
 
     public MainListener() {
-        mapper = new ObjectMapper();
+        mapper = new ObjectMapper().findAndRegisterModules();
         listeners = CoCaListenerService.getCocaListeners();
     }
 
