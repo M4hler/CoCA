@@ -3,7 +3,6 @@ package com.coca.server.services;
 import com.coca.server.models.WeatherGenerator;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.xml.transform.stream.StreamSource;
@@ -12,18 +11,18 @@ import javax.xml.transform.stream.StreamSource;
 public class WeatherGeneratorService {
     public WeatherGeneratorService(XmlValidationService xmlValidationService) {
         var result = xmlValidationService.validate("weatherGenerator.xsd", "weatherGenerator.xml");
-        if(result) {
+        if (result) {
             var weatherGenerator = unmarshall("weatherGenerator.xml");
         }
     }
 
-    public WeatherGenerator unmarshall(String xmlFile) {
+    public WeatherGenerator unmarshall(String xmlName) {
         try {
             var context = JAXBContext.newInstance(WeatherGenerator.class);
-            var source = new StreamSource(new ClassPathResource("/src/main/resources/" + xmlFile).getPath());
+            var xmlInput = getClass().getClassLoader().getResourceAsStream(xmlName);
+            var source = new StreamSource(xmlInput);
             return (WeatherGenerator) context.createUnmarshaller().unmarshal(source);
-        }
-        catch(JAXBException e) {
+        } catch (JAXBException e) {
             System.out.println("Error: " + e);
             return null;
         }

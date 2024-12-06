@@ -1,6 +1,5 @@
 package com.coca.server.services;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
@@ -11,17 +10,21 @@ import java.io.IOException;
 
 @Service
 public class XmlValidationService {
-    public boolean validate(String xsdFile, String xmlFile) {
+    public boolean validate(String xsdName, String xmlName) {
         try {
+            var classLoader = getClass().getClassLoader();
             var factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            var schemaFile = new StreamSource(new ClassPathResource("/src/main/resources/" + xsdFile).getPath());
-            var schema = factory.newSchema(schemaFile);
+
+            var xsdInput = classLoader.getResourceAsStream(xsdName);
+            var schema = factory.newSchema(new StreamSource(xsdInput));
             var validator = schema.newValidator();
-            var source = new StreamSource(new ClassPathResource("/src/main/resources/" + xmlFile).getPath());
+
+            var xmlInput = classLoader.getResourceAsStream(xmlName);
+            var source = new StreamSource(xmlInput);
             validator.validate(source);
+
             return true;
-        }
-        catch(SAXException | IOException e) {
+        } catch (SAXException | IOException e) {
             System.out.println("Error: " + e);
             return false;
         }
