@@ -6,6 +6,7 @@ import jakarta.xml.bind.JAXBException;
 import org.springframework.stereotype.Service;
 
 import javax.xml.transform.stream.StreamSource;
+import java.util.HashMap;
 
 @Service
 public class WeatherGeneratorService {
@@ -13,6 +14,7 @@ public class WeatherGeneratorService {
         var result = xmlValidationService.validate("weatherGenerator.xsd", "weatherGenerator.xml");
         if (result) {
             var weatherGenerator = unmarshall("weatherGenerator.xml");
+            validate(weatherGenerator);
         }
     }
 
@@ -25,6 +27,24 @@ public class WeatherGeneratorService {
         } catch (JAXBException e) {
             System.out.println("Error: " + e);
             return null;
+        }
+    }
+
+    private void validate(WeatherGenerator weatherGenerator) {
+        var idMap = new HashMap<String, Integer>();
+        for (var node : weatherGenerator.getNodes()) {
+            idMap.merge(node.getId(), 1, Integer::sum);
+            if (node.getTransitions() == null) {
+                continue;
+            }
+
+            for (var transition : node.getTransitions()) {
+                idMap.merge(transition.getTarget(), 1, Integer::sum);
+            }
+        }
+
+        for (var entry : idMap.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
         }
     }
 }
