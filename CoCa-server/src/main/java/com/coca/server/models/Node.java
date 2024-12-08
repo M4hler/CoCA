@@ -10,6 +10,8 @@ import java.util.List;
 public class Node {
     @XmlAttribute(name = "id")
     private String id;
+    @XmlAttribute(name = "start")
+    private boolean start;
     @XmlElement(name = "transition")
     private List<Transition> transitions;
 }

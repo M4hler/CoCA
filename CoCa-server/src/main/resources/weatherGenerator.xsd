@@ -13,6 +13,7 @@
             <xsd:element name="transition" type="Transition" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:string" use="required"/>
+        <xsd:attribute name="start" type="xsd:boolean"/>
     </xsd:complexType>
 
     <xsd:complexType name="Transition">

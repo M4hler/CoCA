@@ -32,8 +32,13 @@ public class WeatherGeneratorService {
 
     private void validate(WeatherGenerator weatherGenerator) {
         var idMap = new HashMap<String, Integer>();
+        var foundStart = false;
         for (var node : weatherGenerator.getNodes()) {
             idMap.merge(node.getId(), 1, Integer::sum);
+            if (node.isStart()) {
+                foundStart = true;
+            }
+
             if (node.getTransitions() == null) {
                 continue;
             }
@@ -46,5 +51,7 @@ public class WeatherGeneratorService {
         for (var entry : idMap.entrySet()) {
             System.out.println(entry.getKey() + " " + entry.getValue());
         }
+
+        System.out.println("Found start: " + foundStart);
     }
 }
