@@ -43,8 +43,14 @@ public class WeatherGeneratorService {
                 continue;
             }
 
+            int sum = 0;
             for (var transition : node.getTransitions()) {
                 idMap.merge(transition.getTarget(), 1, Integer::sum);
+                sum += transition.getWeight();
+            }
+
+            if (sum != 100) {
+                System.out.println("Weights don't sum up to 100%");
             }
         }
 
