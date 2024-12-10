@@ -15,6 +15,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
@@ -172,8 +174,17 @@ public class SessionView implements IView {
         text.setTextAlignment(TextAlignment.LEFT);
         text.getChildren().addAll(t1, t2, t3);
 
+        var stream = getClass().getClassLoader().getResourceAsStream("bladerunner.jpg");
+        var image = new Image(stream);
+        var imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setFitWidth(100);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+
         Platform.runLater(() -> {
             vBox.getChildren().add(text);
+            vBox.getChildren().add(imageView);
             //vBox.getChildren().addListener();
             scrollPane.setVvalue(1.0);
         });
