@@ -37,6 +37,8 @@ public class WeatherGeneratorService {
             idMap.merge(node.getId(), 1, Integer::sum);
             if (node.isStart()) {
                 foundStart = true;
+            } else if (node.getDescription() == null || node.getDescription().isEmpty()) {
+                System.out.println("Found node: " + node.getId() + " that isn't start node and has empty description");
             }
 
             if (node.getTransitions() == null) {

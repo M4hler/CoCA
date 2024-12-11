@@ -12,6 +12,8 @@ public class Node {
     private String id;
     @XmlAttribute(name = "start")
     private boolean start;
+    @XmlAttribute(name = "description")
+    private String description;
     @XmlElement(name = "transition")
     private List<Transition> transitions;
 }

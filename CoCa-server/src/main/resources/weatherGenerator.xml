@@ -4,7 +4,7 @@
         <transition target="state.1" weight="100"/>
     </node>
 
-    <node id="state.1">
+    <node id="state.1" description="testDescription">
         <transition target="state.2" weight="75"/>
         <transition target="state.3" weight="25"/>
     </node>
