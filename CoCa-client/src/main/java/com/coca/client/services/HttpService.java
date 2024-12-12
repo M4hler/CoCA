@@ -38,8 +38,7 @@ public class HttpService {
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
             return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Exception: " + e);
             return null;
         }
@@ -53,16 +52,15 @@ public class HttpService {
                     .GET()
                     .build();
             return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Exception: " + e);
             return null;
         }
     }
 
     private static String getHash(String password) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-512");
-        byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        var digest = MessageDigest.getInstance("SHA-512");
+        var hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
         return new String(hashBytes, StandardCharsets.UTF_8);
     }
 }

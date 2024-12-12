@@ -16,8 +16,10 @@ public class ServerController extends AbstractController<ServerView> {
 
     public void tryConnect(String address) {
         var response = HttpService.healthCheckRequest(address);
-        if(Objects.equals(response.statusCode(), HttpURLConnection.HTTP_OK)) {
+        if (Objects.equals(response.statusCode(), HttpURLConnection.HTTP_OK)) {
             mainController.transitionToLoginController(address);
+        } else {
+            System.out.println("Response: " + response.statusCode());
         }
     }
 }
