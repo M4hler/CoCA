@@ -313,3 +313,23 @@ databaseChangeLog:
               - column:
                   name: timestamp
                   type: timestamp
+  - changeSet:
+      id: Create AvatarImage table
+      author: M4hler
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: avatar_image
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: AvatarImagePrimaryKey
+              - column:
+                  name: image
+                  type: blob
+                  constraints:
+                    nullable: false
