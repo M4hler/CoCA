@@ -12,7 +12,7 @@ databaseChangeLog:
                   type: varchar(40)
                   constraints:
                     primaryKey: true
-                    primaryKeyName: accountPrimaryKey
+                    primaryKeyName: account_primary_key
               - column:
                   name: password
                   type: varchar(64)
@@ -40,7 +40,7 @@ databaseChangeLog:
                   type: varchar(40)
                   constraints:
                     primaryKey: true
-                    primaryKeyName: bladeRunnerPrimaryKey
+                    primaryKeyName: blade_runner_primary_key
               - column:
                   name: account_name
                   type: varchar(40)
@@ -189,7 +189,7 @@ databaseChangeLog:
                   type: varchar(40)
                   constraints:
                     primaryKey: true
-                    primaryKeyName: NpcPrimaryKey
+                    primaryKeyName: npc_primary_key
               - column:
                   name: is_human
                   type: boolean
@@ -299,7 +299,7 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-                    primaryKeyName: MainframePrimaryKey
+                    primaryKeyName: mainframe_primary_key
               - column:
                   name: author
                   type: varchar(64)
@@ -332,7 +332,7 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-                    primaryKeyName: AvatarImagePrimaryKey
+                    primaryKeyName: avatar_image_primary_key
               - column:
                   name: image
                   type: blob
