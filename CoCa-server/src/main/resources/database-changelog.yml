@@ -47,6 +47,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: avatar_image_id
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
                   name: is_human
                   type: boolean
                   constraints:

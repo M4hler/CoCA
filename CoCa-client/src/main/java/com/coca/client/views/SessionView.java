@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -174,8 +175,16 @@ public class SessionView implements IView {
         text.setTextAlignment(TextAlignment.LEFT);
         text.getChildren().addAll(t1, t2, t3);
 
-        var stream = getClass().getClassLoader().getResourceAsStream("bladerunner.jpg");
-        var image = new Image(stream);
+        var image = (Image) null;
+        if (bladeRunner != null && bladeRunner.getAvatarImage() != null) {
+            var stream = new ByteArrayInputStream(bladeRunner.getAvatarImage().getImage());
+            image = new Image(stream);
+        }
+        else {
+            var stream = getClass().getClassLoader().getResourceAsStream("bladerunner.jpg");
+            image = new Image(stream);
+        }
+
         var imageView = new ImageView();
         imageView.setImage(image);
         imageView.setFitWidth(100);

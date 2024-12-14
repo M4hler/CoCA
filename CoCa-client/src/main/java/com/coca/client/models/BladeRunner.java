@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 @Setter
 public class BladeRunner {
     private String name;
+    private AvatarImage avatarImage;
 
     private boolean isHuman;
     private boolean secretReplicant;

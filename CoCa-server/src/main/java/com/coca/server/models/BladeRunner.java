@@ -21,6 +21,9 @@ public class BladeRunner {
     @JoinColumn(name = "account_name")
     @JsonIgnore
     private Account account;
+    @OneToOne
+    @JoinColumn
+    private AvatarImage avatarImage;
 
     private boolean isHuman;
     private boolean secretReplicant;
