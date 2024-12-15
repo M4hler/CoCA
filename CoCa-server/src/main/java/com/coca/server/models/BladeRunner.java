@@ -16,7 +16,13 @@ import java.util.function.Supplier;
 @Setter
 public class BladeRunner {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private String name;
+    private String nickname;
+    private String surname;
+
     @ManyToOne
     @JoinColumn(name = "account_name")
     @JsonIgnore

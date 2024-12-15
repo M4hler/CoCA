@@ -11,7 +11,10 @@ import java.util.function.Supplier;
 @Getter
 @Setter
 public class BladeRunner {
+    private int id;
     private String name;
+    private String nickname;
+    private String surname;
     private AvatarImage avatarImage;
 
     private boolean isHuman;

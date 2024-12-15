@@ -36,14 +36,29 @@ databaseChangeLog:
             tableName: blade_runner
             columns:
               - column:
-                  name: name
-                  type: varchar(40)
+                  name: id
+                  type: int
                   constraints:
                     primaryKey: true
                     primaryKeyName: blade_runner_primary_key
               - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: nickname
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: surname
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
                   name: account_name
-                  type: varchar(40)
+                  type: varchar(64)
                   constraints:
                     nullable: false
               - column:
@@ -63,7 +78,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: archetype
-                  type: varchar(20)
+                  type: varchar(32)
                   constraints:
                     nullable: false
               - column:
