@@ -57,14 +57,8 @@ public class SessionView implements IView {
     public SessionView(boolean isAdmin, BladeRunner bladeRunner, String queueName, JmsTemplate jmsTemplate) {
         this.bladeRunner = bladeRunner;
         this.queueName = queueName;
-        if(bladeRunner == null) {
-            bladeRunnerName = "";
-        }
-        else {
-            bladeRunnerName = bladeRunner.getName();
-        }
-
         this.jmsTemplate = jmsTemplate;
+        bladeRunnerName = getBladeRunnerName();
 
         labelToSkill = new HashMap<>();
         labelToSkill.put("Force", "force");
@@ -221,7 +215,7 @@ public class SessionView implements IView {
             return;
         }
 
-        title = new Text("User view");
+        title = new Text("Blade Runner " + bladeRunnerName);
         title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(title, 3, 0, 2, 1);
 
@@ -647,6 +641,27 @@ public class SessionView implements IView {
             default -> {
                 return 0;
             }
+        }
+    }
+
+    private String getBladeRunnerName() {
+        if (bladeRunner == null) {
+            return "unknown";
+        } else {
+            var builder = new StringBuilder();
+            if (bladeRunner.getName() != null && !bladeRunner.getName().isEmpty()) {
+                builder.append(bladeRunner.getName());
+            }
+
+            if (bladeRunner.getNickname() != null && !bladeRunner.getNickname().isEmpty()) {
+                builder.append(" '").append(bladeRunner.getNickname()).append("'");
+            }
+
+            if (bladeRunner.getSurname() != null && !bladeRunner.getSurname().isEmpty()) {
+                builder.append(" ").append(bladeRunner.getSurname());
+            }
+
+            return builder.toString();
         }
     }
 }
