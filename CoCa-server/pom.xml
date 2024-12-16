@@ -6,12 +6,11 @@
 
     <parent>
         <artifactId>CoCa</artifactId>
-        <groupId>com.cthulhu</groupId>
+        <groupId>com.coca</groupId>
         <version>0.0.1</version>
     </parent>
 
     <artifactId>CoCa-server</artifactId>
-    <version>0.0.1</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
