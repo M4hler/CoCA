@@ -200,11 +200,26 @@ databaseChangeLog:
             tableName: NPC
             columns:
               - column:
-                  name: name
-                  type: varchar(40)
+                  name: id
+                  type: int
                   constraints:
                     primaryKey: true
-                    primaryKeyName: npc_primary_key
+                    primaryKeyName: blade_runner_primary_key
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: nickname
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: surname
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
               - column:
                   name: is_human
                   type: boolean
