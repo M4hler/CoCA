@@ -8,7 +8,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Npc {
+    private int id;
+
     private String name;
+    private String nickname;
+    private String surname;
+
     private boolean isHuman;
 
     private int strength;

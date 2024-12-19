@@ -310,7 +310,7 @@ public class SessionView implements IView {
                            int medicalAid, int observation, int tech, int connections, int manipulation, int insight) {
         var health = (strength + agility + 2) / 4;
         var resolve = (intelligence + empathy + 2) / 4;
-        var npc = new Npc(name, isHuman, strength, agility, intelligence, empathy, health, resolve, force,
+        var npc = new Npc(0, name, "", "", isHuman, strength, agility, intelligence, empathy, health, resolve, force,
                 handToHandCombat, stamina, firearms, mobility, stealth, medicalAid, observation, tech, connections,
                 manipulation, insight);
         var npcEvent = new NpcDataEvent(npc);
