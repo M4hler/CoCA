@@ -60,7 +60,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-artemis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

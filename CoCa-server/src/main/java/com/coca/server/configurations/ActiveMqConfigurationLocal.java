@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("local")
+@Profile({"local", "test"})
 public class ActiveMqConfigurationLocal {
     @Bean
     public BrokerService broker() throws Exception {

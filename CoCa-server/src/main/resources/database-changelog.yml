@@ -204,7 +204,7 @@ databaseChangeLog:
                   type: int
                   constraints:
                     primaryKey: true
-                    primaryKeyName: blade_runner_primary_key
+                    primaryKeyName: npc_primary_key
               - column:
                   name: name
                   type: varchar(64)
