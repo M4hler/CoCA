@@ -368,3 +368,15 @@ databaseChangeLog:
                   type: blob
                   constraints:
                     nullable: false
+  - changeSet:
+      id: Create table for storing weather state
+      author: M4hler
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: weather_state
+            columns:
+              - column: id
+                type: varchar(32)
+                constraints:
+                  nullable: false
