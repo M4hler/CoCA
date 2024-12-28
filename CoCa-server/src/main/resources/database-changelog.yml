@@ -376,7 +376,8 @@ databaseChangeLog:
             schemaName: public
             tableName: weather_state
             columns:
-              - column: id
-                type: varchar(32)
-                constraints:
-                  nullable: false
+              - column:
+                  name: id
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
