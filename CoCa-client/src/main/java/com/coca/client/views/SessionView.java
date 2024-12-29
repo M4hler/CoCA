@@ -115,7 +115,24 @@ public class SessionView implements IView {
         mainframeBox.getChildren().add(mainframeButton);
         grid.add(mainframeBox, 25, 21);
 
-        scene = new Scene(grid, 800, 600);
+        var sidePanel = new BorderPane();
+        var borderPane = new ScrollPane();
+        var collapseButton = new Button("Collapse");
+        collapseButton.setOnAction(e -> sidePanel.setVisible(false));
+
+        var borderBox = new VBox();
+        borderBox.getChildren().add(collapseButton);
+        borderPane.setContent(borderBox);
+        sidePanel.setVisible(false);
+        sidePanel.setRight(borderPane);
+
+        var expandButton = new Button("Expand");
+        expandButton.setOnAction(e -> sidePanel.setVisible(true));
+        grid.add(expandButton, 25, 22);
+
+        var root = new StackPane();
+        root.getChildren().addAll(grid, sidePanel);
+        scene = new Scene(root, 800, 600);
 
         if(isAdmin) {
             setupAdmin();
