@@ -126,7 +126,14 @@ public class SessionView implements IView {
         sidePanel.setVisible(false);
         sidePanel.setRight(borderPane);
 
-        var expandButton = new Button("Expand");
+        var expandButton = new Button();
+        var image = new Image(getClass().getClassLoader().getResourceAsStream("npc.png"));
+        var imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setFitWidth(10);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        expandButton.setGraphic(imageView);
         expandButton.setOnAction(e -> sidePanel.setVisible(true));
         grid.add(expandButton, 25, 22);
 
