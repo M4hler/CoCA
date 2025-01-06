@@ -115,16 +115,11 @@ public class SessionView implements IView {
         mainframeBox.getChildren().add(mainframeButton);
         grid.add(mainframeBox, 25, 21);
 
-        var sidePanel = new BorderPane();
-        var borderPane = new ScrollPane();
+        var borderPane = new BorderPane();
+        var rightPane = new ScrollPane();
+        rightPane.setVisible(false);
         var collapseButton = new Button("Collapse");
-        collapseButton.setOnAction(e -> sidePanel.setVisible(false));
-
-        var borderBox = new VBox();
-        borderBox.getChildren().add(collapseButton);
-        borderPane.setContent(borderBox);
-        sidePanel.setVisible(false);
-        sidePanel.setRight(borderPane);
+        collapseButton.setOnAction(e -> rightPane.setVisible(false));
 
         var expandButton = new Button();
         var image = new Image(getClass().getClassLoader().getResourceAsStream("npc.png"));
@@ -134,11 +129,25 @@ public class SessionView implements IView {
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         expandButton.setGraphic(imageView);
-        expandButton.setOnAction(e -> sidePanel.setVisible(true));
-        grid.add(expandButton, 25, 22);
+        expandButton.setOnAction(e -> rightPane.setVisible(true));
+        expandButton.setAlignment(Pos.CENTER_RIGHT);
+
+        var toolbar = new ToolBar();
+        var toolbarBox = new HBox();
+        HBox.setHgrow(toolbarBox, Priority.ALWAYS);
+        toolbarBox.setAlignment(Pos.CENTER_RIGHT);
+        toolbarBox.getChildren().add(expandButton);
+        toolbar.getItems().add(toolbarBox);
+        toolbar.setBackground(Background.EMPTY);
+
+        var borderBox = new VBox();
+        borderBox.getChildren().add(collapseButton);
+        rightPane.setContent(borderBox);
+        borderPane.setRight(rightPane);
+        borderPane.setTop(toolbar);
 
         var root = new StackPane();
-        root.getChildren().addAll(grid, sidePanel);
+        root.getChildren().addAll(grid, borderPane);
         scene = new Scene(root, 800, 600);
 
         if(isAdmin) {
