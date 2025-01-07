@@ -118,8 +118,6 @@ public class SessionView implements IView {
         var borderPane = new BorderPane();
         var rightPane = new ScrollPane();
         rightPane.setVisible(false);
-        var collapseButton = new Button("Collapse");
-        collapseButton.setOnAction(e -> rightPane.setVisible(false));
 
         var expandButton = new Button();
         var image = new Image(getClass().getClassLoader().getResourceAsStream("npc.png"));
@@ -129,7 +127,7 @@ public class SessionView implements IView {
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         expandButton.setGraphic(imageView);
-        expandButton.setOnAction(e -> rightPane.setVisible(true));
+        expandButton.setOnAction(e -> rightPane.setVisible(!rightPane.isVisible()));
         expandButton.setAlignment(Pos.CENTER_RIGHT);
 
         var toolbar = new ToolBar();
@@ -140,9 +138,6 @@ public class SessionView implements IView {
         toolbar.getItems().add(toolbarBox);
         toolbar.setBackground(Background.EMPTY);
 
-        var borderBox = new VBox();
-        borderBox.getChildren().add(collapseButton);
-        rightPane.setContent(borderBox);
         borderPane.setRight(rightPane);
         borderPane.setTop(toolbar);
 
