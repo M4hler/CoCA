@@ -141,9 +141,7 @@ public class SessionView implements IView {
         borderPane.setRight(rightPane);
         borderPane.setTop(toolbar);
 
-        var root = new StackPane();
-        root.getChildren().addAll(grid, borderPane);
-        scene = new Scene(root, 800, 600);
+        scene = new Scene(grid, 800, 600);
 
         if(isAdmin) {
             setupAdmin();
