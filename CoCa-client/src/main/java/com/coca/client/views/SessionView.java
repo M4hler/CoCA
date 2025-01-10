@@ -115,7 +115,6 @@ public class SessionView implements IView {
         mainframeBox.getChildren().add(mainframeButton);
         grid.add(mainframeBox, 25, 21);
 
-        var borderPane = new BorderPane();
         var rightPane = new ScrollPane();
         rightPane.setVisible(false);
 
@@ -136,10 +135,8 @@ public class SessionView implements IView {
         toolbarBox.setAlignment(Pos.CENTER_RIGHT);
         toolbarBox.getChildren().add(expandButton);
         toolbar.getItems().add(toolbarBox);
-        toolbar.setBackground(Background.EMPTY);
-
-        borderPane.setRight(rightPane);
-        borderPane.setTop(toolbar);
+        toolbar.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        grid.add(toolbar, 0, 0, 10, 10);
 
         scene = new Scene(grid, 800, 600);
 
