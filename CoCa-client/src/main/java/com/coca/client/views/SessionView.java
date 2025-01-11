@@ -75,6 +75,7 @@ public class SessionView implements IView {
         labelToSkill.put("Insight", "insight");
 
         grid = new GridPane();
+        //grid.setGridLinesVisible(true);
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
@@ -135,8 +136,8 @@ public class SessionView implements IView {
         toolbarBox.setAlignment(Pos.CENTER_RIGHT);
         toolbarBox.getChildren().add(expandButton);
         toolbar.getItems().add(toolbarBox);
-        toolbar.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        grid.add(toolbar, 0, 0, 10, 10);
+        toolbar.setBackground(Background.EMPTY);
+        grid.add(toolbar, 0, 0, 30, 1);
 
         scene = new Scene(grid, 800, 600);
 
