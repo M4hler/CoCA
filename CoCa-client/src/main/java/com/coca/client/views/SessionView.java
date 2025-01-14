@@ -75,7 +75,6 @@ public class SessionView implements IView {
         labelToSkill.put("Insight", "insight");
 
         grid = new GridPane();
-        grid.setGridLinesVisible(true);
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
@@ -115,6 +114,10 @@ public class SessionView implements IView {
         mainframeBox.setAlignment(Pos.BOTTOM_RIGHT);
         mainframeBox.getChildren().add(mainframeButton);
         grid.add(mainframeBox, 25, 21);
+
+        var gridLinesButton = new Button("Lines");
+        gridLinesButton.setOnAction(e -> grid.setGridLinesVisible(!grid.isGridLinesVisible()));
+        grid.add(gridLinesButton, 25, 22);
 
         var rightPane = new ScrollPane();
         rightPane.setVisible(false);
