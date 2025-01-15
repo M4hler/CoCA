@@ -47,6 +47,7 @@ public class SessionView implements IView {
     private Label chinyenPointsLabel;
     private CheckBoxTreeItem<String> root;
     private final GridPane grid;
+    private final VBox leftContent;
     private final VBox vBox;
     private final ScrollPane scrollPane;
     private final Button pushButton;
@@ -141,6 +142,12 @@ public class SessionView implements IView {
         toolbar.getItems().add(toolbarBox);
         toolbar.setBackground(Background.EMPTY);
         grid.add(toolbar, 0, 0, 30, 1);
+
+        leftContent = new VBox();
+
+        var leftScrollPane = new ScrollPane();
+        leftScrollPane.setContent(leftContent);
+        grid.add(leftScrollPane, 0, 1, 5, 30);
 
         grid.add(rightPane, 26, 1, 3, 30);
 
@@ -366,15 +373,17 @@ public class SessionView implements IView {
     private void createRow(String text, int value, int row, int size) {
         var label = createClickableLabel(text, size);
         var valueLabel = createLabel(map(value), size);
-        grid.add(label, 0, row, 2, 1);
-        grid.add(valueLabel, 2, row, 1, 1);
+        leftContent.getChildren().add(label);
+        //grid.add(label, 0, row, 2, 1);
+        //grid.add(valueLabel, 2, row, 1, 1);
     }
 
     private void createAttributeRow(String text, int value, int row, int size) {
         var label = createLabel(text, size);
         var valueLabel = createLabel(map(value), size);
-        grid.add(label, 0, row, 2, 1);
-        grid.add(valueLabel, 2, row, 1, 1);
+        leftContent.getChildren().add(label);
+        //grid.add(label, 0, row, 2, 1);
+        //grid.add(valueLabel, 2, row, 1, 1);
     }
 
     private Label createStatusRowWithLimit(String text, int value, int limit, int row) {
