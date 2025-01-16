@@ -124,13 +124,17 @@ public class SessionView implements IView {
         rightPane.setVisible(false);
 
         var expandButton = new Button();
-        var image = new Image(getClass().getClassLoader().getResourceAsStream("npc.png"));
-        var imageView = new ImageView();
-        imageView.setImage(image);
-        imageView.setFitWidth(10);
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
-        expandButton.setGraphic(imageView);
+        var resource = getClass().getClassLoader().getResourceAsStream("npc.png");
+        if (resource != null) {
+            var image = new Image(resource);
+            var imageView = new ImageView();
+            imageView.setImage(image);
+            imageView.setFitWidth(10);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            expandButton.setGraphic(imageView);
+        }
+
         expandButton.setOnAction(e -> rightPane.setVisible(!rightPane.isVisible()));
         expandButton.setAlignment(Pos.CENTER_RIGHT);
 
