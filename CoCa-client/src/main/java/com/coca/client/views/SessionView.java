@@ -215,8 +215,10 @@ public class SessionView implements IView {
             image = new Image(stream);
         }
         else {
-            var stream = getClass().getClassLoader().getResourceAsStream("bladerunner.jpg");
-            image = new Image(stream);
+            var resource = getClass().getClassLoader().getResourceAsStream("bladerunner.jpg");
+            if (resource != null) {
+                image = new Image(resource);
+            }
         }
 
         var imageView = new ImageView();
