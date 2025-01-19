@@ -79,7 +79,7 @@ public class SessionView implements IView {
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+        grid.setPadding(new Insets(5, 5, 5, 5));
 
         vBox = new VBox();
         vBox.setMaxWidth(390);
