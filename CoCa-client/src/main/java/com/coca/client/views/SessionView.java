@@ -48,7 +48,7 @@ public class SessionView implements IView {
     private CheckBoxTreeItem<String> root;
     private final GridPane grid;
     private final VBox leftContent;
-    private final VBox vBox;
+    private final VBox middleContent;
     private final ScrollPane scrollPane;
     private final Button pushButton;
     private final Button acceptButton;
@@ -75,34 +75,23 @@ public class SessionView implements IView {
         labelToSkill.put("Manipulation", "manipulation");
         labelToSkill.put("Insight", "insight");
 
-        grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(5);
-        grid.setVgap(5);
-        grid.setPadding(new Insets(5));
-        var leftColumn = new ColumnConstraints();
-        leftColumn.setPercentWidth(20);
-        var middleColumn = new ColumnConstraints();
-        middleColumn.setPercentWidth(60);
-        var rightColumn = new ColumnConstraints();
-        rightColumn.setPercentWidth(20);
-        grid.getColumnConstraints().addAll(leftColumn, middleColumn, rightColumn);
+        grid = createGrid();
 
-        vBox = new VBox();
 //        vBox.setMaxWidth(390);
 //
 //        shift = new Text("Shift: MORNING");
 //        shift.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 //        grid.add(shift, 3, 1, 1, 1);
-//
+
+        middleContent = new VBox();
         scrollPane = new ScrollPane();
-//        scrollPane.setPrefSize(400, 600);
-//        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-//        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-//        scrollPane.setContent(vBox);
-//
-//        grid.add(scrollPane, 3, 2, 20, 20);
-//
+        scrollPane.setPrefSize(400, 600);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setContent(middleContent);
+
+        grid.add(scrollPane, 1, 1);
+
         pushButton = new Button("Push roll");
 //        pushButton.setOnAction(e -> rollPushAction());
 //        pushButton.setVisible(false);
@@ -181,7 +170,7 @@ public class SessionView implements IView {
             text.setTextAlignment(TextAlignment.LEFT);
             textFlow.setPadding(new Insets(5, 5, 5, 5));
             textFlow.getChildren().add(text);
-            vBox.getChildren().add(textFlow);
+            middleContent.getChildren().add(textFlow);
         });
     }
 
@@ -236,8 +225,8 @@ public class SessionView implements IView {
         imageView.setSmooth(true);
 
         Platform.runLater(() -> {
-            vBox.getChildren().add(text);
-            vBox.getChildren().add(imageView);
+            middleContent.getChildren().add(text);
+            middleContent.getChildren().add(imageView);
             //vBox.getChildren().addListener();
             scrollPane.setVvalue(1.0);
         });
@@ -257,6 +246,24 @@ public class SessionView implements IView {
 
     public void changeShift(Shift shift) {
         this.shift.setText("Shift: " + shift.name());
+    }
+
+    private GridPane createGrid() {
+        var grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(5));
+
+        var leftColumn = new ColumnConstraints();
+        leftColumn.setPercentWidth(20);
+        var middleColumn = new ColumnConstraints();
+        middleColumn.setPercentWidth(60);
+        var rightColumn = new ColumnConstraints();
+        rightColumn.setPercentWidth(20);
+        grid.getColumnConstraints().addAll(leftColumn, middleColumn, rightColumn);
+
+        return grid;
     }
 
     private void setupUser(BladeRunner bladeRunner) {
