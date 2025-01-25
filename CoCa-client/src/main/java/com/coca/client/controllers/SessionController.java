@@ -61,7 +61,7 @@ public class SessionController extends AbstractController<SessionView> {
     }
 
     private void addToVBox(JoinEvent event) {
-        view.addToVBox(event.getName());
+        view.addToChatBox(event.getName());
     }
 
     private void addToTreeView(BladeRunnerDataEvent event) {

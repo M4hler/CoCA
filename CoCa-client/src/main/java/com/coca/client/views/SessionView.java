@@ -160,13 +160,13 @@ public class SessionView implements IView {
 //        }
     }
 
-    public void addToVBox(String message) {
+    public void addToChatBox(String message) {
         Platform.runLater(() -> {
             var textFlow = new TextFlow();
-            var text = new Text("Player " + message + " joined game");
+            var text = new Text(String.format("Player %s joined game", message));
             text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
             text.setTextAlignment(TextAlignment.LEFT);
-            textFlow.setPadding(new Insets(5, 5, 5, 5));
+            textFlow.setPadding(new Insets(5));
             textFlow.getChildren().add(text);
             chatBox.getChildren().add(textFlow);
         });
