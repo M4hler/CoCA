@@ -77,52 +77,59 @@ public class SessionView implements IView {
 
         grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(5, 5, 5, 5));
+        grid.setHgap(5);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(5));
+        var leftColumn = new ColumnConstraints();
+        leftColumn.setPercentWidth(20);
+        var middleColumn = new ColumnConstraints();
+        middleColumn.setPercentWidth(60);
+        var rightColumn = new ColumnConstraints();
+        rightColumn.setPercentWidth(20);
+        grid.getColumnConstraints().addAll(leftColumn, middleColumn, rightColumn);
 
         vBox = new VBox();
-        vBox.setMaxWidth(390);
-
-        shift = new Text("Shift: MORNING");
-        shift.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(shift, 3, 1, 1, 1);
-
+//        vBox.setMaxWidth(390);
+//
+//        shift = new Text("Shift: MORNING");
+//        shift.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+//        grid.add(shift, 3, 1, 1, 1);
+//
         scrollPane = new ScrollPane();
-        scrollPane.setPrefSize(400, 600);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setContent(vBox);
-
-        grid.add(scrollPane, 3, 2, 20, 20);
-
+//        scrollPane.setPrefSize(400, 600);
+//        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+//        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//        scrollPane.setContent(vBox);
+//
+//        grid.add(scrollPane, 3, 2, 20, 20);
+//
         pushButton = new Button("Push roll");
-        pushButton.setOnAction(e -> rollPushAction());
-        pushButton.setVisible(false);
+//        pushButton.setOnAction(e -> rollPushAction());
+//        pushButton.setVisible(false);
         acceptButton = new Button("Accept");
-        acceptButton.setOnAction(e -> rollAcceptAction());
-        acceptButton.setVisible(false);
-
-        var rollReactionBox = new HBox(20);
-        rollReactionBox.setAlignment(Pos.BOTTOM_RIGHT);
-        rollReactionBox.getChildren().add(pushButton);
-        rollReactionBox.getChildren().add(acceptButton);
-        grid.add(rollReactionBox, 25, 22);
-
-        var mainframeButton = new Button("Mainframe");
-        mainframeButton.setOnAction(e -> createMainframeDialog());
-        var mainframeBox = new HBox(10);
-        mainframeBox.setAlignment(Pos.BOTTOM_RIGHT);
-        mainframeBox.getChildren().add(mainframeButton);
-        grid.add(mainframeBox, 25, 21);
-
+//        acceptButton.setOnAction(e -> rollAcceptAction());
+//        acceptButton.setVisible(false);
+//
+//        var rollReactionBox = new HBox(20);
+//        rollReactionBox.setAlignment(Pos.BOTTOM_RIGHT);
+//        rollReactionBox.getChildren().add(pushButton);
+//        rollReactionBox.getChildren().add(acceptButton);
+//        grid.add(rollReactionBox, 25, 22);
+//
+//        var mainframeButton = new Button("Mainframe");
+//        mainframeButton.setOnAction(e -> createMainframeDialog());
+//        var mainframeBox = new HBox(10);
+//        mainframeBox.setAlignment(Pos.BOTTOM_RIGHT);
+//        mainframeBox.getChildren().add(mainframeButton);
+//        grid.add(mainframeBox, 25, 21);
+//
         var gridLinesButton = new Button("Lines");
         gridLinesButton.setOnAction(e -> grid.setGridLinesVisible(!grid.isGridLinesVisible()));
-        grid.add(gridLinesButton, 25, 22);
-
-        var rightPane = new ScrollPane();
-        rightPane.setVisible(false);
-
+        grid.add(gridLinesButton, 0, 0);
+//
+//        var rightPane = new ScrollPane();
+//        rightPane.setVisible(false);
+//
         var expandButton = new Button();
         var resource = getClass().getClassLoader().getResourceAsStream("npc.png");
         if (resource != null) {
@@ -134,8 +141,8 @@ public class SessionView implements IView {
             imageView.setSmooth(true);
             expandButton.setGraphic(imageView);
         }
-
-        expandButton.setOnAction(e -> rightPane.setVisible(!rightPane.isVisible()));
+//
+//        expandButton.setOnAction(e -> rightPane.setVisible(!rightPane.isVisible()));
         expandButton.setAlignment(Pos.CENTER_RIGHT);
 
         var toolbar = new ToolBar();
@@ -145,24 +152,25 @@ public class SessionView implements IView {
         toolbarBox.getChildren().add(expandButton);
         toolbar.getItems().add(toolbarBox);
         toolbar.setBackground(Background.EMPTY);
-        grid.add(toolbar, 0, 0, 30, 1);
-
+        //grid.add(toolbar, 0, 0, 30, 1);
+//
         leftContent = new VBox();
-
-        var leftScrollPane = new ScrollPane();
-        leftScrollPane.setContent(leftContent);
-        grid.add(leftScrollPane, 0, 1, 5, 30);
-
-        grid.add(rightPane, 26, 1, 3, 30);
-
+//
+//        var leftScrollPane = new ScrollPane();
+//        leftScrollPane.setContent(leftContent);
+//        grid.add(leftScrollPane, 0, 1, 5, 30);
+//
+//        grid.add(rightPane, 26, 1, 3, 30);
+//
         scene = new Scene(grid, 800, 600);
-
-        if(isAdmin) {
-            setupAdmin();
-        }
-        else {
-            setupUser(bladeRunner);
-        }
+        System.out.println(grid.getColumnCount() + " " + grid.getRowCount());
+//
+//        if(isAdmin) {
+//            setupAdmin();
+//        }
+//        else {
+//            setupUser(bladeRunner);
+//        }
     }
 
     public void addToVBox(String message) {
