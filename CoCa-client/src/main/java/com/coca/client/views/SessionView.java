@@ -39,7 +39,6 @@ public class SessionView implements IView {
     private final JmsTemplate jmsTemplate;
 
     private Text title;
-    private Text shift;
     private Label healthLabel;
     private Label resolveLabel;
     private Label promotionPointsLabel;
@@ -48,12 +47,13 @@ public class SessionView implements IView {
     private CheckBoxTreeItem<String> root;
     private final GridPane grid;
     private final VBox leftContent;
-    private final VBox middleContent;
+    private final VBox chatBox;
     private final ScrollPane scrollPane;
     private final Button pushButton;
     private final Button acceptButton;
     private final Scene scene;
     private final Map<String, String> labelToSkill;
+    private final Text shift;
 
     public SessionView(boolean isAdmin, BladeRunner bladeRunner, String queueName, JmsTemplate jmsTemplate) {
         this.bladeRunner = bladeRunner;
@@ -76,21 +76,19 @@ public class SessionView implements IView {
         labelToSkill.put("Insight", "insight");
 
         grid = createGrid();
+        var middleContent = new VBox();
+        middleContent.setAlignment(Pos.CENTER);
 
-//        vBox.setMaxWidth(390);
-//
-//        shift = new Text("Shift: MORNING");
-//        shift.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-//        grid.add(shift, 3, 1, 1, 1);
+        shift = createShiftText();
+        changeShift(Shift.MORNING);
+        middleContent.getChildren().add(shift);
 
-        middleContent = new VBox();
-        scrollPane = new ScrollPane();
-        scrollPane.setPrefSize(400, 600);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setContent(middleContent);
+        chatBox = new VBox();
+        scrollPane = createChatScrollPane();
+        scrollPane.setContent(chatBox);
+        middleContent.getChildren().add(scrollPane);
 
-        grid.add(scrollPane, 1, 1);
+        grid.add(middleContent, 1, 1);
 
         pushButton = new Button("Push roll");
 //        pushButton.setOnAction(e -> rollPushAction());
@@ -170,7 +168,7 @@ public class SessionView implements IView {
             text.setTextAlignment(TextAlignment.LEFT);
             textFlow.setPadding(new Insets(5, 5, 5, 5));
             textFlow.getChildren().add(text);
-            middleContent.getChildren().add(textFlow);
+            chatBox.getChildren().add(textFlow);
         });
     }
 
@@ -225,8 +223,8 @@ public class SessionView implements IView {
         imageView.setSmooth(true);
 
         Platform.runLater(() -> {
-            middleContent.getChildren().add(text);
-            middleContent.getChildren().add(imageView);
+            chatBox.getChildren().add(text);
+            chatBox.getChildren().add(imageView);
             //vBox.getChildren().addListener();
             scrollPane.setVvalue(1.0);
         });
@@ -245,7 +243,7 @@ public class SessionView implements IView {
     }
 
     public void changeShift(Shift shift) {
-        this.shift.setText("Shift: " + shift.name());
+        this.shift.setText(String.format("Shift: %s", shift.name()));
     }
 
     private GridPane createGrid() {
@@ -264,6 +262,20 @@ public class SessionView implements IView {
         grid.getColumnConstraints().addAll(leftColumn, middleColumn, rightColumn);
 
         return grid;
+    }
+
+    private ScrollPane createChatScrollPane() {
+        var scrollPane = new ScrollPane();
+        scrollPane.setPrefSize(400, 600);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        return scrollPane;
+    }
+
+    private Text createShiftText() {
+        var shift = new Text();
+        shift.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        return shift;
     }
 
     private void setupUser(BladeRunner bladeRunner) {
