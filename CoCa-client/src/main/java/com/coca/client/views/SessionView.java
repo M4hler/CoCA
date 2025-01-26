@@ -111,10 +111,6 @@ public class SessionView implements IView {
 //        mainframeBox.setAlignment(Pos.BOTTOM_RIGHT);
 //        mainframeBox.getChildren().add(mainframeButton);
 //        grid.add(mainframeBox, 25, 21);
-//
-        var gridLinesButton = new Button("Lines");
-        gridLinesButton.setOnAction(e -> grid.setGridLinesVisible(!grid.isGridLinesVisible()));
-        leftContent.getChildren().add(gridLinesButton);
 
         var rightContent = new VBox();
         rightContent.setVisible(false);
@@ -152,9 +148,13 @@ public class SessionView implements IView {
         if (isAdmin) {
             setupAdmin();
         }
-//        else {
-//            setupUser(bladeRunner);
-//        }
+        else {
+            setupUser(bladeRunner);
+        }
+
+        var gridLinesButton = new Button("Lines");
+        gridLinesButton.setOnAction(e -> grid.setGridLinesVisible(!grid.isGridLinesVisible()));
+        leftContent.getChildren().add(gridLinesButton);
     }
 
     public void addToChatBox(String message) {
@@ -282,33 +282,33 @@ public class SessionView implements IView {
         }
 
         var stats = createLabel("Stats", 16);
-        grid.add(stats, 0, 1, 2, 1);
+        leftContent.getChildren().add(stats);
 
-        createAttributeRow("Strength", bladeRunner.getStrength(), 2, 14);
-        createRow("Force", bladeRunner.getForce(), 3, 12);
-        createRow("Hand-to-hand combat", bladeRunner.getHandToHandCombat(), 4, 12);
-        createRow("Stamina", bladeRunner.getStamina(), 5, 12);
+        createAttributeRow("Strength", bladeRunner.getStrength());
+        createSkillRow("Force", bladeRunner.getForce());
+        createSkillRow("Hand-to-hand combat", bladeRunner.getHandToHandCombat());
+        createSkillRow("Stamina", bladeRunner.getStamina());
 
-        createAttributeRow("Agility", bladeRunner.getAgility(), 6, 14);
-        createRow("Firearms", bladeRunner.getFirearms(), 7, 12);
-        createRow("Mobility", bladeRunner.getMobility(), 8, 12);
-        createRow("Stealth", bladeRunner.getStealth(), 9, 12);
+        createAttributeRow("Agility", bladeRunner.getAgility());
+        createSkillRow("Firearms", bladeRunner.getFirearms());
+        createSkillRow("Mobility", bladeRunner.getMobility());
+        createSkillRow("Stealth", bladeRunner.getStealth());
 
-        createAttributeRow("Intelligence", bladeRunner.getIntelligence(), 10, 14);
-        createRow("Medical aid", bladeRunner.getMedicalAid(), 11, 12);
-        createRow("Observation", bladeRunner.getObservation(), 12, 12);
-        createRow("Tech", bladeRunner.getTech(), 13, 12);
+        createAttributeRow("Intelligence", bladeRunner.getIntelligence());
+        createSkillRow("Medical aid", bladeRunner.getMedicalAid());
+        createSkillRow("Observation", bladeRunner.getObservation());
+        createSkillRow("Tech", bladeRunner.getTech());
 
-        createAttributeRow("Empathy", bladeRunner.getEmpathy(), 14, 14);
-        createRow("Connections", bladeRunner.getConnections(), 15, 12);
-        createRow("Insight", bladeRunner.getInsight(), 16, 12);
-        createRow("Manipulation", bladeRunner.getManipulation(), 17, 12);
+        createAttributeRow("Empathy", bladeRunner.getEmpathy());
+        createSkillRow("Connections", bladeRunner.getConnections());
+        createSkillRow("Insight", bladeRunner.getInsight());
+        createSkillRow("Manipulation", bladeRunner.getManipulation());
 
-        healthLabel = createStatusRowWithLimit("Health",  bladeRunner.getHealth(), 10, 2);
-        resolveLabel = createStatusRowWithLimit("Resolve", bladeRunner.getResolve(), 11, 3);
-        promotionPointsLabel = createStatusRow("Promotion points", bladeRunner.getPromotionPoints(), 4);
-        humanityPointsLabel = createStatusRow("Humanity points", bladeRunner.getHumanityPoints(), 5);
-        chinyenPointsLabel = createStatusRow("Chinyen points", bladeRunner.getChinyenPoints(), 6);
+//        healthLabel = createStatusRowWithLimit("Health",  bladeRunner.getHealth(), 10, 2);
+//        resolveLabel = createStatusRowWithLimit("Resolve", bladeRunner.getResolve(), 11, 3);
+//        promotionPointsLabel = createStatusRow("Promotion points", bladeRunner.getPromotionPoints(), 4);
+//        humanityPointsLabel = createStatusRow("Humanity points", bladeRunner.getHumanityPoints(), 5);
+//        chinyenPointsLabel = createStatusRow("Chinyen points", bladeRunner.getChinyenPoints(), 6);
     }
 
     private void setupAdmin() {
@@ -392,20 +392,29 @@ public class SessionView implements IView {
         setAcceptButtonVisible(false);
     }
 
-    private void createRow(String text, int value, int row, int size) {
-        var label = createClickableLabel(text, size);
-        var valueLabel = createLabel(map(value), size);
-        leftContent.getChildren().add(label);
-        //grid.add(label, 0, row, 2, 1);
-        //grid.add(valueLabel, 2, row, 1, 1);
+    private void createSkillRow(String text, int value) {
+        var hbox = new HBox(5);
+        var label = createClickableLabel(text, 12);
+        var valueLabel = createLabel(map(value), 12);
+        hbox.getChildren().addAll(label, valueLabel);
+        leftContent.getChildren().add(hbox);
     }
 
-    private void createAttributeRow(String text, int value, int row, int size) {
-        var label = createLabel(text, size);
-        var valueLabel = createLabel(map(value), size);
-        leftContent.getChildren().add(label);
-        //grid.add(label, 0, row, 2, 1);
-        //grid.add(valueLabel, 2, row, 1, 1);
+    private void createAttributeRow(String text, int value) {
+        var mainBox = new HBox(5);
+        //HBox.setHgrow(mainBox, Priority.ALWAYS);
+        //mainBox.setAlignment(Pos.CENTER_RIGHT);
+        var labelBox = new HBox();
+        labelBox.setAlignment(Pos.CENTER_LEFT);
+        var valueBox = new HBox();
+        valueBox.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(valueBox, Priority.ALWAYS);
+        var label = createLabel(text, 14);
+        labelBox.getChildren().add(label);
+        var valueLabel = createLabel(map(value), 14);
+        valueBox.getChildren().add(valueLabel);
+        mainBox.getChildren().addAll(labelBox, valueBox);
+        leftContent.getChildren().add(mainBox);
     }
 
     private Label createStatusRowWithLimit(String text, int value, int limit, int row) {
