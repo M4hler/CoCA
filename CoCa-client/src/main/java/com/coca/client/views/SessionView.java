@@ -38,22 +38,21 @@ public class SessionView implements IView {
     private final String queueName;
     private final JmsTemplate jmsTemplate;
 
-    private Text title;
     private Label healthLabel;
     private Label resolveLabel;
     private Label promotionPointsLabel;
     private Label humanityPointsLabel;
     private Label chinyenPointsLabel;
-    private CheckBoxTreeItem<String> root;
+    private CheckBoxTreeItem<String> bladeRunnerList;
     private final GridPane grid;
     private final VBox leftContent;
     private final VBox chatBox;
     private final ScrollPane chatScrollPane;
     private final Button pushButton;
     private final Button acceptButton;
+    private final Text shift;
     private final Scene scene;
     private final Map<String, String> labelToSkill;
-    private final Text shift;
 
     public SessionView(boolean isAdmin, BladeRunner bladeRunner, String queueName, JmsTemplate jmsTemplate) {
         this.bladeRunner = bladeRunner;
@@ -76,8 +75,13 @@ public class SessionView implements IView {
         labelToSkill.put("Insight", "insight");
 
         grid = createGrid();
+
+        leftContent = new VBox();
+        grid.add(leftContent, 0, 1);
+
         var middleContent = new VBox();
         middleContent.setAlignment(Pos.CENTER);
+        grid.add(middleContent, 1, 1);
 
         shift = createShiftText();
         changeShift(Shift.MORNING);
@@ -87,8 +91,6 @@ public class SessionView implements IView {
         chatScrollPane = createChatScrollPane();
         chatScrollPane.setContent(chatBox);
         middleContent.getChildren().add(chatScrollPane);
-
-        grid.add(middleContent, 1, 1);
 
         pushButton = new Button("Push roll");
 //        pushButton.setOnAction(e -> rollPushAction());
@@ -112,7 +114,7 @@ public class SessionView implements IView {
 //
         var gridLinesButton = new Button("Lines");
         gridLinesButton.setOnAction(e -> grid.setGridLinesVisible(!grid.isGridLinesVisible()));
-        grid.add(gridLinesButton, 0, 1);
+        leftContent.getChildren().add(gridLinesButton);
 
         var rightContent = new VBox();
         rightContent.setVisible(false);
@@ -144,18 +146,12 @@ public class SessionView implements IView {
         toolbar.setBackground(Background.EMPTY);
         grid.add(toolbar, 0, 0, 3, 1);
 
-        leftContent = new VBox();
-
-//        var leftScrollPane = new ScrollPane();
-//        leftScrollPane.setContent(leftContent);
-//        grid.add(leftScrollPane, 0, 1, 5, 30);
-
         scene = new Scene(grid, 800, 600);
         System.out.println(grid.getColumnCount() + " " + grid.getRowCount());
-//
-//        if(isAdmin) {
-//            setupAdmin();
-//        }
+
+        if (isAdmin) {
+            setupAdmin();
+        }
 //        else {
 //            setupUser(bladeRunner);
 //        }
@@ -240,7 +236,7 @@ public class SessionView implements IView {
     }
 
     public void addToTreeView(String name) {
-        Platform.runLater(() -> root.getChildren().add(new TreeItem<>(name)));
+        Platform.runLater(() -> bladeRunnerList.getChildren().add(new TreeItem<>(name)));
     }
 
     public void changeShift(Shift shift) {
@@ -280,14 +276,10 @@ public class SessionView implements IView {
     }
 
     private void setupUser(BladeRunner bladeRunner) {
-        if(bladeRunner == null) {
+        if (bladeRunner == null) {
             System.out.println("Blade runner is null and can't set up the view");
             return;
         }
-
-        title = new Text("Blade Runner " + bladeRunnerName);
-        title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(title, 3, 0, 2, 1);
 
         var stats = createLabel("Stats", 16);
         grid.add(stats, 0, 1, 2, 1);
@@ -320,31 +312,27 @@ public class SessionView implements IView {
     }
 
     private void setupAdmin() {
-        title = new Text("Admin view");
-        title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(title, 3, 0, 2, 1);
-
-        root = new CheckBoxTreeItem<>("Blade Runners");
-        root.setExpanded(false);
-        var treeView = new TreeView<>(root);
+        bladeRunnerList = new CheckBoxTreeItem<>("Blade Runners");
+        bladeRunnerList.setExpanded(false);
+        var treeView = new TreeView<>(bladeRunnerList);
         treeView.setPrefHeight(100);
         treeView.setPrefWidth(200);
         treeView.setCellFactory(CheckBoxTreeCell.forTreeView());
-        grid.add(treeView, 0, 3);
+        leftContent.getChildren().add(treeView);
 
         var npcButton = new Button("Create NPC");
         npcButton.setOnAction(e -> createNpcDialog());
         var npcBox = new HBox(10);
         npcBox.setAlignment(Pos.BOTTOM_RIGHT);
         npcBox.getChildren().add(npcButton);
-        grid.add(npcBox, 0, 20);
+        leftContent.getChildren().add(npcBox);
 
         var shiftButton = new Button("Change shift");
         shiftButton.setOnAction(e -> createShiftChangeDialog());
         var box = new HBox(10);
         box.setAlignment(Pos.BOTTOM_RIGHT);
         box.getChildren().add(shiftButton);
-        grid.add(box, 0, 21);
+        leftContent.getChildren().add(box);
     }
 
     @Override
