@@ -393,22 +393,29 @@ public class SessionView implements IView {
     }
 
     private void createSkillRow(String text, int value) {
-        var hbox = new HBox(5);
-        var label = createClickableLabel(text, 12);
-        var valueLabel = createLabel(map(value), 12);
-        hbox.getChildren().addAll(label, valueLabel);
-        leftContent.getChildren().add(hbox);
-    }
-
-    private void createAttributeRow(String text, int value) {
         var mainBox = new HBox(5);
-        //HBox.setHgrow(mainBox, Priority.ALWAYS);
-        //mainBox.setAlignment(Pos.CENTER_RIGHT);
         var labelBox = new HBox();
         labelBox.setAlignment(Pos.CENTER_LEFT);
         var valueBox = new HBox();
         valueBox.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(valueBox, Priority.ALWAYS);
+
+        var label = createClickableLabel(text, 12);
+        labelBox.getChildren().add(label);
+        var valueLabel = createLabel(map(value), 12);
+        valueBox.getChildren().add(valueLabel);
+        mainBox.getChildren().addAll(labelBox, valueBox);
+        leftContent.getChildren().add(mainBox);
+    }
+
+    private void createAttributeRow(String text, int value) {
+        var mainBox = new HBox(5);
+        var labelBox = new HBox();
+        labelBox.setAlignment(Pos.CENTER_LEFT);
+        var valueBox = new HBox();
+        valueBox.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(valueBox, Priority.ALWAYS);
+
         var label = createLabel(text, 14);
         labelBox.getChildren().add(label);
         var valueLabel = createLabel(map(value), 14);
