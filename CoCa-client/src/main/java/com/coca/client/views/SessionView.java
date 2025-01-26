@@ -48,7 +48,7 @@ public class SessionView implements IView {
     private final GridPane grid;
     private final VBox leftContent;
     private final VBox chatBox;
-    private final ScrollPane scrollPane;
+    private final ScrollPane chatScrollPane;
     private final Button pushButton;
     private final Button acceptButton;
     private final Scene scene;
@@ -84,9 +84,9 @@ public class SessionView implements IView {
         middleContent.getChildren().add(shift);
 
         chatBox = new VBox();
-        scrollPane = createChatScrollPane();
-        scrollPane.setContent(chatBox);
-        middleContent.getChildren().add(scrollPane);
+        chatScrollPane = createChatScrollPane();
+        chatScrollPane.setContent(chatBox);
+        middleContent.getChildren().add(chatScrollPane);
 
         grid.add(middleContent, 1, 1);
 
@@ -112,11 +112,14 @@ public class SessionView implements IView {
 //
         var gridLinesButton = new Button("Lines");
         gridLinesButton.setOnAction(e -> grid.setGridLinesVisible(!grid.isGridLinesVisible()));
-        grid.add(gridLinesButton, 0, 0);
-//
-//        var rightPane = new ScrollPane();
-//        rightPane.setVisible(false);
-//
+        grid.add(gridLinesButton, 0, 1);
+
+        var rightContent = new VBox();
+        rightContent.setVisible(false);
+        var label = new Label("Right content");
+        rightContent.getChildren().add(label);
+        grid.add(rightContent, 2, 1);
+
         var expandButton = new Button();
         var resource = getClass().getClassLoader().getResourceAsStream("npc.png");
         if (resource != null) {
@@ -128,8 +131,8 @@ public class SessionView implements IView {
             imageView.setSmooth(true);
             expandButton.setGraphic(imageView);
         }
-//
-//        expandButton.setOnAction(e -> rightPane.setVisible(!rightPane.isVisible()));
+
+        expandButton.setOnAction(e -> rightContent.setVisible(!rightContent.isVisible()));
         expandButton.setAlignment(Pos.CENTER_RIGHT);
 
         var toolbar = new ToolBar();
@@ -139,16 +142,14 @@ public class SessionView implements IView {
         toolbarBox.getChildren().add(expandButton);
         toolbar.getItems().add(toolbarBox);
         toolbar.setBackground(Background.EMPTY);
-        //grid.add(toolbar, 0, 0, 30, 1);
-//
+        grid.add(toolbar, 0, 0, 3, 1);
+
         leftContent = new VBox();
-//
+
 //        var leftScrollPane = new ScrollPane();
 //        leftScrollPane.setContent(leftContent);
 //        grid.add(leftScrollPane, 0, 1, 5, 30);
-//
-//        grid.add(rightPane, 26, 1, 3, 30);
-//
+
         scene = new Scene(grid, 800, 600);
         System.out.println(grid.getColumnCount() + " " + grid.getRowCount());
 //
@@ -226,7 +227,7 @@ public class SessionView implements IView {
             chatBox.getChildren().add(text);
             chatBox.getChildren().add(imageView);
             //vBox.getChildren().addListener();
-            scrollPane.setVvalue(1.0);
+            chatScrollPane.setVvalue(1.0);
         });
     }
 
