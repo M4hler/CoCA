@@ -133,13 +133,9 @@ public class SessionView implements IView {
         expandButton.setOnAction(e -> rightContent.setVisible(!rightContent.isVisible()));
         expandButton.setAlignment(Pos.CENTER_RIGHT);
 
-        var toolbar = new ToolBar();
         var toolbarBox = new HBox();
-        HBox.setHgrow(toolbarBox, Priority.ALWAYS);
-        toolbarBox.setAlignment(Pos.CENTER_RIGHT);
         toolbarBox.getChildren().add(expandButton);
-        toolbar.getItems().add(toolbarBox);
-        toolbar.setBackground(Background.EMPTY);
+        var toolbar = createToolbar(toolbarBox);
         grid.add(toolbar, 0, 0, 3, 1);
 
         scene = new Scene(grid, 800, 600);
@@ -273,6 +269,15 @@ public class SessionView implements IView {
         var shift = new Text();
         shift.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         return shift;
+    }
+
+    private ToolBar createToolbar(HBox toolbarBox) {
+        var toolbar = new ToolBar();
+        HBox.setHgrow(toolbarBox, Priority.ALWAYS);
+        toolbarBox.setAlignment(Pos.CENTER_RIGHT);
+        toolbar.getItems().add(toolbarBox);
+        toolbar.setBackground(Background.EMPTY);
+        return toolbar;
     }
 
     private void setupUser(BladeRunner bladeRunner) {
