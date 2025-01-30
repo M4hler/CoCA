@@ -119,17 +119,8 @@ public class SessionView implements IView {
         grid.add(rightContent, 2, 1);
 
         var expandButton = new Button();
-        var resource = getClass().getClassLoader().getResourceAsStream("npc.png");
-        if (resource != null) {
-            var image = new Image(resource);
-            var imageView = new ImageView();
-            imageView.setImage(image);
-            imageView.setFitWidth(10);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
-            expandButton.setGraphic(imageView);
-        }
-
+        var imageView = createImageView("npc.png");
+        expandButton.setGraphic(imageView);
         expandButton.setOnAction(e -> rightContent.setVisible(!rightContent.isVisible()));
         expandButton.setAlignment(Pos.CENTER_RIGHT);
 
@@ -278,6 +269,21 @@ public class SessionView implements IView {
         toolbar.getItems().add(toolbarBox);
         toolbar.setBackground(Background.EMPTY);
         return toolbar;
+    }
+
+    private ImageView createImageView(String name) {
+        var resource = getClass().getClassLoader().getResourceAsStream(name);
+        if (resource == null) {
+            return null;
+        }
+
+        var image = new Image(resource);
+        var imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setFitWidth(10);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        return imageView;
     }
 
     private void setupUser(BladeRunner bladeRunner) {
