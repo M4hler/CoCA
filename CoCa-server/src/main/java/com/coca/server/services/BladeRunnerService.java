@@ -12,7 +12,7 @@ public class BladeRunnerService {
         this.repository = repository;
     }
 
-    public BladeRunner getBladeRunner(String name) {
-        return repository.findByName(name);
+    public BladeRunner getBladeRunner(int id) {
+        return repository.findById(id);
     }
 }

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BladeRunnerRepository extends JpaRepository<BladeRunner, Long> {
-    BladeRunner findByName(String name);
+    BladeRunner findById(int id);
 }

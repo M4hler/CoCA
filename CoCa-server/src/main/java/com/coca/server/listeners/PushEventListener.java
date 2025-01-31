@@ -17,6 +17,6 @@ public class PushEventListener extends CustomListener<PushEvent> {
 
     @Override
     protected void handle(PushEvent event, Queue source) {
-        rollEventService.pushRoll(event.getBladeRunner());
+        rollEventService.pushRoll(event.getBladeRunnerId());
     }
 }

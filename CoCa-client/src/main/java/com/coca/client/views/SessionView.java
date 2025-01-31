@@ -156,13 +156,13 @@ public class SessionView implements IView {
         });
     }
 
-    public void addToVBoxRollResult(String name, String attribute, String skill, int attributeValue, int skillValue,
+    public void addToVBoxRollResult(int id, String attribute, String skill, int attributeValue, int skillValue,
                                     List<Integer> diceRolls, List<RollType> rollTypes, int successes) {
         var text = new TextFlow();
         text.setMaxWidth(400);
         text.setPadding(new Insets(5, 5, 5, 5));
         var t1 = new Text(String.format("%s rolled for %s(%s) and %s(%s) and achieved ",
-                name, capitalize(attribute), map(attributeValue), convertSkillToLabel(skill), map(skillValue)));
+                id, capitalize(attribute), map(attributeValue), convertSkillToLabel(skill), map(skillValue)));
         t1.setFont(Font.font("Tahoma", FontWeight.NORMAL, 14));
 
         var t2 = new Text();
@@ -356,14 +356,14 @@ public class SessionView implements IView {
     }
 
     private void rollAction(String skill, Integer bonusDie, Stage stage) {
-        var rollEvent = new RollEvent(bladeRunnerName, labelToSkill.get(skill), bonusDie);
+        var rollEvent = new RollEvent(bladeRunner.getId(), labelToSkill.get(skill), bonusDie);
         rollEvent.setMessageCode(MessageCode.getMessageCode(RollEvent.class));
         jmsTemplate.convertAndSend(queueName, rollEvent);
         stage.close();
     }
 
     private void rollPushAction() {
-        var pushEvent = new PushEvent(bladeRunnerName);
+        var pushEvent = new PushEvent(bladeRunner.getId());
         pushEvent.setMessageCode(MessageCode.getMessageCode(PushEvent.class));
         jmsTemplate.convertAndSend(queueName, pushEvent);
     }
@@ -396,7 +396,7 @@ public class SessionView implements IView {
     }
 
     private void rollAcceptAction() {
-        var acceptEvent = new AcceptEvent(bladeRunnerName);
+        var acceptEvent = new AcceptEvent(bladeRunner.getId());
         acceptEvent.setMessageCode(MessageCode.getMessageCode(AcceptEvent.class));
         jmsTemplate.convertAndSend(queueName, acceptEvent);
         setPushButtonVisible(false);

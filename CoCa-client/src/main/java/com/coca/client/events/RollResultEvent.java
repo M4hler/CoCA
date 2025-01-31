@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RollResultEvent extends Event {
-    private String bladeRunnerName;
+    private int bladeRunnerId;
     private String attribute;
     private String skill;
     private int attributeValue;

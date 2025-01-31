@@ -12,16 +12,12 @@ import org.springframework.jms.support.converter.MessageType;
 
 public class SessionController extends AbstractController<SessionView> {
     private final MainController mainController;
-    private final String bladeRunnerName;
+    private final BladeRunner bladeRunner;
     private final JmsTemplate jmsTemplate;
 
     public SessionController(MainController mainController, boolean isAdmin, BladeRunner bladeRunner) {
         this.mainController = mainController;
-        if (bladeRunner != null) {
-            bladeRunnerName = bladeRunner.getName();
-        } else {
-            bladeRunnerName = "";
-        }
+        this.bladeRunner = bladeRunner;
 
         var joinEventListener = (JoinEventListener) CoCaListenerService.getListener(JoinEventListener.class);
         var bladeRunnerDataEventListener = (BladeRunnerDataEventListener) CoCaListenerService.getListener(BladeRunnerDataEventListener.class);
@@ -69,10 +65,10 @@ public class SessionController extends AbstractController<SessionView> {
     }
 
     private void addToVBoxRollResult(RollResultEvent event) {
-        view.addToVBoxRollResult(event.getBladeRunnerName(), event.getAttribute(), event.getSkill(), event.getAttributeValue(),
+        view.addToVBoxRollResult(event.getBladeRunnerId(), event.getAttribute(), event.getSkill(), event.getAttributeValue(),
                 event.getSkillValue(), event.getDiceRolls(), event.getRollTypes(), event.getSuccesses());
 
-        if (bladeRunnerName.equals(event.getBladeRunnerName())) {
+        if (bladeRunner != null && bladeRunner.getId() == event.getBladeRunnerId()) {
             view.setPushButtonVisible(event.isCanPush());
             view.setAcceptButtonVisible(event.isCanPush());
         }

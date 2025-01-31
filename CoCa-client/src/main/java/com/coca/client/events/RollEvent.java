@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RollEvent extends Event {
-    private String bladeRunner;
+    private int bladeRunnerId;
     private String skill;
     private Integer bonusDie;
 }

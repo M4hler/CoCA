@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PushEvent extends Event {
-    private String bladeRunner;
+    private int bladeRunnerId;
 }

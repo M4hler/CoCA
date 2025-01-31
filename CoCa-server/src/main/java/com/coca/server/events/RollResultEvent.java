@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RollResultEvent extends Event {
-    private String bladeRunnerName;
+    private int bladeRunnerId;
     private String attribute;
     private String skill;
     private int attributeValue;
@@ -22,8 +22,8 @@ public class RollResultEvent extends Event {
     private int successes;
     private boolean canPush;
 
-    public RollResultEvent(String name, RollResult rollResult) {
-        bladeRunnerName = name;
+    public RollResultEvent(int id, RollResult rollResult) {
+        bladeRunnerId = id;
         attribute = rollResult.getAttribute();
         skill = rollResult.getSkill();
         attributeValue = rollResult.getAttributeValue();

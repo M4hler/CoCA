@@ -17,6 +17,6 @@ public class AcceptEventListener extends CustomListener<AcceptEvent> {
 
     @Override
     protected void handle(AcceptEvent event, Queue source) {
-        rollEventService.accept(event.getBladeRunner());
+        rollEventService.accept(event.getBladeRunnerId());
     }
 }
