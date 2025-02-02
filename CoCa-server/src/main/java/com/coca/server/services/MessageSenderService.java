@@ -53,14 +53,14 @@ public class MessageSenderService {
     }
 
     public void sendToAll(Event event) {
-        for(var entry : serverQueues.entrySet()) {
+        for (var entry : serverQueues.entrySet()) {
             sendToQueue(event, entry.getValue());
         }
     }
 
     public void sendToAdminQueue(Event event) {
-        for(var entry : serverQueues.entrySet()) {
-            if(entry.getKey().isAdmin()) {
+        for (var entry : serverQueues.entrySet()) {
+            if (entry.getKey().isAdmin()) {
                 sendToQueue(event, entry.getValue());
             }
         }

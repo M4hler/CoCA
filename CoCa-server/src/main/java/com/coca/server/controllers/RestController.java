@@ -49,7 +49,7 @@ public class RestController {
     @PostMapping("/login")
     @Transactional
     public ResponseEntity<LoginResponse> login(@RequestBody LoginData loginData) {
-        if(!accountService.userExists(loginData.getName())) {
+        if (!accountService.userExists(loginData.getName())) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
@@ -58,15 +58,15 @@ public class RestController {
         var password = getPassword(loginData.getPassword(), salt);
         var dbPassword = accountService.getPassword(loginData.getName());
 
-        if(!dbPassword.equals(password)) {
+        if (!dbPassword.equals(password)) {
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         }
 
-        if(!account.isAdmin() && account.getBladeRunners().isEmpty()) {
+        if (!account.isAdmin() && account.getBladeRunners().isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.GONE);
         }
 
-        if(!account.isAdmin() && !messageSenderService.isAdminOnline()) {
+        if (!account.isAdmin() && !messageSenderService.isAdminOnline()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -74,7 +74,7 @@ public class RestController {
             var serverQueue = messageSenderService.createServerQueue(account);
             var playerQueue = messageSenderService.createPlayerQueue(account);
             BladeRunner bladeRunner = null;
-            if(!account.isAdmin()) {
+            if (!account.isAdmin()) {
                 bladeRunner = account.getBladeRunners().get(0);
             }
 
@@ -84,15 +84,14 @@ public class RestController {
             messageSenderService.sendToAll(new JoinEvent(loginData.getName()));
             messageSenderService.sendToAdminQueue(new BladeRunnerDataEvent(bladeRunner));
             return new ResponseEntity<>(body, HttpStatus.OK);
-        }
-        catch(JMSException e) {
+        } catch (JMSException e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody LoginData loginData) {
-        if(accountService.userExists(loginData.getName())) {
+        if (accountService.userExists(loginData.getName())) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
 
@@ -119,8 +118,7 @@ public class RestController {
             map.put("brokerUrl", environment.getProperty("spring.activemq.broker-url"));
             map.put("brokerUser", environment.getProperty("spring.activemq.user"));
             map.put("brokerPassword", environment.getProperty("spring.activemq.password"));
-        }
-        else {
+        } else {
             map.put("brokerUrl", environment.getProperty("spring.artemis.broker-url"));
             map.put("brokerUser", environment.getProperty("spring.artemis.user"));
             map.put("brokerPassword", environment.getProperty("spring.artemis.password"));
