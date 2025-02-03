@@ -76,7 +76,7 @@ public class SessionView implements IView {
 
         grid = createGrid();
 
-        leftContent = new VBox();
+        leftContent = new VBox(5);
         grid.add(leftContent, 0, 1);
 
         var middleContent = new VBox();
@@ -129,9 +129,6 @@ public class SessionView implements IView {
         var toolbar = createToolbar(toolbarBox);
         grid.add(toolbar, 0, 0, 3, 1);
 
-        scene = new Scene(grid, 800, 600);
-        System.out.println(grid.getColumnCount() + " " + grid.getRowCount());
-
         if (isAdmin) {
             setupAdmin();
         }
@@ -142,6 +139,8 @@ public class SessionView implements IView {
         var gridLinesButton = new Button("Lines");
         gridLinesButton.setOnAction(e -> grid.setGridLinesVisible(!grid.isGridLinesVisible()));
         leftContent.getChildren().add(gridLinesButton);
+
+        scene = new Scene(grid, 800, 600);
     }
 
     public void addToChatBox(String message) {
@@ -292,7 +291,7 @@ public class SessionView implements IView {
             return;
         }
 
-        var stats = createLabel("Stats", 16);
+        var stats = createStatsBox();
         leftContent.getChildren().add(stats);
 
         createAttributeRow("Strength", bladeRunner.getStrength());
@@ -411,7 +410,7 @@ public class SessionView implements IView {
         valueBox.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(valueBox, Priority.ALWAYS);
 
-        var label = createClickableLabel(text, 12);
+        var label = createClickableLabel(text);
         labelBox.getChildren().add(label);
         var valueLabel = createLabel(map(value), 12);
         valueBox.getChildren().add(valueLabel);
@@ -427,9 +426,9 @@ public class SessionView implements IView {
         valueBox.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(valueBox, Priority.ALWAYS);
 
-        var label = createLabel(text, 14);
+        var label = createLabel(text, 16);
         labelBox.getChildren().add(label);
-        var valueLabel = createLabel(map(value), 14);
+        var valueLabel = createLabel(map(value), 16);
         valueBox.getChildren().add(valueLabel);
         mainBox.getChildren().addAll(labelBox, valueBox);
         leftContent.getChildren().add(mainBox);
@@ -454,15 +453,24 @@ public class SessionView implements IView {
     }
 
     private Label createLabel(String s, int size) {
-        var label =  new Label(s);
+        var label = new Label(s);
         label.setFont(Font.font("Tahoma", FontWeight.NORMAL, size));
         label.setAlignment(Pos.CENTER_LEFT);
         return label;
     }
 
-    private Label createClickableLabel(String s, int size) {
+    private HBox createStatsBox() {
+        var statsBox = new HBox(5);
+        var label = new Label("Stats");
+        label.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        statsBox.getChildren().add(label);
+        statsBox.setAlignment(Pos.CENTER);
+        return statsBox;
+    }
+
+    private Label createClickableLabel(String s) {
         var label =  new Label(s);
-        label.setFont(Font.font("Tahoma", FontWeight.NORMAL, size));
+        label.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
         label.setAlignment(Pos.CENTER_LEFT);
         label.setOnMouseEntered(mouseEvent
                 -> label.setBackground(new Background(new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY))));
