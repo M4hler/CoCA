@@ -5,6 +5,7 @@ import com.coca.client.views.IView;
 import com.coca.client.models.BladeRunner;
 import jakarta.jms.ConnectionFactory;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -42,6 +43,10 @@ public class MainController extends Application {
         stage.setTitle("CoCa");
         stage.setScene(currentScene);
         stage.show();
+
+        stage.setOnCloseRequest(event -> {
+            Platform.exit();
+        });
     }
 
     public void setCurrentScene(IView view) {
